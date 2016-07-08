@@ -1,7 +1,9 @@
-Title: GHCi runtime linker found a duplicate definition error
-Date: 2014-05-11
-Tags: haskell
-Authors:  Alexander Kuleshov
++++
+Categories = ["ghci", "haskell"]
+Tags = ["haskell",  "ghci"]
+date = "2014-05-11"
+title = "GHCi runtime linker found a duplicate definition error"
++++
 
 Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I'm not against this programming language, opposite, haskell's unpopularity makes me sad. I will not write about haskell popularity in industry, I'll try to explain my thoughts about "Why Haskell is not popular" not as Haskell expert, not as professional Haskell developer (i don't get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don't afraid monads :). I can't So I will try to explain my opinion about Why Haskell is not popular in this post.
 

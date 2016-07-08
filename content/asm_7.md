@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 7]
-Date: 2014-10-10
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-10-10"
+title = "Say hello to x86_64 Assembly [part 7]"
++++
 
 It is seventh part of Say hello to x86_64 Assembly and here we will look on how we can use C together with assembler.
 

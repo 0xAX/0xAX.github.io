@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 6]
-Date: 2014-10-01
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-10-01"
+title = "Say hello to x86_64 Assembly [part 6]"
++++
 
 It is sixth part of Say hello to x86_64 Assembly and here we will look on AT&T assembler syntax. Previously we used nasm assembler in all parts, but there are some another assemblers with different syntax, fasm, yasm and others. As i wrote above we will look on gas (GNU assembler) and difference between it's syntax and nasm. GCC uses GNU assembler, so if you see at assembler output for simple hello world:
 

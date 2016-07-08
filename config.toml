@@ -4,4 +4,10 @@ title = "Just a memo"
 newContentEditor = "emacs"
 theme = "purehugo"
 pygmentsStyle = "native"
+draft = false
+Paginate = 10
 
+[params]
+  twitterName = "0xAX"
+  githubName = "0xAX"
+  description = "Just a memo"

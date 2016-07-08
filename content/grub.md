@@ -1,7 +1,9 @@
-Title: How does GNU GRUB work
-Date: 2016-01-05
-Tags: linux, bootloader
-Authors: Alexander Kuleshov
++++
+Categories = ["bootloader", "grub"]
+Tags = ["linux",  "grub"]
+date = "2016-01-05"
+title = "How does GNU GRUB work"
++++
 
 This blog post is closely related with my interest in low-level stuff. As you already may know, I've started to be interested in such things like: How `N` works, where the `N` is something like - what does occur when we turn on the computer, pressing key on keyboard, how does an operating system load a program and many many more. I have found answers on some of my questions. You can look on the set if
 blog [posts](http://0xax.github.io/tag/assembler.html) which are decribe some aspects of the [assembly](https://en.wikipedia.org/wiki/Assembly_language) programming or the [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html) book which describes internals of the Linux kernel.

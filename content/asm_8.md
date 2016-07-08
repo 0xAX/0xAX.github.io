@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 8]
-Date: 2014-12-01
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-12-01"
+title = "Say hello to x86_64 Assembly [part 8]"
++++
 
 It is eight and final part of Say hello to x86_64 Assembly and here we will take a look on how to work with non-integer numbers in assembler. There are a couple of ways how to work with floating point data:
 

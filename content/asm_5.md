@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 5]
-Date: 2014-09-20
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-09-20"
+title = "Say hello to x86_64 Assembly [part 5]"
++++
 
 It is a fifth part of Say hello to x86_64 Assembly and here we will look at macros. It will not be blog post about x86_64, mainly it will be about nasm assembler and it's preprocessor. If you're interesting in it read next.
 

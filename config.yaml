@@ -1,0 +1,11 @@
+contentdir: "content"
+languageCode: "en-us"
+layoutdir: "layouts"
+publishdir: "public"
+Paginate: 10
+indexes:
+  category: "categories"
+baseurl: "http://0xAX.github.io/hugo_gh_blog"
+title: "Just a memo"
+canonifyurls: true
+theme: "purehugo"

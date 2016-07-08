@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 4]
-Date: 2014-09-01
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-09-01"
+title = "Say hello to x86_64 Assembly [part 4]"
++++
 
 Some time ago i started to write series of blog posts about assembly programming for x86_64. You can find it by asm tag. Unfortunately i was busy last time and there were not new post, so today I continue to write posts about assembly, and will try to do it every week.
 

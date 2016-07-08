@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 3]
-Date: 2014-08-15
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-08-15"
+title = "Say hello to x86_64 Assembly [part 3]"
++++
 
 The stack is special region in memory, which operates on the principle lifo (Last Input, First Output).
 

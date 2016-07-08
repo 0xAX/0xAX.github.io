@@ -1,7 +1,9 @@
-Title: Say hello to x86_64 Assembly [part 2]
-Date: 2014-08-10
-Tags: linux, x86_64, assembler
-Authors:  Alexander Kuleshov
++++
+Categories = ["assembler"]
+Tags = ["linux", "x86_64", "assembly"]
+date = "2014-08-10"
+title = "Say hello to x86_64 Assembly [part 2]"
++++
 
 Some days ago I wrote the first blog post - introduction to x64 assembly - Say hello to x64 Assembly [part 1] which to my surprise caused great interest:
 

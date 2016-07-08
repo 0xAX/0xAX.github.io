@@ -1,7 +1,9 @@
-Title: Amazon Kindle and Read-only file system
-Date: 2013-12-01
-Tags: linux, amazon kindle
-Authors:  Alexander Kuleshov
++++
+Categories = ["kindle", "amazon"]
+Tags = ["linux",  "amazon kindle"]
+date = "2013-12-01"
+title = "Amazon Kindle and Read-only file system"
++++
 
 Some times ago I've moved on 64 bit system and my first problem with new system was a situation when I couldn't copy any files to my [Amazon Kindle 5](https://en.wikipedia.org/wiki/Amazon_Kindle#Kindle_5). Every time, when I've tried to delete some file from my Kindle, I got following error:
 
