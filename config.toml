@@ -1,0 +1,7 @@
+baseurl = "https://0xAX.github.io"
+languageCode = "en-us"
+title = "Just a memo"
+newContentEditor = "emacs"
+theme = "purehugo"
+pygmentsStyle = "native"
+
