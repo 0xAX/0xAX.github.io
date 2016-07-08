@@ -10,4 +10,4 @@ Paginate = 10
 [params]
   twitterName = "0xAX"
   githubName = "0xAX"
-  description = "Just a memo"
+  description = "My posts about Linux kernel and low-level stuff"
