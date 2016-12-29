@@ -47,7 +47,9 @@ Big-endian - big-endian stores bytes in opposite order than little-endian. So if
     3 FF
 ```
 
-Syscall - is the way a user level program asks the operating system to do something for it. You can find syscall table - here. Stack - processor has a very restricted count of registers. So stack is a continuous area of ​​memory addressable special registers RSP,SS,RIP and etc... We will take a closer look on stack in next parts.
+Syscall - is the way a user level program asks the operating system to do something for it. You can find syscall table - [here](https://github.com/torvalds/linux/blob/master/arch/x86/entry/syscalls/syscall_64.tbl).
+
+Stack - processor has a very restricted count of registers. So stack is a continuous area of ​​memory addressable special registers `RSP`,`SS`,`RIP` and etc. We will take a closer look on stack in next parts.
 
 Section - every assembly program consists from sections. There are following sections:
 
