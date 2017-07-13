@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://0xAX.github.io/stack_layout_x86_64/</loc>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://0xAX.github.io/grub/</loc>
     <lastmod>2016-01-05T00:00:00+00:00</lastmod>
   </url>
@@ -81,13 +86,13 @@
   
   <url>
     <loc>https://0xAX.github.io/categories/assembler/</loc>
-    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://0xAX.github.io/tags/assembly/</loc>
-    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -147,7 +152,7 @@
   
   <url>
     <loc>https://0xAX.github.io/</loc>
-    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -159,7 +164,13 @@
   
   <url>
     <loc>https://0xAX.github.io/tags/linux/</loc>
-    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/linux/</loc>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -195,7 +206,13 @@
   
   <url>
     <loc>https://0xAX.github.io/tags/x86_64/</loc>
-    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/x86_64/</loc>
+    <lastmod>2017-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,10 +6,20 @@
     <description>Recent content on Just a memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 Jan 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 13 Jul 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://0xAX.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title> Layout of a stack frame in x86_64 </title>
+      <link>https://0xAX.github.io/stack_layout_x86_64/</link>
+      <pubDate>Thu, 13 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/stack_layout_x86_64/</guid>
+      <description> Stack frame in x86_64 Just for a memo:
+ +--------------+ | | + | | | +--------------+ | | | | | arg(N-1) | starts from 7&#39;th argument for x86_64 | | | | +--------------+ | | | | | argN | | | | | +--------------+ | | | | |Return address| %rbp + 8 Stack grows down | | | | +--------------+ | | | | | %rbp | Frame base pointer | | | | +--------------+ | | | | | local var1 | %rbp - 8 | | | | +--------------+ | | | | | local ^ar 2 | v +--------------+ | | | | +--------------+  </description>
+    </item>
     
     <item>
       <title>How does GNU GRUB work</title>

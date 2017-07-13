@@ -23,7 +23,7 @@
     <item>
       <title>Assembler</title>
       <link>https://0xAX.github.io/categories/assembler/</link>
-      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 13 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>https://0xAX.github.io/categories/assembler/</guid>
       <description></description>
@@ -84,6 +84,15 @@
     </item>
     
     <item>
+      <title>Linux</title>
+      <link>https://0xAX.github.io/categories/linux/</link>
+      <pubDate>Thu, 13 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Perf</title>
       <link>https://0xAX.github.io/categories/perf/</link>
       <pubDate>Mon, 13 Jan 2014 00:00:00 +0000</pubDate>
@@ -98,6 +107,15 @@
       <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
       
       <guid>https://0xAX.github.io/categories/thoghts/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>X86_64</title>
+      <link>https://0xAX.github.io/categories/x86_64/</link>
+      <pubDate>Thu, 13 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/x86_64/</guid>
       <description></description>
     </item>
     

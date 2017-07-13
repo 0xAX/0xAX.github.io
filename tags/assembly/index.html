@@ -71,6 +71,64 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">13 Jul 2017, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/stack_layout_x86_64/" class="post-title"> Layout of a stack frame in x86_64 </a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a><a class="post-category post-category-linux" href="https://0xAX.github.io/categories/linux">linux</a><a class="post-category post-category-x86_64" href="https://0xAX.github.io/categories/x86_64">x86_64</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<h2 id="stack-frame-in-x86-64">Stack frame in x86_64</h2>
+
+<p>Just for a memo:</p>
+
+<pre><code>                         +--------------+
+                         |              |
+                    +    |              |
+                    |    +--------------+
+                    |    |              |
+                    |    |   arg(N-1)   |  starts from 7'th argument for x86_64
+                    |    |              |
+                    |    +--------------+
+                    |    |              |
+                    |    |     argN     |
+                    |    |              |
+                    |    +--------------+
+                    |    |              |
+                    |    |Return address|  %rbp + 8
+Stack grows down    |    |              |
+                    |    +--------------+
+                    |    |              |
+                    |    |     %rbp     |  Frame base pointer
+                    |    |              |
+                    |    +--------------+
+                    |    |              |
+                    |    |  local var1  |  %rbp - 8
+                    |    |              |
+                    |    +--------------+
+                    |    |              |
+                    |    | local ^ar 2  |
+                    v    +--------------+
+                         |              |
+                         |              |
+                         +--------------+
+</code></pre>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">01 Dec 2014, 00:00</h1>
                 <section class="post">
                     <header class="post-header">
