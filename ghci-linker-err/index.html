@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHCi runtime linker found a duplicate definition error &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="GHCi runtime linker found a duplicate definition error &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="GHCi runtime linker found a duplicate definition error &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">11 May 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/ghci-linker-err/" class="post-title">GHCi runtime linker found a duplicate definition error</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-ghci" href="https://0xAX.github.io/categories/ghci">ghci</a><a class="post-category post-category-haskell" href="https://0xAX.github.io/categories/haskell">haskell</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/ghci-linker-err/" data-title="GHCi runtime linker found a duplicate definition error" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/ghci-linker-err/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<p>Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I&rsquo;m not against this programming language, opposite, haskell&rsquo;s unpopularity makes me sad. I will not write about haskell popularity in industry, I&rsquo;ll try to explain my thoughts about &ldquo;Why Haskell is not popular&rdquo; not as Haskell expert, not as professional Haskell developer (i don&rsquo;t get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don&rsquo;t afraid monads :). I can&rsquo;t So I will try to explain my opinion about Why Haskell is not popular in this post.</p>
+
+<h2 id="myths">Myths</h2>
+
+<p>I&rsquo;m not long time with Haskell and I don&rsquo;t know all myths/stories/jokes and other funny things about Haskell, I know one popular myth (for my look it&rsquo;s a myth) that Haskell is a difficult. Difficult to learn, difficult to use, not important, it is difficult. I think it&rsquo;s old myth, I remember it before I started to learn Haskell. I think that it is really myth and Haskell can be not so hard as you can think about it. It is not difficult, it is different. If you&rsquo;re using python,ruby,C++,javascript,java,something else&hellip; Haskell will be really different. Why it is different? There are many reasons for this like: another programming paradigm, lazy evaluations, different concepts and etc&hellip; But of course it is not a big problem and relatively easy to solve. Developer just need to spend more time to learn it than with another programming languages like python,javascript and etc&hellip; (Except C++ of course :))</p>
+
+<h2 id="lack-of-documentation">Lack of documentation</h2>
+
+<p>The Lack of documentation is a first problem in this list that related with practical side of Haskell usage. I don&rsquo;t mean that Haskell as language has bad documentation, it is not true. I&rsquo;m speaking about Haskell libraries documentation. It&rsquo;s the one of big problem that stands on the road to Haskell popularity. Sooner or later after start of Haskell learning developer will want to use libraries written in Haskell. We can easily find library by name, or functions/data types name with Hoogle, it is good, but how to use this libraries if developer doesn&rsquo;t program in Haskell a couple years and library has no or has but bad documentation. For example some time ago I played with WAI and i was need in websockets. Fortunately WAI has <a href="http://hackage.haskell.org/package/wai-websockets-3.0.0">wai-websockets</a> package but let&rsquo;s look on it&rsquo;s <a href="http://hackage.haskell.org/package/wai-websockets-3.0.0/docs/Network-Wai-Handler-WebSockets.html">documentation</a>. How to use it? I don&rsquo;t know how about you, but I don&rsquo;t understand. I see only one way out of this: to read <a href="https://github.com/yesodweb/wai/blob/master/wai-websockets/server.lhs">wai-websockets</a> source code or examples. Is it good? I&rsquo;m not sure.</p>
+
+<h2 id="standard-library">Standard Library</h2>
+
+<p>Now let&rsquo;s talk about Haskell&rsquo;s standard library. On my look it has many really useful things for haskell and has really little amount things for Real World play. What it means when I am telling about Real World. It&rsquo;s simple, i mean that Haskell standard library has many things like Control.Category, Control.Arrow, Data.Typeable and etc&hellip; Again, I don&rsquo;t know how is it for you, but for me and I think other newbie Haskell developers: Category, Arrow and other magic words are just words without any meaning. Not, i know Arrows, Monads are very useful in Haskell, but where is the something like Network.TcpClient, Network.HttpServer and etc&hellip; I know that Haskell has separate libraries for TCP, HTTP and other network and not only network things. But imagine, for exmaple I just started with Haskell and I want to write simple example like sending HTTP request and getting response, i need to understand where to find library for this, how to install it and etc&hellip; I don&rsquo;t speak that Haskell standard library must have all things for all case, but things like http client in stdlib is a standard case. Or i&rsquo;m wrong? Let&rsquo;s look on golang for example. I think that it has a perfect standard library. Look on it and haskell standard library, do you feel difference? Golang is only five years and Haskell is 24, so big difference. Of course I have no statistic, but I see that golang is much popular for this moment. I don&rsquo;t think that it is main reason but one of.</p>
+
+<h2 id="why-to-learn">Why to learn</h2>
+
+<p>I think it&rsquo;s not only Haskell problem, but other languages too. I see only one answer for this question: To get/improve knowledges in functional programming and look on your working programming language with other eyes after it. Yes, getting new knowledges it is very good. But what about practical side? I know that somewhere developers who get money for Haskell programming, but I don&rsquo;t see tons of vacancies for Haskell developers like for javascript, ruby or other tools and it is problem. Let&rsquo;s look in another side. For example i want to start learn Haskell for my super-cool pet project. But why Haskell in this case? For web development I can take habitual ruby/python/php, for system programming I can take C/C++ or maybe Rust, for concurrent programming I will choose erlang. So why i need to learn new programming language and in addition so different from my standard tools?</p>
+
+<h2 id="lazyness">Lazyness</h2>
+
+<p>When we start to learn Haskell we can read something like this: Haskell - general purpose programming language with non-strict evaluation. I think that many developers know about lazy evaluations, but I am really not sure that all of they knows how it works, how to correctly use it and etc&hellip; In this way, I as beginner in Haskell must learn not only another programming paradigm, but also another evaluation order. It is much harder, because it is much implicit. For example let&rsquo;s take a look at popular ByteString library. It provides two implementations lazy strings and strict. But I still don&rsquo;t know where to use first and where to use second.</p>
+
+<h2 id="different-abstractions">Different abstractions</h2>
+
+<p>It is problem of Haskell learning. Haskell uses different abstractions than other programming languages. And if you know python for example it will be much easy to learn ruby than Haskell. Let&rsquo;s look on simple echo example. You need to read input from stdin and prtin this string again. How we do it with python language:</p>
+
+<pre><code class="language-golang">import sys
+data = sys.stdin.readlines()
+print data
+</code></pre>
+
+<p>All is transparent enough. We do this task with all imperative programming languages in this way. First we reading from stdin and put result to a variable and than pass this variable to the printing function. Let&rsquo;s look at the same Haskell example:</p>
+
+<pre><code class="language-haskell">main = do
+  getLine &gt;&gt;= putStrLn
+</code></pre>
+
+<p>Ok. Developer can guess about getLine and putStrLn, but what is it &gt;&gt;=. If we open documentation we will read something like this: &gt;&gt;= combine two monadic values&hellip; &ldquo;combine two monadic values&hellip;&rdquo;. What is it Monad, How to use Monad and many many different questions with not easy answers sometimes. And it is only monads (concept which standard developer could not hear never), but there are many different concepts like Functors, Comonads and many many others which you can&rsquo;t meet in standard programming languages.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So it was a short list of my thoughts why Haskell is not popular. I am very interesting what do you think about Haskell popularity.
+In the end I want to remind that all from this post only my opinion and if you&rsquo;re agree or disagree with me write me a comment.</p>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

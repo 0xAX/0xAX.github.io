@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Perf on Just a memo</title>
+    <link>https://0xAX.github.io/categories/perf/</link>
+    <description>Recent content in Perf on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 13 Jan 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/categories/perf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Get function execution time in Haskell</title>
+      <link>https://0xAX.github.io/haskel-execution-time/</link>
+      <pubDate>Mon, 13 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/haskel-execution-time/</guid>
+      <description>Some times ago I encountered with question: How to get function execution time in Haskell program? I asked this question at StackOverflow, and got some useful answers. Here i will try to describe how to do it. For example we have simple haskell program which will calculate sum of prime numbers which are between 0 and 10000. Something like this:
+module TimingTest where main :: IO() main = do putStrLn &amp;quot;Start&amp;quot; putStrLn (&amp;quot;Result: &amp;quot; ++ show primesSum) putStrLn &amp;quot;Done&amp;quot; -- -- Returns True if `n` is prime -- isPrime :: Int -&amp;gt; Bool isPrime n = null [ x | x &amp;lt;- [2.</description>
+    </item>
+    
+  </channel>
+</rss>

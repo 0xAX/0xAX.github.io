@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Just a memo</title>
+    <link>https://0xAX.github.io/categories/</link>
+    <description>Recent content in Categories on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 01 Dec 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Amazon</title>
+      <link>https://0xAX.github.io/categories/amazon/</link>
+      <pubDate>Sun, 01 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/amazon/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Assembler</title>
+      <link>https://0xAX.github.io/categories/assembler/</link>
+      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/assembler/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bootloader</title>
+      <link>https://0xAX.github.io/categories/bootloader/</link>
+      <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/bootloader/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ghci</title>
+      <link>https://0xAX.github.io/categories/ghci/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/ghci/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Grub</title>
+      <link>https://0xAX.github.io/categories/grub/</link>
+      <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/grub/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Haskel</title>
+      <link>https://0xAX.github.io/categories/haskel/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/haskel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Haskell</title>
+      <link>https://0xAX.github.io/categories/haskell/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/haskell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kindle</title>
+      <link>https://0xAX.github.io/categories/kindle/</link>
+      <pubDate>Sun, 01 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/kindle/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Perf</title>
+      <link>https://0xAX.github.io/categories/perf/</link>
+      <pubDate>Mon, 13 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/perf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Thoghts</title>
+      <link>https://0xAX.github.io/categories/thoghts/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/categories/thoghts/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

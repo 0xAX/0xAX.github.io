@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Just a memo</title>
+    <link>https://0xAX.github.io/</link>
+    <description>Recent content on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 05 Jan 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>How does GNU GRUB work</title>
+      <link>https://0xAX.github.io/grub/</link>
+      <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/grub/</guid>
+      <description>This blog post is closely related with my interest in low-level stuff. As you already may know, I&amp;rsquo;ve started to be interested in such things like: How N works, where the N is something like - what does occur when we turn on the computer, pressing key on keyboard, how does an operating system load a program and many many more. I have found answers on some of my questions.</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 8]</title>
+      <link>https://0xAX.github.io/asm_8/</link>
+      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_8/</guid>
+      <description>It is eight and final part of Say hello to x86_64 Assembly and here we will take a look on how to work with non-integer numbers in assembler. There are a couple of ways how to work with floating point data:
+ fpu sse  First of all let&amp;rsquo;s look how floating point number stored in memory. There are three floating point data types:
+ single-precision double-precision double-extended precision  As Intel&amp;rsquo;s 64-ia-32-architecture-software-developer-vol-1-manual described:</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 7]</title>
+      <link>https://0xAX.github.io/asm_7/</link>
+      <pubDate>Fri, 10 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_7/</guid>
+      <description>It is seventh part of Say hello to x86_64 Assembly and here we will look on how we can use C together with assembler.
+Actually we have 3 ways to use it together:
+ Call assembly routines from C code Call c routines from assembly code Use inline assembly in C code  Let&amp;rsquo;s write 3 simple Hello world programs which shows us how to use assembly and C together.</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 6]</title>
+      <link>https://0xAX.github.io/asm_6/</link>
+      <pubDate>Wed, 01 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_6/</guid>
+      <description>It is sixth part of Say hello to x86_64 Assembly and here we will look on AT&amp;amp;T assembler syntax. Previously we used nasm assembler in all parts, but there are some another assemblers with different syntax, fasm, yasm and others. As i wrote above we will look on gas (GNU assembler) and difference between it&amp;rsquo;s syntax and nasm. GCC uses GNU assembler, so if you see at assembler output for simple hello world:</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 5]</title>
+      <link>https://0xAX.github.io/asm_5/</link>
+      <pubDate>Sat, 20 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_5/</guid>
+      <description>It is a fifth part of Say hello to x86_64 Assembly and here we will look at macros. It will not be blog post about x86_64, mainly it will be about nasm assembler and it&amp;rsquo;s preprocessor. If you&amp;rsquo;re interesting in it read next.
+Macros NASM supports two form of macro:
+ single-line multiline  All single-line macro must start from %define directive. It form is following:
+%define macro_name(parameter) value  Nasm macro behaves and looks very similar as in C.</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 4]</title>
+      <link>https://0xAX.github.io/asm_4/</link>
+      <pubDate>Mon, 01 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_4/</guid>
+      <description>Some time ago i started to write series of blog posts about assembly programming for x86_64. You can find it by asm tag. Unfortunately i was busy last time and there were not new post, so today I continue to write posts about assembly, and will try to do it every week.
+Today we will look at strings and some strings operations. We still use nasm assembler, and linux x86_64.</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 3]</title>
+      <link>https://0xAX.github.io/asm_3/</link>
+      <pubDate>Fri, 15 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_3/</guid>
+      <description>The stack is special region in memory, which operates on the principle lifo (Last Input, First Output).
+We have 16 general-purpose registers for temporary data storage. They are RAX, RBX, RCX, RDX, RDI, RSI, RBP, RSP and R8-R15. It&amp;rsquo;s too few for serious applications. So we can store data in the stack. Yet another usage of stack is following: When we call a function, return address copied in stack. After end of function execution, address copied in commands counter (RIP) and application continue to executes from next place after function.</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 2]</title>
+      <link>https://0xAX.github.io/asm_2/</link>
+      <pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_2/</guid>
+      <description>Some days ago I wrote the first blog post - introduction to x64 assembly - Say hello to x64 Assembly [part 1] which to my surprise caused great interest:
+It motivates me even more to describe my way of learning. During this days I got many feedback from different people. There were many grateful words, but what is more important for me, there were many advices and adequate critics. Especially I want to say thank you words for great feedback to:</description>
+    </item>
+    
+    <item>
+      <title>Say hello to x86_64 Assembly [part 1]</title>
+      <link>https://0xAX.github.io/asm_1/</link>
+      <pubDate>Fri, 01 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/asm_1/</guid>
+      <description>Introduction There are many developers between us. We write a tons of code every day. Sometime, it is even not a bad code :) Every of us can easily write the simplest code like this:
+#include &amp;lt;stdio.h&amp;gt; int main() { int x = 10; int y = 100; printf(&amp;quot;x + y = %d&amp;quot;, x + y); return 0; }  Every of us can understand what&amp;rsquo;s this C code does.</description>
+    </item>
+    
+    <item>
+      <title>GHCi runtime linker found a duplicate definition error</title>
+      <link>https://0xAX.github.io/ghci-linker-err/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/ghci-linker-err/</guid>
+      <description>Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I&amp;rsquo;m not against this programming language, opposite, haskell&amp;rsquo;s unpopularity makes me sad. I will not write about haskell popularity in industry, I&amp;rsquo;ll try to explain my thoughts about &amp;ldquo;Why Haskell is not popular&amp;rdquo; not as Haskell expert, not as professional Haskell developer (i don&amp;rsquo;t get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don&amp;rsquo;t afraid monads :).</description>
+    </item>
+    
+    <item>
+      <title>My thoughts about why Haskell is not popular</title>
+      <link>https://0xAX.github.io/haskell_not_popular/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/haskell_not_popular/</guid>
+      <description>Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I&amp;rsquo;m not against this programming language, opposite, haskell&amp;rsquo;s unpopularity makes me sad. I will not write about haskell popularity in industry, I&amp;rsquo;ll try to explain my thoughts about &amp;ldquo;Why Haskell is not popular&amp;rdquo; not as Haskell expert, not as professional Haskell developer (i don&amp;rsquo;t get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don&amp;rsquo;t afraid monads :).</description>
+    </item>
+    
+    <item>
+      <title>Get function execution time in Haskell</title>
+      <link>https://0xAX.github.io/haskel-execution-time/</link>
+      <pubDate>Mon, 13 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/haskel-execution-time/</guid>
+      <description>Some times ago I encountered with question: How to get function execution time in Haskell program? I asked this question at StackOverflow, and got some useful answers. Here i will try to describe how to do it. For example we have simple haskell program which will calculate sum of prime numbers which are between 0 and 10000. Something like this:
+module TimingTest where main :: IO() main = do putStrLn &amp;quot;Start&amp;quot; putStrLn (&amp;quot;Result: &amp;quot; ++ show primesSum) putStrLn &amp;quot;Done&amp;quot; -- -- Returns True if `n` is prime -- isPrime :: Int -&amp;gt; Bool isPrime n = null [ x | x &amp;lt;- [2.</description>
+    </item>
+    
+    <item>
+      <title>Amazon Kindle and Read-only file system</title>
+      <link>https://0xAX.github.io/kindle/</link>
+      <pubDate>Sun, 01 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/kindle/</guid>
+      <description>Some times ago I&amp;rsquo;ve moved on 64 bit system and my first problem with new system was a situation when I couldn&amp;rsquo;t copy any files to my Amazon Kindle 5. Every time, when I&amp;rsquo;ve tried to delete some file from my Kindle, I got following error:
+[Errno 30] Read-only file system  Here is the solution how to fix it: First of all you need to determine your device in the system.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bootloader on Just a memo</title>
+    <link>https://0xAX.github.io/categories/bootloader/</link>
+    <description>Recent content in Bootloader on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 05 Jan 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/categories/bootloader/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>How does GNU GRUB work</title>
+      <link>https://0xAX.github.io/grub/</link>
+      <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/grub/</guid>
+      <description>This blog post is closely related with my interest in low-level stuff. As you already may know, I&amp;rsquo;ve started to be interested in such things like: How N works, where the N is something like - what does occur when we turn on the computer, pressing key on keyboard, how does an operating system load a program and many many more. I have found answers on some of my questions.</description>
+    </item>
+    
+  </channel>
+</rss>

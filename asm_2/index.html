@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say hello to x86_64 Assembly [part 2] &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Say hello to x86_64 Assembly [part 2] &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Say hello to x86_64 Assembly [part 2] &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">10 Aug 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_2/" class="post-title">Say hello to x86_64 Assembly [part 2]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/asm_2/" data-title="Say hello to x86_64 Assembly [part 2]" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/asm_2/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<p>Some days ago I wrote the first blog post - introduction to x64 assembly - Say hello to x64 Assembly [part 1] which to my surprise caused great interest:</p>
+
+<p><img src="http://2.bp.blogspot.com/-wtVOF9PoT3U/VAXLYjlkbbI/AAAAAAAAAGs/Wo-53TGH0Do/s1600/Screenshot%2Bfrom%2B2014-08-31%2B23%3A58%3A26.png" alt="newscombinator" />
+<img src="http://4.bp.blogspot.com/-__MfY5bYax4/VAXLf8lQmGI/AAAAAAAAAG0/MBdT2vjhcts/s1600/Screenshot%2Bfrom%2B2014-09-01%2B00%3A30%3A32.png" alt="reddit" /></p>
+
+<p>It motivates me even more to describe my way of learning. During this days I got many feedback from different people. There were many grateful words, but what is more important for me, there were many advices and adequate critics. Especially I want to say thank you words for great feedback to:</p>
+
+<p>It motivates me even more to describe my way of learning. During this days I got many feedback from different people. There were many grateful words, but what is more important for me, there were many advices and adequate critics. Especially I want to say thank you words for great feedback to:</p>
+
+<ul>
+<li><a href="http://www.reddit.com/user/Fiennes">Fiennes</a></li>
+<li><a href="https://disqus.com/by/Universal178/">Grienders</a></li>
+<li><a href="https://news.ycombinator.com/user?id=nkurz">nkurz</a></li>
+</ul>
+
+<p>And all who took a part in discussion at Reddit and Hacker News. There were many opinions, that first part was a not very clear for absolute beginner, that&rsquo;s why i decided to write more informative posts. So, let&rsquo;s start with second part of Say hello to x86_64 assembly.</p>
+
+<h2 id="terminology-and-concepts">Terminology and Concepts</h2>
+
+<p>As i wrote above, I got many feedback from different people that some parts of first post are not clear, that&rsquo;s why let&rsquo;s start from description of some terminology that we will see in this and next parts.</p>
+
+<p>Register - register is a small amount of storage inside processor. Main point of processor is data processing. Processor can get data from memory, but it is slow operation. That&rsquo;s why processor has own internal restricted set of data storage which name is - register.</p>
+
+<p>Little-endian - we can imagine memory as one large array. It contains bytes. Each address stores one element of the memory &ldquo;array&rdquo;. Each element is one byte. For example we have 4 bytes: AA 56 AB FF. In little-endian the least significant byte has the smallest address:</p>
+
+<pre><code>    0 FF
+    1 AB
+    2 56
+    3 AA
+</code></pre>
+
+<p>where 0,1,2 and 3 are memory addresses.</p>
+
+<p>Big-endian - big-endian stores bytes in opposite order than little-endian. So if we have AA 56 AB FF bytes sequence it will be:</p>
+
+<pre><code>    0 AA
+    1 56
+    2 AB
+    3 FF
+</code></pre>
+
+<p>Syscall - is the way a user level program asks the operating system to do something for it. You can find syscall table - <a href="https://github.com/torvalds/linux/blob/master/arch/x86/entry/syscalls/syscall_64.tbl">here</a>.</p>
+
+<p>Stack - processor has a very restricted count of registers. So stack is a continuous area of ​​memory addressable special registers <code>RSP</code>,<code>SS</code>,<code>RIP</code> and etc. We will take a closer look on stack in next parts.</p>
+
+<p>Section - every assembly program consists from sections. There are following sections:</p>
+
+<ul>
+<li><code>data</code> - section is used for declaring initialized data or constants</li>
+<li><code>bss</code> - section is used for declaring non initialized variables</li>
+<li><code>text</code> - section is used for code</li>
+</ul>
+
+<p>General-purpose registers - there are 16 general-purpose registers - rax, rbx, rcx, rdx, rbp, rsp, rsi, rdi, r8, r9, r10, r11, r12, r13, r14, r15. Of course, it is not a full list of terms and concepts which related with assembly programming. If we will meet another strange and unfamiliar words in next blog posts, there will be explanation of this words.</p>
+
+<h2 id="data-types">Data Types</h2>
+
+<p>The fundamental data types are bytes, words, doublewords, quadwords, and double quadwords. A byte is eight bits, a word is 2 bytes, a doubleword is 4 bytes, a quadword is 8 bytes and a double quadword is 16 bytes (128 bits).</p>
+
+<p>Now we will work only with integer numbers, so let&rsquo;s see to it. There two types of integer: unsigned and signed. Unsigned integers are unsigned binary numbers contained in a byte, word, doubleword, and quadword. Their values range from 0 to 255 for an unsigned byte integer, from 0 to 65,535 for an unsigned word integer, from 0 to 2^32 – 1 for an unsigned doubleword integer, and from 0 to 2^64 – 1 for an unsigned quadword integer. Signed integers are signed binary numbers held as unsigned in a byte, word and etc&hellip; The sign bit is set for negative integers and cleared for positive integers and zero. Integer values range from –128 to +127 for a byte integer, from –32,768 to +32,767 for a word integer,from –2^31 to +2^31 – 1 for a doubleword integer, and from –2^63 to +2^63 – 1 for a quadword integer.</p>
+
+<h2 id="sections">Sections</h2>
+
+<p>As i wrote above, every assembly program consists from sections, it can be data section, text section and bss section. Let&rsquo;s look on data section.It&rsquo;s main point - to declare initialized constants. For example:</p>
+
+<pre><code class="language-assembly">section .data
+    num1:   equ 100
+    num2:   equ 50
+    msg:    db &quot;Sum is correct&quot;, 10
+</code></pre>
+
+<p>Ok, it is almost all clear here. 3 constants with name num1, num2, msg and with values 100, 50 and &ldquo;Sum is correct&rdquo;, 10. But what is it db, equ? Actual NASM supports a number of pseudo-instructions:</p>
+
+<ul>
+<li>DB, DW, DD, DQ, DT, DO, DY and DZ - are used for declaring initialized data. For example:</li>
+</ul>
+
+<pre><code class="language-assembly">;; Initialize 4 bytes 1h, 2h, 3h, 4h
+db 0x01,0x02,0x03,0x04
+
+;; Initialize word to 0x12 0x34
+dw    0x1234
+</code></pre>
+
+<ul>
+<li>RESB, RESW, RESD, RESQ, REST, RESO, RESY and RESZ - are used for declaring non initialized variables</li>
+<li>INCBIN - includes External Binary Files</li>
+<li>EQU - defines constant. For example:</li>
+</ul>
+
+<pre><code class="language-assembly">;; now one is 1
+one equ 1
+</code></pre>
+
+<ul>
+<li>TIMES - Repeating Instructions or Data. (description will be in next posts)</li>
+</ul>
+
+<h2 id="arithmetic-operations">Arithmetic operations</h2>
+
+<p>There is short list of arithmetic instructions:</p>
+
+<ul>
+<li><code>ADD</code> - integer add</li>
+<li><code>SUB</code> - substract</li>
+<li><code>MUL</code> - unsigned multiply</li>
+<li><code>IMUL</code> - signed multiply</li>
+<li><code>DIV</code> - unsigned divide</li>
+<li><code>IDIV</code> - signed divide</li>
+<li><code>INC</code> - increment</li>
+<li><code>DEC</code> - decrement</li>
+<li><code>NEG</code> - negate</li>
+</ul>
+
+<p>Some of it we will see at practice in this post. Other will be covered in next posts.</p>
+
+<h2 id="control-flow">Control flow</h2>
+
+<p>Usually programming languages have ability to change order of evaluation (with if statement, case statement, goto and etc&hellip;) and assembly has it too. Here we will see some of it. There is cmp instruction for performing comparison between two values. It is used along with the conditional jump instruction for decision making. For example:</p>
+
+<pre><code class="language-assembly">;; compare rax with 50
+cmp rax, 50
+</code></pre>
+
+<p>The <code>cmp</code> instruction just compares 2 values, but doesn&rsquo;t affect them and doesn&rsquo;t execute anything depend on result of comparison. For performing any actions after comparison there is conditional jump instructions. It can be one of it:</p>
+
+<ul>
+<li><code>JE</code> - if equal</li>
+<li><code>JZ</code> - if zero</li>
+<li><code>JNE</code> - if not equal</li>
+<li><code>JNZ</code> - if not zero</li>
+<li><code>JG</code> - if first operand is greater than second</li>
+<li><code>JGE</code> - if first operand is greater or equal to second</li>
+<li><code>JA</code> - the same that JG, but performs unsigned comparison</li>
+<li><code>JAE</code> - the same that JGE, but performs unsigned comparison</li>
+</ul>
+
+<p>For example if we want to make something like if/else statement in C:</p>
+
+<pre><code class="language-C">if (rax != 50) {
+    exit();
+} else {
+    right();
+}
+</code></pre>
+
+<p>will be in assembly:</p>
+
+<pre><code class="language-assembly">;; compare rax with 50
+cmp rax, 50
+;; perform .exit if rax is not equal 50
+jne .exit
+jmp .right
+</code></pre>
+
+<p>There is also unconditional jump with syntax:</p>
+
+<pre><code class="language-assembly">JMP label
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">_start:
+    ;; ....
+    ;; do something and jump to .exit label
+    ;; ....
+    jmp .exit
+
+.exit:
+    mov    rax, 60
+    mov    rdi, 0
+    syscall
+</code></pre>
+
+<p>Here we have can have some code which will be after _start label, and all of this code will be executed, assembly transfer control to .exit label, and code after .exit: will start to execute.</p>
+
+<p>Often unconditional jump uses in loops. For example we have label and some code after it. This code executes anything, than we have condition and jump to the start of this code if condition is not successfully. Loops will be covered in next parts.</p>
+
+<h2 id="example">Example</h2>
+
+<p>Let&rsquo;s see simple example. It will take two integer numbers, get sum of these numbers and compare it with predefined number. If predefined number is equal to sum, it will print something on the screen, if not - just exit. Here is the source code of our example:</p>
+
+<pre><code class="language-assembly">section .data
+    ; Define constants
+    num1:   equ 100
+    num2:   equ 50
+    ; initialize message
+    msg:    db &quot;Sum is correct\n&quot;
+
+section .text
+
+    global _start
+
+;; entry point
+_start:
+    ; set num1's value to rax
+    mov rax, num1
+    ; set num2's value to rbx
+    mov rbx, num2
+    ; get sum of rax and rbx, and store it's value in rax
+    add rax, rbx
+    ; compare rax and 150
+    cmp rax, 150
+    ; go to .exit label if rax and 150 are not equal
+    jne .exit
+    ; go to .rightSum label if rax and 150 are equal
+    jmp .rightSum
+
+; Print message that sum is correct
+.rightSum:
+    ;; write syscall
+    mov     rax, 1
+    ;; file descritor, standard output
+    mov     rdi, 1
+    ;; message address
+    mov     rsi, msg
+    ;; length of message
+    mov     rdx, 15
+    ;; call write syscall
+    syscall
+    ; exit from program
+    jmp .exit
+
+; exit procedure
+.exit:
+    ; exit syscall
+    mov    rax, 60
+    ; exit code
+    mov    rdi, 0
+    ; call exit syscall
+    syscall
+</code></pre>
+
+<p>Let&rsquo;s go through the source code. First of all there is data section with two constants num1, num2 and variable msg with &ldquo;Sum is correct\n&rdquo; value. Now look at 14 line. There is begin of program&rsquo;s entry point. We transfer num1 and num2 values to general purpose registers rax and rbx. Sum it with add instruction. After execution of add instruction, it calculates sum of values from rax and rbx and store it&rsquo;s value to rax. Now we have sum of num1 and num2 in the rax register.</p>
+
+<p>Ok we have num1 which is 100 and num2 which is 50. Our sum must be 150. Let&rsquo;s check it with cmp instruction. After comparison rax and 150 we check result of comparison, if rax and 150 are not equal (checking it with jne) we go to .exit label, if they are equal we go to .rightSum label.</p>
+
+<p>Now we have two labels: .exit and .rightSum. First is just sets 60 to rax, it is exit system call number, and 0 to rdi, it is a exit code. Second is .rightSum is pretty easy, it just prints Sum is correct.</p>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say hello to x86_64 Assembly [part 5] &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Say hello to x86_64 Assembly [part 5] &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Say hello to x86_64 Assembly [part 5] &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">20 Sep 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_5/" class="post-title">Say hello to x86_64 Assembly [part 5]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/asm_5/" data-title="Say hello to x86_64 Assembly [part 5]" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/asm_5/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<p>It is a fifth part of Say hello to x86_64 Assembly and here we will look at macros. It will not be blog post about x86_64, mainly it will be about nasm assembler and it&rsquo;s preprocessor. If you&rsquo;re interesting in it read next.</p>
+
+<h2 id="macros">Macros</h2>
+
+<p>NASM supports two form of macro:</p>
+
+<ul>
+<li>single-line</li>
+<li>multiline</li>
+</ul>
+
+<p>All single-line macro must start from %define directive. It form is following:</p>
+
+<pre><code class="language-assembly">%define macro_name(parameter) value
+</code></pre>
+
+<p>Nasm macro behaves and looks very similar as in C. For example, we can create following single-line macro:</p>
+
+<pre><code class="language-assembly">%define argc rsp + 8
+%define cliArg1 rsp + 24
+</code></pre>
+
+<p>and than use it in code:</p>
+
+<pre><code class="language-assembly">;;
+;; argc will be expanded to rsp + 8
+;;
+mov rax, [argc]
+cmp rax, 3
+jne .mustBe3args
+</code></pre>
+
+<p>Multiline macro starts with %macro nasm directive and end with %endmacro. It general form is following:</p>
+
+<pre><code class="language-assembly">%macro number_of_parameters
+    instruction
+    instruction
+    instruction
+%endmacro
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">%macro bootstrap 1
+          push ebp
+          mov ebp,esp
+%endmacro
+</code></pre>
+
+<p>And we can use it:</p>
+
+<pre><code class="language-assembly">_start:
+    bootstrap
+</code></pre>
+
+<p>For example let&rsquo;s look at PRINT macro:</p>
+
+<pre><code class="language-assembly">%macro PRINT 1
+    pusha
+    pushf
+    jmp %%astr
+%%str db %1, 0
+%%strln equ $-%%str
+%%astr: _syscall_write %%str, %%strln
+popf
+popa
+%endmacro
+
+%macro _syscall_write 2
+	mov rax, 1
+        mov rdi, 1
+        mov rsi, %%str
+        mov rdx, %%strln
+        syscall
+%endmacro
+</code></pre>
+
+<p>Let&rsquo;s try to go through it macro and understand how it works: At first line we defined PRINT macro with one parameter. Than we push all general registers (with pusha instruction) and flag register with (with pushf instruction). After this we jump to %%astr label. Pay attention that all labels which defined in macro must start with %%. Now we move to __syscall_write macro with 2 parameter. Let&rsquo;s look on __syscall_write implementation. You can remember that we use write system call in all previous posts for printing string to stdout. It looks like this:</p>
+
+<pre><code class="language-assembly">;; write syscall number
+mov rax, 1
+;; file descriptor, standard output
+mov rdi, 1
+;; message address
+mov rsi, msg
+;; length of message
+mov rdx, 14
+;; call write syscall
+syscall
+</code></pre>
+
+<p>In our __syscall_write macro we define first two instruction for putting 1 to rax (write system call number) and rdi (stdout file descriptor). Than we put %%str to rsi register (pointer to string), where %%str is local label to which is get first parameter of PRINT macro (pay attention that macro parameter access by $parameter_number) and end with 0 (every string must end with zero). And %%strlen which calculates string length. After this we call system call with syscall instruction and that&rsquo;s all.</p>
+
+<p>Now we can use it:</p>
+
+<pre><code class="language-assembly">label: PRINT &quot;Hello World!&quot;
+</code></pre>
+
+<h2 id="useful-standard-macros">Useful standard macros</h2>
+
+<p>NASM supports following standard macros:</p>
+
+<h2 id="struc">STRUC</h2>
+
+<p>We can use <code>STRUC</code> and <code>ENDSTRUC</code> for data structure defintion. For example:</p>
+
+<pre><code class="language-assembly">struc person
+   name: resb 10
+   age:  resb 1
+endstruc
+</code></pre>
+
+<p>And now we can make instance of our structure:</p>
+
+<pre><code class="language-assembly">section .data
+    p: istruc person
+      at name db &quot;name&quot;
+      at age  db 25
+    iend
+
+section .text
+_start:
+    mov rax, [p + person.name]
+</code></pre>
+
+<h2 id="include">%include</h2>
+
+<p>We can include other assembly files and jump to there labels or call functions with %include directive.</p>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

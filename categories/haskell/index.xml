@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Haskell on Just a memo</title>
+    <link>https://0xAX.github.io/categories/haskell/</link>
+    <description>Recent content in Haskell on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 11 May 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/categories/haskell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GHCi runtime linker found a duplicate definition error</title>
+      <link>https://0xAX.github.io/ghci-linker-err/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/ghci-linker-err/</guid>
+      <description>Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I&amp;rsquo;m not against this programming language, opposite, haskell&amp;rsquo;s unpopularity makes me sad. I will not write about haskell popularity in industry, I&amp;rsquo;ll try to explain my thoughts about &amp;ldquo;Why Haskell is not popular&amp;rdquo; not as Haskell expert, not as professional Haskell developer (i don&amp;rsquo;t get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don&amp;rsquo;t afraid monads :).</description>
+    </item>
+    
+  </channel>
+</rss>

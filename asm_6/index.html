@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say hello to x86_64 Assembly [part 6] &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Say hello to x86_64 Assembly [part 6] &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Say hello to x86_64 Assembly [part 6] &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">01 Oct 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_6/" class="post-title">Say hello to x86_64 Assembly [part 6]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/asm_6/" data-title="Say hello to x86_64 Assembly [part 6]" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/asm_6/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<p>It is sixth part of Say hello to x86_64 Assembly and here we will look on AT&amp;T assembler syntax. Previously we used nasm assembler in all parts, but there are some another assemblers with different syntax, fasm, yasm and others. As i wrote above we will look on gas (GNU assembler) and difference between it&rsquo;s syntax and nasm. GCC uses GNU assembler, so if you see at assembler output for simple hello world:</p>
+
+<pre><code class="language-C">#include &lt;unistd.h&gt;
+
+int main(void) {
+	write(1, &quot;Hello World\n&quot;, 15);
+	return 0;
+}
+</code></pre>
+
+<p>You will see following output:</p>
+
+<pre><code class="language-assembly">	.file	&quot;test.c&quot;
+	.section	.rodata
+.LC0:
+	.string	&quot;Hello World\n&quot;
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	$15, %edx
+	movl	$.LC0, %esi
+	movl	$1, %edi
+	call	write
+	movl	$0, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	&quot;GCC: (Ubuntu 4.9.1-16ubuntu6) 4.9.1&quot;
+	.section	.note.GNU-stack,&quot;&quot;,@progbits
+</code></pre>
+
+<p>Looks different then nasm Hello world, let&rsquo;s look on some differences.</p>
+
+<h1 id="at-t-syntax">AT&amp;T syntax</h1>
+
+<h2 id="sections">Sections</h2>
+
+<p>I don&rsquo;t know how about you, but when I start to write assembler program, usually I&rsquo;m starting from sections definition. Let&rsquo;s look on simple example:</p>
+
+<pre><code class="language-assembly">.data
+    //
+    // initialized data definition
+    //
+.text
+    .global _start
+
+_start:
+    //
+    // main routine
+    //
+</code></pre>
+
+<p>You can note two little differences here:</p>
+
+<ul>
+<li>Section definition starts with . symbol</li>
+<li>Main routine defines with .globl instead global as we do it in nasm</li>
+</ul>
+
+<p>Also gas uses another directives for data defintion:</p>
+
+<pre><code class="language-assembly">.section .data
+    // 1 byte
+    var1: .byte 10
+    // 2 byte
+    var2: .word 10
+    // 4 byte
+    var3: .int 10
+    // 8 byte
+    var4: .quad 10
+    // 16 byte
+    var5: .octa 10
+
+    // assembles each string (with no automatic trailing zero byte) into consecutive addresses
+    str1: .asci &quot;Hello world&quot;
+    // just like .ascii, but each string is followed by a zero byte
+    str2: .asciz &quot;Hello world&quot;
+    // Copy the characters in str to the object file
+    str3: .string &quot;Hello world&quot;
+</code></pre>
+
+<p>Operands order
+When we write assembler program with nasm, we have following general syntax for data manipulation:</p>
+
+<pre><code class="language-assembly">mov destination, source
+</code></pre>
+
+<p>With GNU assembler we have back order i.e.:</p>
+
+<pre><code class="language-assembly">mov source, destination
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">;;
+;; nasm syntax
+;;
+mov rax, rcx
+
+//
+// gas syntax
+//
+mov %rcx, %rax
+</code></pre>
+
+<p>Also you can not here that registers starts with % symbol. If you&rsquo;re using direct operands, need to use <code>$</code> symbol:</p>
+
+<pre><code class="language-assembly">movb $10, %rax
+</code></pre>
+
+<h2 id="size-of-operands-and-operation-syntax">Size of operands and operation syntax</h2>
+
+<p>Sometimes when we need to get part of memory, for example first byte of 64 register, we used following syntax:</p>
+
+<pre><code class="language-assembly">mov ax, word [rsi]
+</code></pre>
+
+<p>There is another way for such operations in gas. We don&rsquo;t define size in operands but in instruction:</p>
+
+<pre><code class="language-assembly">movw (%rsi), %ax
+</code></pre>
+
+<p>GNU assembler has 6 postfixes for operations:</p>
+
+<ul>
+<li><code>b</code> - 1 byte operands</li>
+<li><code>w</code> - 2 bytes operands</li>
+<li><code>l</code> - 4 bytes operands</li>
+<li><code>q</code> - 8 bytes operands</li>
+<li><code>t</code> - 10 bytes operands</li>
+<li><code>o</code> - 16 bytes operands</li>
+</ul>
+
+<p>This rule is not only mov instruction, but also for all another like addl, xorb, cmpw and etc&hellip;</p>
+
+<h2 id="memory-access">Memory access</h2>
+
+<p>You can note that we used () brackets in previous example instead [] in nasm example. To dereference values in parentheses are used GAS: (%rax), for example:</p>
+
+<pre><code class="language-assembly">movq -8(%rbp),%rdi
+movq 8(%rbp),%rdi
+</code></pre>
+
+<h2 id="jumps">Jumps</h2>
+
+<p>GNU assembler supports following operators for far functions call and jumps:</p>
+
+<pre><code class="language-assembly">lcall $section, $offset
+</code></pre>
+
+<p>Far jump - a jump to an instruction located in a different segment than the current code segment but at the same privilege level, sometimes referred to as an intersegment jump.</p>
+
+<h2 id="comments">Comments</h2>
+
+<p>GNU assembler supports 3 types of comments:</p>
+
+<pre><code>    # - single line comments
+    // - single line comments
+    /* */ - for multiline comments
+</code></pre>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

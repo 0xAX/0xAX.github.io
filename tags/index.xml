@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Just a memo</title>
+    <link>https://0xAX.github.io/tags/</link>
+    <description>Recent content in Tags on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 01 Dec 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Amazon Kindle</title>
+      <link>https://0xAX.github.io/tags/amazon-kindle/</link>
+      <pubDate>Sun, 01 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/amazon-kindle/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Assembly</title>
+      <link>https://0xAX.github.io/tags/assembly/</link>
+      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/assembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ghci</title>
+      <link>https://0xAX.github.io/tags/ghci/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/ghci/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Grub</title>
+      <link>https://0xAX.github.io/tags/grub/</link>
+      <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/grub/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Haskell</title>
+      <link>https://0xAX.github.io/tags/haskell/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/haskell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://0xAX.github.io/tags/linux/</link>
+      <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Perf</title>
+      <link>https://0xAX.github.io/tags/perf/</link>
+      <pubDate>Mon, 13 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/perf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Thoughts</title>
+      <link>https://0xAX.github.io/tags/thoughts/</link>
+      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/thoughts/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>X86_64</title>
+      <link>https://0xAX.github.io/tags/x86_64/</link>
+      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/tags/x86_64/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

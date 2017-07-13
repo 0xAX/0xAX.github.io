@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get function execution time in Haskell &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Get function execution time in Haskell &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Get function execution time in Haskell &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">13 Jan 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/haskel-execution-time/" class="post-title">Get function execution time in Haskell</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-haskel" href="https://0xAX.github.io/categories/haskel">haskel</a><a class="post-category post-category-perf" href="https://0xAX.github.io/categories/perf">perf</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/haskel-execution-time/" data-title="Get function execution time in Haskell" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/haskel-execution-time/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<p>Some times ago I encountered with question: How to get function execution time in Haskell program? I asked this question at <a href="http://stackoverflow.com/questions/6766450/haskell-function-execution-time">StackOverflow</a>, and got some useful answers. Here i will try to describe how to do it. For example we have simple haskell program which will calculate sum of prime numbers which are between 0 and 10000. Something like this:</p>
+
+<pre><code class="language-haskell">module TimingTest where
+
+main :: IO()
+main = do
+	putStrLn &quot;Start&quot;
+	putStrLn (&quot;Result: &quot; ++ show primesSum)
+	putStrLn &quot;Done&quot;
+
+
+--
+-- Returns True if `n` is prime
+--
+isPrime :: Int -&gt; Bool
+isPrime n = null [ x | x &lt;- [2..n - 1], n `mod` x  == 0]
+
+primesSum :: Int
+primesSum = sum [x | x &lt;- [2..10000], isPrime x == True]
+</code></pre>
+
+<p>Yes, it&rsquo;s not the best implementation of prime numbers, but it&rsquo;s not important at the current moment. Let&rsquo;s see what we have for checking execution time.</p>
+
+<h2 id="time">Time</h2>
+
+<p>First of all, the simplest method to get execution time is time command. Compile our source code and execute:</p>
+
+<pre><code>$ time ./TimingTest
+</code></pre>
+
+<p>We must get something like this:</p>
+
+<pre><code>real 0m3.503s
+user 0m3.492s
+sys 0m0.004s
+</code></pre>
+
+<h2 id="ghci">GHCI</h2>
+
+<p>The second method is just add <code>:set +s</code> in <code>ghci</code> before the function execution. Of course it&rsquo;s not the best method, because functions run much slower in `<code>ghci</code>.</p>
+
+<h2 id="timeit">TimeIt</h2>
+
+<p>The third method is to use <a href="http://hackage.haskell.org/package/timeit">TimeIt</a> haskell library by Lennart Augustsson. Very little, but useful library with simple API. It consist only from two functions:</p>
+
+<pre><code class="language-haskell">timeIt :: IO a -&gt; IO a -- | Wrap an IO computation so that it prints out the execution time
+</code></pre>
+
+<p>and</p>
+
+<pre><code class="language-haskell">timeItT :: IO a -&gt; IO (Double, a)Source -- | Wrap an IO computation so that it returns execution time is seconds as well as the real value.
+</code></pre>
+
+<p>Let&rsquo;s remake our main function as:</p>
+
+<pre><code class="language-haskell">import System.TimeIt
+
+main :: IO()
+main = do
+ 	putStrLn &quot;Start&quot;
+	timeIt $ putStrLn (&quot;Result: &quot; ++ show primesSum)
+	putStrLn &quot;End&quot;
+</code></pre>
+
+<p>and will get something like this:</p>
+
+<pre><code>Start
+Result: 5736396
+CPU time: 8.22s
+</code></pre>
+
+<h2 id="criterion">Criterion</h2>
+
+<p><a href="http://hackage.haskell.org/package/criterion">Criterion</a> library provides a powerful but simple way to measure software performance by Bryan O&rsquo;Sullivan. For using it, will remake again our main function as:</p>
+
+<pre><code class="language-haskell">module Main where
+
+import Criterion.Main
+
+main :: IO()
+main = defaultMain [
+       bgroup &quot;Prime numbers.&quot; [bench &quot;prime numbers benchmark&quot; $ whnfIO (putStrLn $ show primesSum)]
+       ]
+</code></pre>
+
+<p>and as a result we will get:</p>
+
+<pre><code>estimating clock resolution...
+mean is 3.760062 us (160001 iterations)
+found 3006 outliers among 159999 samples (1.9%)
+2461 (1.5%) high severe
+
+estimating cost of a clock call...
+mean is 98.08812 ns (28 iterations)
+found 4 outliers among 28 samples (14.3%)
+4 (14.3%) low severe
+</code></pre>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

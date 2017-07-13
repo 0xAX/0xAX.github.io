@@ -1,0 +1,2344 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux &middot; Just a memo</title>
+
+    <meta name="description" content="My posts about Linux kernel and low-level stuff">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Linux &middot; Just a memo">
+    <meta name="twitter:description" content="My posts about Linux kernel and low-level stuff">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Linux &middot; Just a memo">
+    <meta property="og:description" content="My posts about Linux kernel and low-level stuff">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                
+                <h1 class="content-subhead">05 Jan 2016, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/grub/" class="post-title">How does GNU GRUB work</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-bootloader" href="https://0xAX.github.io/categories/bootloader">bootloader</a><a class="post-category post-category-grub" href="https://0xAX.github.io/categories/grub">grub</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>This blog post is closely related with my interest in low-level stuff. As you already may know, I&rsquo;ve started to be interested in such things like: How <code>N</code> works, where the <code>N</code> is something like - what does occur when we turn on the computer, pressing key on keyboard, how does an operating system load a program and many many more. I have found answers on some of my questions. You can look on the set if
+blog <a href="http://0xax.github.io/tag/assembler.html">posts</a> which are decribe some aspects of the <a href="https://en.wikipedia.org/wiki/Assembly_language">assembly</a> programming or the <a href="https://0xax.gitbooks.io/linux-insides/content/index.html">linux-insides</a> book which describes internals of the Linux kernel.</p>
+
+<p>Yes. This answered on some of my questions, but not at all. Lately, besides the Linux kernel, I&rsquo;ve also learned internals of the <a href="https://en.wikipedia.org/wiki/GNU_GRUB">GNU GRUB</a>. In the previous year I&rsquo;ve got many thank you words from different people for the <code>linux-insides</code>. Seems that low-level stuff is interesting not only for me and I decided to write this blog post which will cover some parts of the <code>GNU GRUB</code> and we will see answer on the question which is in the title of this post - How GNU GRUB works. Hope, that it will be useful for somebody.</p>
+
+<p>If you use Linux, you likely know about <code>GNU GRUB</code>. But just in case, wikipedia says that:</p>
+
+<blockquote>
+<p>GNU GRUB (short for GNU GRand Unified Bootloader) is a boot loader package from the GNU Project</p>
+</blockquote>
+
+<p>So, the GNU GRUB is a bootloader. Main point of a bootloader is to load an operating system kernel and to transfer control to it. GNU GRUB has many features like support of different types of executable file formats, dynamic configuration, graphical menu interface, support for different types of file systems and etc.</p>
+
+<p>So the point of the bootloader is clear - to load an operating system kernel. In this post we will see how the GNU GRUB loads the Linux kernel. But before this let&rsquo;s take a little look on architecture of the GNU GRUB. Even if you are newbie Linux user, you can guess that all <code>boot</code> related data is placed in the <code>/boot</code> directory. For me it looks like:</p>
+
+<p><img src="http://s30.postimg.org/3mfl4a681/2016_01_02_193818_933x47_scrot.png" alt="boot-dir" /></p>
+
+<p>This directory contains two <a href="https://en.wikipedia.org/wiki/Initrd">initrd</a> images, the Linux kernel image and the <code>grub</code> directory which contains GNU GRUB related data:</p>
+
+<p><img src="http://s17.postimg.org/bgttwn3u7/ls_boot.png" alt="boot-grub-dir" /></p>
+
+<p>Directory with fonts, GNU GRUB configuration file, themes, locales, the <code>grubenv</code> file that contains GNU GRUB environment variables which are can be used in runtime and the <code>i386-pc</code> directory which contains GNU GRUB images and modules. Content of the <code>i386-pc</code> directory is the most interesting for us. Yes the <code>/boot/grub</code> directory contains many other interesting directories/files besides the <code>/boot/grub</code> directory, but this post will not cover topics like how to make GNU GRUB menu beautiful, readable and etc. If we will open the <code>/boot/grub/i386-pc</code> directory, we will find three types of files there:</p>
+
+<ul>
+<li><code>*.lst</code> files - contain lists of available options depends on file. For example, the <code>/boot/grub/i386-pc/video.lst</code> contains list of available video modes or the <code>/boot/grub/i386-pc/fs.list</code> file contains information about supported file systems;</li>
+<li><code>*.mod</code> files - 32-bit <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a> files which provide additional functional for GNU GRUB. For example, the <code>/boot/grub/i386-pc/acpi.mod</code> adds support of the <a href="https://en.wikipedia.org/wiki/Advanced_Configuration_and_Power_Interface">Advanced Configuration and Power Interface</a> which is used to perform various power-related functions or <code>/boot/grub/i386-pc/ext2.mod</code> provides support for <a href="https://en.wikipedia.org/wiki/Ext2">ext2</a> file system;</li>
+<li><code>*.img</code> files - only two files: <code>/boot/grub/i386-pc/boot.img</code> and <code>/boot/grub/i386-pc/core.img</code>. We need to look closer on this file.</li>
+</ul>
+
+<p>The first <code>boot.img</code> file is the entry of the bootloader on a <a href="https://en.wikipedia.org/wiki/BIOS">PC BIOS</a> system. The content of this file is written to the first sector of the disk or in the <a href="https://en.wikipedia.org/wiki/Master_boot_record">Master boot record</a>. The main point of the <code>boot.img</code> is to load first sector (512 bytes) of the <code>core.img</code> which will continue to do main job of the bootloader. As <code>boot.img</code> is in the master boot record, it must meet several conditions. First of all its size must be 512-bytes and the last two bytes must be <code>0xAA55</code>. We can see that <code>boot.img</code> is 512 bytes size file:</p>
+
+<p><img src="http://s2.postimg.org/7e8s3cuzd/boot_img.png" alt="boot.img" /></p>
+
+<p>and contains two magic bytes in the end:</p>
+
+<pre><code>~$ hexdump -s 510 /boot/grub/i386-pc/boot.img
+00001fe aa55
+</code></pre>
+
+<p>Besides two magic bytes, the <code>Master boot record</code> must contain bootstrap code which will load second stage of the bootloader which can be much more than 512 bytes and <a href="https://en.wikipedia.org/wiki/Partition_table">partition table</a> with four 16-bytes partition entries. Generall structure of the <code>MBR</code> must be like this:</p>
+
+<pre><code>0   +--------------------+
+    |                    |
+    |   Bootstrap code   |
+446 |                    |
+    |                    |
+    |  Partition entry 1 |
+    |  Partition entry 2 |
+    |  Partition entry 3 |
+    |  Partition entry 4 |
+510 |        0x55        |
+511 |        0xaa        |
+512 +--------------------+
+</code></pre>
+
+<p>The second <code>core.img</code> file does the main job for us. It contains file system drivers, so it can load configuration from the <code>/boot/grub/grub.cfg</code> file and modules. The main point of the <code>core.img</code> is to transfer control to the last - second stage of the grub. At this moment, the GNU GRUB will have loaded modules, so it will know everything about operating system kernels which are needed to load. It draws menu, reacts on selection and etc.</p>
+
+<p>Before we will start to dive into low-level source code of the GNU GRUB. We need to understand how all of this data occurs on a disk of computer. Besides bootloader functions, the GNU GRUB provides a rich set of utils:</p>
+
+<p><img src="http://s22.postimg.org/z9plrxbld/grub_utils.png" alt="grub-utils" /></p>
+
+<p>And one of this util may help us to install GNU GRUB on a computer. The name of this util is - <code>grub-install</code>. As we can read in the <code>grub-instal</code> manual page. The <code>grub-install</code> util:</p>
+
+<blockquote>
+<p>grub-install - install GRUB on your drive</p>
+</blockquote>
+
+<p>We just saw a little about GNU GRUB related files and now is time to see how the <code>grub-install</code> installs master boot record and this files. Let&rsquo;s look on the source code if the <code>grub-install</code>.</p>
+
+<h2 id="the-grub-install-util">The grub-install util</h2>
+
+<p>Implementation of the GNU GRUB utils is located in the <code>utils</code> directory. In our case, implementation of the <code>grub-install</code> utils is in the <code>grub-install.c</code>. If we will look on its <code>main</code> function, we will see that it starts from the call of the <code>grub_util_host_init</code> function which defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/osdep/basic/init.c">grub-core/osdep/basic/init.c</a> source code file and produces standard stuff for a C programs, like the call of the <code>set_program_name</code>, setting locale and etc.</p>
+
+<p>After the first inital initialization, we can see the call of the <code>arg_parse</code> function which as we may understand from the name - parses command line arguments of the <code>grub-install</code> util. We will not dive into details of implementation of the <code>argp_parse</code> function in ths post. I don&rsquo;t know how about you, but now, its interesting for me only low-level stuff in the GRUB. At the next step as we parsed command line arguments of the <code>grub-install</code> util, we start to check these arguments and do something depend on their values. First of all, we check the <code>-v</code> or <code>--verbose</code> flag which allows us to see verbose output of the <code>grub-instal</code> work. If this flag is set we set <code>debug=all</code> environment variable of GRUB with the call of the <code>grub_env_set</code> function:</p>
+
+<pre><code class="language-C">  if (verbosity &gt; 1)
+    grub_env_set (&quot;debug&quot;, &quot;all&quot;);
+</code></pre>
+
+<p>GRUB stores its environment variables in the hashtable which is represented by the following structure:</p>
+
+<pre><code class="language-C">struct grub_env_context
+{
+  struct grub_env_var *vars[HASHSZ];
+  struct grub_env_context *prev;
+};
+</code></pre>
+
+<p>The implementation of the <code>grub_env_set</code> function is simple. It just calculates index in the <code>grub_env_context</code> hashtable and stores a given variable in it. After this we can see the call of the:</p>
+
+<pre><code class="language-C">grub_util_load_config (&amp;config);
+</code></pre>
+
+<p>function. This function just fills the <code>grub_util_config</code> structure from the GRUB configuration file (located in the <code>/etc/default/grub</code>). This structure consists from two fields. Both fields are depends on the following environment variables:</p>
+
+<ul>
+<li><code>GRUB_ENABLE_CRYPTODISK</code> - allows to install GRUB on the encrypted disk.</li>
+<li><code>GRUB_DISTRIBUTOR</code> - provides string which is associated with the distributor. For example, for me now it is:</li>
+</ul>
+
+<pre><code>$ cat /etc/default/grub | grep DIST
+GRUB_DISTRIBUTOR=&quot;Arch&quot;
+</code></pre>
+
+<p>After this we check the <code>GRUB_DISTRIBUTOR</code> value and if we&rsquo;ve found it in the GRUB configuration file we save it in the <code>bootloader_id</code> variable. In other way the <code>bootloader_id</code> will contain <code>&quot;grub&quot;</code> string by default. At the next step we need to check current platform and exit in a failure case. The <code>grub-install</code> util does it with the call of the <code>get_default_platform</code> function. This function checks <code>gcc</code> directives and returns our platform:</p>
+
+<pre><code class="language-C">static const char *
+get_default_platform (void)
+{
+#ifdef __powerpc__
+   return &quot;powerpc-ieee1275&quot;;
+   ...
+   ...
+   ...
+#elif defined (__amd64__) || defined (__x86_64__) || defined (__i386__)
+   return grub_install_get_default_x86_platform ();
+#else
+   return NULL;
+#endif
+}
+</code></pre>
+
+<p>The <code>grub_install_get_default_x86_platform ()</code> function returns <code>x86_64-efi</code>, <code>i386-efi</code> or just <code>i386-pc</code> on <code>x86_64</code> platform. So, now we know target machine and now we need to get the path of directory where <code>grub-install</code> util will install its modules. In our case it will be <code>/lib/grub/i386-pc</code> and the <code>grub_install_source_directory</code> variable will contain this path. Besides the name of the target platform, we need to get information about this platform. The <code>grub-install</code> util will do it with the call of the <code>grub_install_get_target()</code> function. The main point of this function is to return item from the <code>platforms</code> array:</p>
+
+<pre><code class="language-C">static struct
+{
+  const char *cpu;
+  const char *platform;
+} platforms[GRUB_INSTALL_PLATFORM_MAX] =
+  {
+    [GRUB_INSTALL_PLATFORM_I386_PC] =          { &quot;i386&quot;,    &quot;pc&quot;        },
+    [GRUB_INSTALL_PLATFORM_I386_EFI] =         { &quot;i386&quot;,    &quot;efi&quot;       },
+    [GRUB_INSTALL_PLATFORM_I386_QEMU] =        { &quot;i386&quot;,    &quot;qemu&quot;      },
+	...
+	...
+	...
+}
+</code></pre>
+
+<p>and print information about it:</p>
+
+<pre><code class="language-C">{
+    char *platname = grub_install_get_platform_name (platform);
+    fprintf (stderr, _(&quot;Installing for %s platform.\n&quot;), platname);
+    free (platname);
+}
+</code></pre>
+
+<p>At the next step we need to select GRUB&rsquo;s disk module depends on the platform name. In our case it will be <code>biosdisk</code> module:</p>
+
+<pre><code class="language-C">switch (platform)
+{
+    case GRUB_INSTALL_PLATFORM_I386_PC:
+      if (!disk_module)
+	disk_module = xstrdup (&quot;biosdisk&quot;);
+      break;
+	  ...
+	  ...
+}
+</code></pre>
+
+<p>The next step after we have selected disk module is initialization of all modules:</p>
+
+<pre><code class="language-C">  grub_init_all ();
+  grub_gcry_init_all ();
+  grub_hostfs_init ();
+  grub_host_init ();
+</code></pre>
+
+<p>The source code of GRUB modules is located in different parts of GRUB source code, but each module contains definition of the <code>GRUB_MOD_INIT</code> and <code>GRUB_MOD_FINI</code> macros which make all initialization stuff. After all modules are initialized we are copying/installing to the <code>/boot/grub</code> directory all GRUB files (modules, locales, themes and etc.) to the source directory by the call of the:</p>
+
+<pre><code class="language-C">  grub_install_copy_files (grub_install_source_directory,
+			   grubdir, platform);
+</code></pre>
+
+<p>function. After all of this manipulations, the <code>grub-install</code> util executes many different thing. It creates the <code>/boot/grub/envblk</code> file which is the GRUB environment block that is stores GRUB&rsquo;s environment variables. You can use the <code>grub-editevn --list</code> util to lust the GRUB environment variables. At the next step, the <code>grub-install</code> checks the given device, tries to understand type of files system on a given device and loads module for the certain file system type. It loads the module which provides functional for a disk reading. You can remember that it is the <code>biosdisk</code> for us. But the main point of the <code>grub-install</code> utils is to install <a href="https://en.wikipedia.org/wiki/Master_boot_record">MBR</a>, the <code>core.img</code> and the <code>kernel.img</code>. The most interesting part for us is the call of the:</p>
+
+<pre><code class="language-C">if (install_bootsector)
+	grub_util_bios_setup (platdir, &quot;boot.img&quot;, &quot;core.img&quot;,
+                          install_drive, force,
+				          fs_probe, allow_floppy, add_rs_codes);
+</code></pre>
+
+<p>function. The <code>grub_util_bios_setup</code> function defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/util/setup.c">util/setup.c</a> source code file and its main point is to setup MBR. This function takes eight arguments:</p>
+
+<ul>
+<li><code>platdir</code> - platform dependend directory wich contains GRUB modules, image and etc. (For example - <code>/lib/grub/i386-pc</code>);</li>
+<li>GRUB boot image;</li>
+<li>GRUB core image;</li>
+<li><code>install_drive</code> - name of the device where to install GRUB;</li>
+<li><code>force</code> - install or not if any problems are presented;</li>
+<li><code>fs_probe</code> - allows GRUB to skip file system probes for the given device;</li>
+<li><code>allow_floppy</code> - makes a drive bootable as floppy;</li>
+<li><code>add_rs_codes</code> - shows apply or not <a href="https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction">reed-solomon</a> codes during <code>core-img</code> embedding.</li>
+</ul>
+
+<p>The <code>grub_util_bios_setup</code> function reads the <code>boot.img</code> and the <code>core.img</code> from the disk, sets the root device, copies <a href="https://en.wikipedia.org/wiki/Partition_table">partition table</a> (will see more about it later), reads partition table, checks errors and writes the <code>core.img</code> and the <code>boot.img</code>:</p>
+
+<pre><code class="language-C">for (i = 0; i &lt; nsec; i++)
+	grub_disk_write (dest_dev-&gt;disk, sectors[i], 0,
+		             GRUB_DISK_SECTOR_SIZE,
+		             core_img + i * GRUB_DISK_SECTOR_SIZE);
+...
+...
+...
+if (grub_disk_write (dest_dev-&gt;disk, BOOT_SECTOR,
+                     0, GRUB_DISK_SECTOR_SIZE, boot_img))
+    grub_util_error (&quot;%s&quot;, grub_errmsg);
+</code></pre>
+
+<p>That&rsquo;s all. Now we have installed master boot record and other boot-related GRUB parts on our machine.</p>
+
+<h2 id="booting-process">Booting process</h2>
+
+<p>The booting process starts when BIOS reads first sector (first 512 bytes) from a disk and loads it into memory by <code>0x0000:0x7c000</code> address. The GNU GRUB MBR code is implemented in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/boot/i386/pc/boot.S">grub-core/boot/i386/pc/boot.S</a> assembly source code file. As I already wrote above, the main point of the master boot record bootstrap code is to load second second sector from disk and control transfer to it. Besides this, bootstrap code does not do almost anything, because as you remember it is very small, only 512 bytes size. Let&rsquo;s look on the implementation of the bootstrap code.</p>
+
+<p>In the beginning of the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/boot/i386/pc/boot.S">grub-core/boot/i386/pc/boot.S</a> source code file we can see definition of the global labels and the jump to the local label:</p>
+
+<pre><code class="language-assembly">.globl _start, start;
+_start:
+start:
+	jmp	LOCAL(after_BPB)
+	nop
+</code></pre>
+
+<p>The <code>LOCAL</code> macro defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/include/grub/symbol.h">include/grub/symbol.h</a> header file and expands to the concatenation of the <code>L_</code> and given symbol:</p>
+
+<pre><code class="language-C">#define LOCAL(sym)	L_ ## sym
+</code></pre>
+
+<p>in our case it will expand to the <code>L_after_BPB</code> label. This label represents the <a href="https://en.wikipedia.org/wiki/BIOS_parameter_block">BIOS parameter block</a> which contains information about physycal layout of a disk. At the start of the <code>L_after_BPB</code> label we disable interrupts with the <code>cli</code> instruction to prevent erasing of the <code>dl</code> register which stores number of hard drive from which we have loaded. After this we test value of the <code>dl</code> register and set to <code>0x80</code> (first hard drive in the system) if buggy BIOS did not set it:</p>
+
+<pre><code class="language-assembly">	cli
+    testb   $0x80, %dl
+    jz      2f
+2:
+    movb    $0x80, %dl
+</code></pre>
+
+<p>At the next step we set data segment and stack segment registers to the known value - it is zero in our case, setup stack pointer to the top of the stack segment (<code>0x2000</code>) and enable interrupts again, because from this point we are safe now:</p>
+
+<pre><code class="language-assembly">	xorw	%ax, %ax
+	movw	%ax, %ds
+	movw	%ax, %ss
+
+	movw	$GRUB_BOOT_MACHINE_STACK_SEG, %sp
+	sti		/* we're safe again */
+</code></pre>
+
+<p>We just made enabled interrupts, so we can print <code>Welcome</code> message to the screen with the <code>MSG</code> macro:</p>
+
+<pre><code class="language-assembly">MSG(notification_string)
+
+#define MSG(x)	movw $x, %si; call LOCAL(message)
+
+notification_string:	.asciz &quot;GRUB &quot;
+
+LOCAL(message):
+	lodsb			/* loads character from %si to %al */
+	cmpb	$0, %al /* check that we are at the end of string */
+	jne	1b          /* display character if we are not at the end of string */
+	ret
+
+/* %si stores pointer to the notification_string */
+/* %bx represents foreground color */
+/* %ah number of BIOS service */
+/* int $10 - http://www.ctyme.com/intr/rb-0106.htm */
+1:  movw	$0x0001, %bx
+	movb	$0xe, %ah
+	int	$0x10
+</code></pre>
+
+<p>After we saw the <code>notification_string</code> in our screen, the <code>boot.S</code> starts to load first sector of the <code>core.img</code> file which is represented by the <code>diskboot.img</code> image. To read first sector of the <code>core.img</code> we will use the <code>0x42</code> function of the <a href="http://www.ctyme.com/intr/rb-0708.htm">0x13</a> interrupt. First of all we need to check support of the <a href="https://en.wikipedia.org/wiki/Logical_block_addressing">LBA</a> in the BIOS by the call of the <a href="http://www.ctyme.com/intr/rb-0706.htm">0x41</a> fuction of the <code>0x13</code> interrupt:</p>
+
+<pre><code class="language-assembly">	movb	$0x41, %ah
+	movw	$0x55aa, %bx
+	int	$0x13
+</code></pre>
+
+<p>If the extended read or <code>LBA</code> is supported we start to read first 512 bytes from the <code>core.img</code>. To use extended read we must call the <a href="http://www.ctyme.com/intr/rb-0708.htm">0x42</a> function of the <code>0x13</code> interrupt with the following set of arguments:</p>
+
+<ul>
+<li><code>%ah</code> register must contain number of the function, <code>0x42</code> in our case;</li>
+<li><code>%dl</code> register must contain number of the hard drive (starts from <code>0x80</code>);</li>
+<li><code>%ds:%si</code> registers must point to the <a href="http://www-pc.uni-regensburg.de/hardware/TECHDOK/ATA_EDD_11.PDF">disk address packet structure</a>.</li>
+</ul>
+
+<p>The disk address packet structure is a data structure which contains data that helps to convert logical block addressing information to physical parameters (<a href="https://en.wikipedia.org/wiki/Cylinder-head-sector">Cylinders, Heads, Sectors</a>) of a disk. Before the call of the <code>0x13</code> interrupt, we need to fill disk address packet structure. In the our code it starts at the <code>disk_address_packet</code> label. General structure of the disk address packet structure is:</p>
+
+<pre><code>Offset
+      +---------------------------------+
+  0	  |  Packet size in bytes           |
+  1   |  Reserved (must be 0)           |
+  2   |  Number of blocks to transfer   |
+  3   |  Reserved (must be 0)           |
+  4   |  Address of transfer buffer     |
+  8   |  Started absolute block number  |
+      +---------------------------------+
+</code></pre>
+
+<p>Address of the disk address packet structure is located in the <code>%si</code> register:</p>
+
+<pre><code class="language-assembly">	movw	$disk_address_packet, %si
+</code></pre>
+
+<p>So, we can set reserved bytes to zero and packet size in our <code>disk_packet_packet</code> with the:</p>
+
+<pre><code class="language-assembly">movw	$0x0010, (%si)
+</code></pre>
+
+<p>packets size will be <code>16</code> bytes here. We will read one 512 bytes block:</p>
+
+<pre><code class="language-assembly">	xorw	%ax, %ax
+	...
+	incw	%ax
+	movw	%ax, 2(%si)
+</code></pre>
+
+<p>In the end we need to set block number:</p>
+
+<pre><code class="language-assembly">	movl	LOCAL(kernel_sector), %ebx
+	movl	%ebx, 8(%si)
+	movl	LOCAL(kernel_sector_high), %ebx
+	movl	%ebx, 12(%si)
+</code></pre>
+
+<p>and pointer to the buffer where we will read data from disk:</p>
+
+<pre><code class="language-assembly">	movw	$GRUB_BOOT_MACHINE_BUFFER_SEG, 6(%si)
+</code></pre>
+
+<p>and call the <code>0x13</code> interrupt:</p>
+
+<pre><code class="language-assembly">	movb	$0x42, %ah
+	int	    $0x13
+</code></pre>
+
+<p>If all is good, the <code>GRUB_BOOT_MACHINE_BUFFER_SEG</code> will point to the beginning of the <code>diskboot.img</code> image in memory. In the of the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/boot/i386/pc/boot.S">grub-core/boot/i386/pc/boot.S</a> we relocate our buffer to the <code>GRUB_BOOT_MACHINE_KERNEL_ADDR</code> or address and jump into it:</p>
+
+<pre><code class="language-assembly">	jmp	*(LOCAL(kernel_address))
+</code></pre>
+
+<p>From this moment we have <code>diskboot.img</code> (which is first 512 bytes of the <code>core.img</code>) in the memory. As you may remember, the main point of the <code>diskboot.img</code> is to load rest of the <code>core.img</code> and jump into it. I will not describe this process here, it is pretty easy to understand if you understood previous description of how the <code>boot.S</code> loads <code>diskboot.img</code>. Both of these processes are prety similar. After the <code>diskboot.img</code> will load rest of the <code>core.img</code> it jumps to the GNU GRUB kernel code at <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/boot/i386/pc/startup_raw.S">grub-core/boot/i386/pc/startup_raw.S</a> source code file. The main point of this code is to make preparation before the <a href="https://en.wikipedia.org/wiki/C_%28programming_language%29">C</a> code. You can remember that we need to prepare <a href="https://en.wikipedia.org/wiki/.bss">BSS</a> section for global uninitialized data to run <code>C</code> code and stack. Besides this we execute transition to <a href="https://en.wikipedia.org/wiki/Protected_mode">protected mode</a>. Let&rsquo;s look on this.</p>
+
+<p>Before the transition to the protected mode, we set segment registers to the known value (zero in our case) and setup stack. After this we call the <code>real_to_prot</code> function which is implemented in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/kern/i386/realmode.S">grub-core/kern/i386/realmode.S</a> assembly file. It starts from the loading of <a href="http://wiki.osdev.org/Global_Descriptor_Table">Global Descriptor Table</a> with the <code>lgdt</code> instruction:</p>
+
+<pre><code class="language-assembly">lgdtl	gdtdesc
+</code></pre>
+
+<p>Where the <code>gdtdesc</code> contains description of four segments:</p>
+
+<ul>
+<li>Code segment;</li>
+<li>Data segment;</li>
+<li>Real-mode code segment;</li>
+<li>Real-mode data segment.</li>
+</ul>
+
+<p>I will not describe what is it <code>GDT</code> and why do we need in it in this post. More about it you can read more about it in the second <a href="https://0xax.gitbooks.io/linux-insides/content/Booting/linux-bootstrap-2.html">part</a> of the linux-insides book. After we set the <code>Global Descriptor Table</code>, we turn on protected mode by the setting <code>PE</code> bit in the <code>%cr0</code> <a href="https://en.wikipedia.org/wiki/Control_register">control register</a>:</p>
+
+<pre><code class="language-assembly">	movl	%cr0, %eax
+	orl	$GRUB_MEMORY_CPU_CR0_PE_ON, %eax
+	movl	%eax, %cr0
+</code></pre>
+
+<p>and jump to the protected mode. Next we clear segment registers, setup protected mode stack and load <a href="https://en.wikipedia.org/wiki/Interrupt_descriptor_table">interrupt descriptor table</a> by the call of the <code>lidtl</code> instruction:</p>
+
+<pre><code class="language-assembly">lidt protidt
+</code></pre>
+
+<p>Interrupt descriptor table contains addresses of the interrupt handlers which are will be called when an interrupt occurs. After all of this manipulations we are in protected mode and may return to the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/boot/i386/pc/startup_raw.S">grub-core/boot/i386/pc/startup_raw.S</a> assembly file. In the end, we fill <code>%edx</code>, <code>%edi</code>, <code>%ecx</code> and <code>%eax</code> registers with the number of boot device, addresses of the <code>prot_to_real</code> and <code>real_to_prot</code> function which are helpers for transition between real/protected modes and address of the interrupt descriptor table. Now we can jump to the GNU GRUB kernel:</p>
+
+<pre><code class="language-assembly">movl	LOCAL(boot_dev), %edx
+movl	$prot_to_real, %edi
+movl	$real_to_prot, %ecx
+movl	$LOCAL(realidt), %eax
+jmp	*%esi
+</code></pre>
+
+<p>The GNU GRUB kernel for <a href="https://en.wikipedia.org/wiki/X86">x86</a> entry is in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/kern/i386/pc/startup.S">grub-core/kern/i386/pc/startup.S</a> assembly file. We are clearing space for the <a href="https://en.wikipedia.org/wiki/.bss">BSS</a> section and call the first function which is written in <code>C</code> programming language:</p>
+
+<pre><code class="language-assembly">call EXT_C(grub_main)
+</code></pre>
+
+<p>For this moment, we&rsquo;ve been through the low-level part of the GNU GRUB. Of course, it is not the end of the assembly. But for now we have loaded kernel of the GNU GRUB into memory and transfered control to it which is writen mostly in C programming language. Well, let&rsquo;s continue.</p>
+
+<h2 id="gnu-grub-kernel">GNU GRUB kernel</h2>
+
+<p>The <code>grub_main</code> function defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/kern/main.c">grub-core/kern/main.c</a> source code file and its main purpose is to initialize architecture-specific stuff, to load/parse configuration file and modules, to set some environment variables and to load <code>normal</code> mode. It starts from the call of the <code>grub_machine_init()</code> function which is defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/kern/i386/pc/init.c">grub-core/kern/i386/pc/init.c</a> source code file. The <code>grub_machine_init</code> function initializes console by the call of the:</p>
+
+<pre><code class="language-C">grub_console_init ();
+</code></pre>
+
+<p>which just call of:</p>
+
+<pre><code class="language-C">grub_term_register_output (&quot;console&quot;, &amp;grub_console_term_output);
+grub_term_register_input (&quot;console&quot;, &amp;grub_console_term_input);
+</code></pre>
+
+<p>functions. These functions takes two parameters: the first is name of a console and the second is pointer to a structure which contains pointer to the actions on a given console, like <code>putchar</code>, <code>cls</code> and etc. In the next time, when print-like function will be called, the GNU GRUB will go through a list of registered consoles and will call their print API. After this the <code>grub_machine_init()</code> function initializes memory regions and intializes <a href="https://en.wikipedia.org/wiki/Time_Stamp_Counter">Time stamp counter</a>.</p>
+
+<p>After this we return to the <code>grub_main ()</code> function which calls the <code>grub_load_config()</code> function. As you can understand from the function&rsquo;s name, it loads configuration file. The next step is loading of GNU GRUB modules which are represented by the <a href="grub_load_config ();">ELF</a> files in the <code>/boot/grub/arch</code>. For example:</p>
+
+<p><img src="http://s3.postimg.org/bvfh7uatf/elf.png" alt="grub-mod" /></p>
+
+<p>After the GNU GRUB kernel will load modules, it sets <code>root</code> and <code>prefix</code> environment variables which are represent root device and prefix of GNU GRUB directory (by default it is <code>/boot/grub</code>), parses configuration file, registers four core command: <code>ls</code>, <code>set</code>, <code>unset</code> and <code>insmod</code>. The last step of execution of the <code>grub_main ()</code> function is the <code>grub_load_normal_mode ()</code> function. This function defined in the same source code file as the <code>grub_main()</code> function and it tries to load and execute the <code>normal</code> module.</p>
+
+<p>This module represents main module of GNU GRUB which starts to work after all of main low-level preparation. As we can read in the <a href="http://www.gnu.org/software/grub/manual/grub.html#normal">documentation</a>:</p>
+
+<blockquote>
+<p>In normal mode, commands, filesystem modules, and cryptography modules are automatically loaded, and the full GRUB script parser is available</p>
+</blockquote>
+
+<p>So, the <code>normal</code> module/command is responsible for the user menu, loading of modules which are defined in the GNU GRUB configuration file with <code>insmod</code> command, handling of user input and transfering control to the real loader of an operating system kernel. Let&rsquo;s take a closer look on the <code>normal</code> mode.</p>
+
+<h2 id="normal-mode">Normal mode</h2>
+
+<p>All code which is related to the <code>normal</code> mode is located in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/normal">grub-core/normal</a> directory. As well as all the modules of GNU GRUB, the <code>normal.mod</code> has definition of the <code>GRUB_MOD_INIT</code> and <code>GRUB_MOD_FINI</code> macros which are responsible for a module initialization and finalization. The <code>normal.mod</code> sets a couple of environment variables like target processor, colors, pager and etc. Also it registers a set of command to clear screen, exit from normal mode and etc. In the end of the <code>grub_main()</code> function we could see the call of the:</p>
+
+<pre><code class="language-C">grub_command_execute (&quot;normal&quot;, 0, 0);
+</code></pre>
+
+<p>function which executes already registred command in the <code>GRUB_MOD_INIT(&quot;normal&quot;)</code>. It looks:</p>
+
+<pre><code class="language-C">grub_register_command (&quot;normal&quot;, grub_cmd_normal,
+			           0, N_(&quot;Enter normal mode.&quot;));
+</code></pre>
+
+<p>So, after the last step of the <code>grub_main()</code> function, we will be in the <code>grub_cmd_normal()</code> function. This function enters to the <code>normal</code> mode. Practically it means that it reads configuration file of the GNU GRUB (<code>/boot/grub/grub.cfg</code>) to the <code>grub_menu_t</code> type which represents menu of the GNU GRUB and renders menu. We will skip many parts of this, like how menu renders and how it is represented in the source code of the GNU GRUB, because its not related directly with bootloading. The interesting part for us is that <code>grub_normal_execute()</code> function calls the <code>grub_show_menu()</code> function from the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/normal/menu.c">grub-core/normal/menu.c</a> source code file which in turn calls the <code>run_menu</code> function.</p>
+
+<p>The <code>run_menu</code> function provides interruptible sleep until a menu item is selected and returns the selected menu item:</p>
+
+<pre><code class="language-C">boot_entry = run_menu (menu, nested, &amp;auto_boot);
+</code></pre>
+
+<p>After the <code>run_menu()</code> function will return index of selected menu item which is represented by the <code>grub_menu_entry</code> structure, we need to execute this menu entry by the call of the <code>grub_menu_execute_entry</code> function. This function takes two parameters:</p>
+
+<ul>
+<li>Selected menu entry;</li>
+<li><code>auto_boot</code> - shows that nothing was selected and timer is expired.</li>
+</ul>
+
+<p>The <code>grub_menu_execute_entry()</code> function is big enough. It checks that an user selected submenu and renders it in this case, it checks that selected menu entry needs in authentication if we put something like <code>--users user1</code> to a menu entry and etc. But the greatest interest for us is the following code:</p>
+
+<pre><code class="language-C">grub_script_execute_new_scope (entry-&gt;sourcecode, entry-&gt;argc, entry-&gt;args);
+...
+...
+...
+if (grub_errno == GRUB_ERR_NONE &amp;&amp; grub_loader_is_loaded ())
+    grub_command_execute (&quot;boot&quot;, 0, 0);
+</code></pre>
+
+<p>The first function takes the body of the selected menu entry, count of arguments and arguments of the GNU GRUB function and tries to execute it. For example if a body of your menu entry will be like this:</p>
+
+<pre><code>linux	/vmlinuz-linux root=UUID=4680b48e-595e-4d03-9115-2db79206e9f9 rw  quiet
+echo	'Loading initial ramdisk ...'
+initrd	 /initramfs-linux.img
+</code></pre>
+
+<p>The <code>grub_cmd_linux()</code>, <code>grub_cmd_initrd()</code> and the <code>grub_cmd_echo()</code> functions will be called. After the GNU GRUB will handle script we check an error and that loader is loaded. If both conditions will be good, we execute <code>boot</code> commands which will start to boot a kernel. Now we are stopped on the last step - loading of the Linux kernel.</p>
+
+<h2 id="ok-finally-lets-load-it">Ok, finally lets load it</h2>
+
+<p>A loader will be loaded during <code>linux</code> command execution in the <code>grub_cmd_linux()</code> function. This function is defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/loader/i386/linux.c">grub-core/loader/i386/linux.c</a> source code file. If you will look on the definition of the <code>linux</code> command in your <code>/boot/grub/grub.cfg</code> configuration file, you will see that this command takes path of the Linux kernel image as first argument. So, the <code>grub_cmd_linux()</code> function starts from the check of the number of command line arguments:</p>
+
+<pre><code class="language-C">if (argc == 0)
+{
+    grub_error (GRUB_ERR_BAD_ARGUMENT, N_(&quot;filename expected&quot;));
+	goto fail;
+}
+</code></pre>
+
+<p>If we have no command line arguments, print error and go to <code>fail</code> label. After this we try to open and read the header of the Linux kernel image by the given path in the first command line argument. We are reading the Linux kernel image to the <code>struct linux_kernel_header lh</code> structure which defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/include/grub/i386/linux.h">include/grub/i386/linux.h</a> header file and contains fields which are mapped to the <a href="https://www.kernel.org/doc/Documentation/x86/boot.txt">Linux boot protocol v 2.10</a>. After we have read the header of the Linux kernel image, we make some checks for magic number (<code>0xaa55</code>), that <code>setup_sects</code> field is not greater than <code>64</code> and etc. As we finished with checks, we need to calculate size of the Linux kernel image and read it full. After this we need to fill/calculate fields which are marked in the Linux boot protocol as <code>write</code>. There fields are:</p>
+
+<ul>
+<li><code>code32_start</code> - entry point of the Linux kernel in <a href="https://en.wikipedia.org/wiki/Protected_mode">protected mode</a>. It is not neccecary, but can be updated for realocation;</li>
+<li><code>ramdisk_image</code> - the 32-bit linear address of the initial ramdisk or ramfs;</li>
+<li><code>ramdisk_image_size</code> - the size of the initial ramdisk or ramfs;</li>
+<li><code>heap_end_ptr</code> - the offset of the end of the setup stack/heap, minus <code>0x0200</code>;</li>
+<li><code>loadflags</code> - bitmask which provides boot related flags.</li>
+<li>and etc.</li>
+</ul>
+
+<p>So, we are setting the type of the bootloader which is the GNU GRUB (<code>0x72</code>) in our case, offset for the Linux kernel command line, <code>ramdisk_image</code> and <code>ramdisk_size</code> to zero (these fields will be filled in the <code>grub_cmd_initrd()</code>) and other fields:</p>
+
+<pre><code class="language-C">linux_params.type_of_loader = GRUB_LINUX_BOOT_LOADER_TYPE;
+linux_params.cl_magic = GRUB_LINUX_CL_MAGIC;
+linux_params.cl_offset = 0x1000;
+linux_params.ramdisk_image = 0;
+linux_params.ramdisk_size = 0;
+linux_params.heap_end_ptr = GRUB_LINUX_HEAP_END_OFFSET;
+linux_params.loadflags |= GRUB_LINUX_FLAG_CAN_USE_HEAP;
+...
+...
+...
+</code></pre>
+
+<p>After we have load the Linux kernel image into memory and have filled Linux kernel header with constructed command line, we check errors and set callback function for the Linux kernel booting. In our case this function will be <code>grub_linux_boot()</code> function:</p>
+
+<pre><code class="language-C">if (grub_errno == GRUB_ERR_NONE)
+{
+    grub_loader_set (grub_linux_boot, grub_linux_unload, 0);
+    loaded = 1;
+}
+</code></pre>
+
+<p>where the <code>grub_loader_set()</code> function sets:</p>
+
+<pre><code class="language-C">grub_loader_set (grub_err_t (*boot) (void),
+                 grub_err_t (*unload) (void),
+		         int flags)
+{
+    ...
+    grub_loader_boot_func = boot;
+    ...
+}
+</code></pre>
+
+<p>Now let&rsquo;s return to the <code>grub_menu_execute_entry()</code> function. We have stopped at the following code there:</p>
+
+<pre><code class="language-C">grub_script_execute_new_scope (entry-&gt;sourcecode, entry-&gt;argc, entry-&gt;args);
+
+if (grub_errno == GRUB_ERR_NONE &amp;&amp; grub_loader_is_loaded ())
+    grub_command_execute (&quot;boot&quot;, 0, 0);
+</code></pre>
+
+<p>The first line of code is executed and as we just saw, this function reads the body of a selected menu entry and executes commands from it. After the <code>grub_script_execute_new_scope</code> will be finished, at least <code>linux</code> and <code>initrd</code> commands of GNU GRUB will be executed. This means that the header of the Linux kernel and <a href="https://en.wikipedia.org/wiki/Initrd">initrd</a> will be loaded into the memory and fields of the Linux kernel header are parsed and needed fields of it will be calculated and filled. If everything is ok, the <code>if</code> condition after the call of the <code>grub_script_execute_new_scope()</code> function will return true and the <code>boot</code> command will be execute.</p>
+
+<p>The entry of the <code>boot</code> command is the <code>grub_cmd_boot()</code> function which defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/commands/boot.c">grub-core/commands/boot.c</a> source code file. Besides a couple of check, the point of the <code>grub_cmd_boot()</code> function is to call <code>boot</code> callback function which is set by the loader:</p>
+
+<pre><code class="language-C">err = (grub_loader_boot_func) ();
+</code></pre>
+
+<p>In our case, this callback function was set in the <code>grub_loader_set()</code> function and this function is <code>grub_linux_boot()</code> function which defined in the <a href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/loader/i386/linux.c">grub-core/loader/i386/linux.c</a> source code file. The <code>grub_linux_boot()</code> function sets video mode which is depends on values of <code>video</code> parameters from the Linux kernel header, sets the Linux kernel command line offset, fills register and start</p>
+
+<pre><code class="language-C">state.ebp = state.edi = state.ebx = 0;
+state.esi = ctx.real_mode_target;
+state.esp = ctx.real_mode_target;
+state.eip = ctx.params-&gt;code32_start;
+return grub_relocator32_boot (relocator, state, 0);
+</code></pre>
+
+<p>The relocator of the GNU GRUB is big piece of code which prepares all registers to the state which is good for the Linux kernel, prepares environment to the actual processor mode which depends on relocator type (may be in real, protected or long mode), calculates base physical address of the Linux kernel and jumps on it.</p>
+
+<p>From this moment we are in the kernel!</p>
+
+<p>That&rsquo;s all.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We saw how the GNU GRUB loads the Linux kernel in this post. Of course, it is not fully cover booting process of the Linux kernel and it also does not cover full aspects of the GNU GRUB. We have missed some things like how does GRUB manage filesystem related work, memory management related stuff, styles and appereance of menu and etc. This is not real to cover all of this topics and especially full source code of the such project like the GNU GRUB in one post. But I hope, you&rsquo;ll like it and you will research other boot related things with yourself.</p>
+
+<p><strong>Questions/Suggestions</strong>: Feel free about any questions or suggestions by pinging me at twitter <a href="https://twitter.com/0xAX">@0xAX</a>, adding an issue or just drop me an <a href="kuleshovmail@gmail.com">email</a>.</p>
+
+<p><strong>Please note that English is not my first language and I am really sorry for any inconvenience. If you found any mistakes please send me PR to <a href="https://github.com/0xAX/0xAX.github.io/tree/source">0xax.github.com</a> or just drop me an <a href="kuleshovmail@gmail.com">email</a></strong></p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+<li><a href="https://www.gnu.org/software/grub/">GNU GRUB</a></li>
+<li><a href="http://git.savannah.gnu.org/cgit/grub.git/tree/">GNU GRUB git web interface</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Assembly_language">assembly programming language</a></li>
+<li><a href="https://0xax.gitbooks.io/linux-insides/content/index.html">linux-insides</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Initrd">initrd</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Advanced_Configuration_and_Power_Interface">Advanced Configuration and Power Interface</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Master_boot_record">Master boot record</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Partition_table">partition table</a></li>
+<li><a href="https://en.wikipedia.org/wiki/BIOS_parameter_block">BIOS parameter block</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Logical_block_addressing">LBA</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Cylinder-head-sector">Cylinders, Heads, Sectors</a></li>
+<li><a href="https://en.wikipedia.org/wiki/.bss">BSS</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Protected_mode">protected mode</a></li>
+<li><a href="http://wiki.osdev.org/Global_Descriptor_Table">Global Descriptor Table</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Interrupt_descriptor_table">interrupt descriptor table</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Time_Stamp_Counter">Time stamp counter</a></li>
+<li><a href="https://www.kernel.org/doc/Documentation/x86/boot.txt">Linux kernel boot protocol</a></li>
+</ul>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">01 Dec 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_8/" class="post-title">Say hello to x86_64 Assembly [part 8]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>It is eight and final part of Say hello to x86_64 Assembly and here we will take a look on how to work with non-integer numbers in assembler. There are a couple of ways how to work with floating point data:</p>
+
+<ul>
+<li>fpu</li>
+<li>sse</li>
+</ul>
+
+<p>First of all let&rsquo;s look how floating point number stored in memory. There are three floating point data types:</p>
+
+<ul>
+<li>single-precision</li>
+<li>double-precision</li>
+<li>double-extended precision</li>
+</ul>
+
+<p>As Intel&rsquo;s 64-ia-32-architecture-software-developer-vol-1-manual described:</p>
+
+<pre><code>The data formats for these data types correspond directly to formats specified in the IEEE Standard 754 for Binary Floating-Point Arithmetic.
+</code></pre>
+
+<p>Single-precision floating-point float point data presented in memory:</p>
+
+<ul>
+<li>sign - 1 bit</li>
+<li>exponent - 8 bits</li>
+<li>mantissa - 23 bits</li>
+</ul>
+
+<p>So for example if we have following number:</p>
+
+<pre><code>| sign  | exponent | mantissa
+|-------|----------|-------------------------
+| 0     | 00001111 | 110000000000000000000000
+</code></pre>
+
+<p>Exponent is either an 8 bit signed integer from −128 to 127 or an 8 bit unsigned integer from 0 to 255. Sign bit is zero, so we have positive number. Exponent is 00001111b or 15 in decimal. For single-precision displacement is 127, it means that we need to calculate exponent - 127 or 15 - 127 = -112. Since the normalized binary integer part of the mantissa is always equal to one, then in the mantissa is recorded only its fractional part, so mantissa or our number is 1,110000000000000000000000. Result value will be:</p>
+
+<pre><code>value = mantissa * 2^-112
+</code></pre>
+
+<p>Double precision number is 64 bit of memory where:</p>
+
+<ul>
+<li>sign - 1 bit</li>
+<li>exponent - 11 bit</li>
+<li>mantissa - 52 bit</li>
+</ul>
+
+<p>Result number we can get by:</p>
+
+<pre><code>value = (-1)^sign * (1 + mantissa / 2 ^ 52) * 2 ^ exponent - 1023)
+</code></pre>
+
+<p>Extended precision is 80 bit numbers where:</p>
+
+<ul>
+<li>sign - 1 bit</li>
+<li>exponent - 15 bit</li>
+<li>mantissa - 112 bit</li>
+</ul>
+
+<p>Read more about it - <a href="https://en.wikipedia.org/wiki/Extended_precision">here</a>. Let&rsquo;s look at simple example.</p>
+
+<h2 id="x87-fpu">x87 FPU</h2>
+
+<p>The x87 Floating-Point Unit (FPU) provides high-performance floating-point processing. It supports the floating-point, integer, and packed BCD integer data types and the floating-point processing algorithms. x87 provides following instructions set:</p>
+
+<ul>
+<li>Data transfer instructions</li>
+<li>Basic arithmetic instructions</li>
+<li>Comparison instructions</li>
+<li>Transcendental instructions</li>
+<li>Load constant instructions</li>
+<li>x87 FPU control instructions</li>
+</ul>
+
+<p>Of course we will not see all instructions here provided by x87, for additional information see 64-ia-32-architecture-software-developer-vol-1-manual Chapter 8. There are a couple of data transfer instructions:</p>
+
+<ul>
+<li><code>FDL</code> - load floating point</li>
+<li><code>FST</code> - store floating point (in ST(0) register)</li>
+<li><code>FSTP</code> - store floating point and pop (in ST(0) register)</li>
+</ul>
+
+<p>Arithmetic instructions:</p>
+
+<ul>
+<li><code>FADD</code> - add floating point</li>
+<li><code>FIADD</code> - add integer to floating point</li>
+<li><code>FSUB</code> - subtract floating point</li>
+<li><code>FISUB</code> - subtract integer from floating point</li>
+<li><code>FABS</code> - get absolute value</li>
+<li><code>FIMUL</code> - multiply integer and floating point</li>
+<li><code>FIDIV</code> - device integer and floating point</li>
+</ul>
+
+<p>and etc&hellip; FPU has eight 10 byte registers organized in a ring stack. Top of the stack - register ST(0), other registers are ST(1), ST(2) &hellip; ST(7). We usually uses it when we are working with floating point data.</p>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">section .data
+    x dw 1.0
+
+fld dword [x]
+</code></pre>
+
+<p>pushes value of x to this stack. Operator can be 32bit, 64bit or 80bit. It works as usual stack, if we push another value with fld, x value will be in ST(1) and new value will be in ST(0). FPU instructions can use these registers, for example:</p>
+
+<pre><code class="language-assembly">;;
+;; adds st0 value to st3 and saves it in st0
+;;
+fadd st0, st3
+
+;;
+;; adds x and y and saves it in st0
+;;
+fld dword [x]
+fld dword [y]
+fadd
+</code></pre>
+
+<p>Let&rsquo;s look on simple example. We will have circle radius and calculate circle square and print it:</p>
+
+<pre><code class="language-assembly">extern printResult
+
+section .data
+		radius    dq  1.7
+		result    dq  0
+
+		SYS_EXIT  equ 60
+		EXIT_CODE equ 0
+
+global _start
+section .text
+
+_start:
+		fld qword [radius]
+		fld qword [radius]
+		fmul
+
+		fldpi
+		fmul
+		fstp qword [result]
+
+		mov rax, 0
+		movq xmm0, [result]
+		call printResult
+
+		mov rax, SYS_EXIT
+		mov rdi, EXIT_CODE
+		syscall
+</code></pre>
+
+<p>Let&rsquo;s try to understand how it works: First of all there is data section with predefined radius data and result which we will use for storing result. After this 2 constants for calling exit system call. Next we see entry point of program - _start. There we stores radius value in st0 and st1 with fld instruction and multiply this two values with fmul instruction. After this operations we will have result of radius on radius multiplication in st0 register. Next we load The number π with fldpi instruction to the st0 register, and after it radius * radius value will be in st1 register. After this execute multiplication with fmul on st0 (pi) and st1 (value of radius * radius), result will be in st0 register. Ok, now we have circle square in st0 register and can extract it with fstp instruction to the result. Next point is to pass result to the C function and call it. Remember we call C function from assembly code in previous blog post. We need to know x86_64 calling convention. In usual way we pass function parameters through registers rdi (arg1), rsi (arg2) and etc&hellip;, but here is floating point data. There is special registers: xmm0 - xmm15 provided by sse. First of all we need to put number of xmmN register to rax register (0 for our case), and put result to xmm0 register. Now we can call C function for printing result:</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+extern int printResult(double result);
+
+int printResult(double result) {
+	printf(&quot;Circle radius is - %f\n&quot;, result);
+	return 0;
+}
+</code></pre>
+
+<p>We can build it with:</p>
+
+<pre><code>build:
+	gcc  -g -c circle_fpu_87c.c -o c.o
+	nasm -f elf64 circle_fpu_87.asm -o circle_fpu_87.o
+	ld   -dynamic-linker /lib64/ld-linux-x86-64.so.2 -lc circle_fpu_87.o  c.o -o testFloat1
+
+clean:
+	rm -rf *.o
+	rm -rf testFloat1
+</code></pre>
+
+<p>And run:</p>
+
+<p><img src="http://1.bp.blogspot.com/-yBn1V2mJ3no/VJgkuudOQRI/AAAAAAAAAIc/rqVNUpX87Og/s1600/Screenshot%2Bfrom%2B2014-12-22%2B20%3A02%3A56.png" alt="result" /></p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">10 Oct 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_7/" class="post-title">Say hello to x86_64 Assembly [part 7]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>It is seventh part of Say hello to x86_64 Assembly and here we will look on how we can use C together with assembler.</p>
+
+<p>Actually we have 3 ways to use it together:</p>
+
+<ul>
+<li>Call assembly routines from C code</li>
+<li>Call c routines from assembly code</li>
+<li>Use inline assembly in C code</li>
+</ul>
+
+<p>Let&rsquo;s write 3 simple Hello world programs which shows us how to use assembly and C together.</p>
+
+<h2 id="call-assembly-from-c">Call assembly from C</h2>
+
+<p>First of all let&rsquo;s write simple C program like this:</p>
+
+<pre><code class="language-C">#include &lt;string.h&gt;
+
+int main() {
+	char* str = &quot;Hello World\n&quot;;
+	int len = strlen(str);
+	printHelloWorld(str, len);
+	return 0;
+}
+</code></pre>
+
+<p>Here we can see C code which defines two variables: our Hello world string which we will write to stdout and length of this string. Next we call printHelloWorld assembly function with this 2 variables as parameters. As we use x86_64 Linux, we must know x86_64 linux calling convetions, so we will know how to write printHelloWorld function, how to get incoming parameters and etc&hellip; When we call function first six parameters passes through rdi, rsi, rdx, rcx, r8 and r9 general purpose registers, all another through the stack. So we can get first and second parameter from rdi and rsi registers and call write syscall and than return from function with ret instruction:</p>
+
+<pre><code class="language-assembly">global printHelloWorld
+
+section .text
+printHelloWorld:
+		;; 1 arg
+		mov r10, rdi
+		;; 2 arg
+		mov r11, rsi
+		;; call write syscall
+		mov rax, 1
+		mov rdi, 1
+		mov rsi, r10
+		mov rdx, r11
+		syscall
+		ret
+</code></pre>
+
+<p>Now we can build it with:</p>
+
+<pre><code>build:
+	nasm -f elf64 -o casm.o casm.asm
+	gcc casm.o casm.c -o casm
+</code></pre>
+
+<h2 id="inline-assembly">Inline assembly</h2>
+
+<p>The following method is to write assembly code directly in C code. There is special syntax for this. It has general view:</p>
+
+<pre><code>asm [volatile] (&quot;assembly code&quot; : output operand : input operand : clobbers);
+</code></pre>
+
+<p>As we can read in gcc documentation volatile keyword means:</p>
+
+<pre><code>The typical use of Extended asm statements is to manipulate input values to produce output values. However, your asm statements may also produce side effects. If so, you may need to use the volatile qualifier to disable certain optimizations
+</code></pre>
+
+<p>Each operand is described by constraint string followed by C expression in parentheses. There are a number of constraints:</p>
+
+<ul>
+<li><code>r</code> - Kept variable value in general purpose register</li>
+<li><code>g</code> - Any register, memory or immediate integer operand is allowed, except for registers that are not general registers.</li>
+<li><code>f</code> - Floating point register</li>
+<li><code>m</code> - A memory operand is allowed, with any kind of address that the machine supports in general.</li>
+<li>and etc&hellip;</li>
+</ul>
+
+<p>So our hello world will be:</p>
+
+<pre><code class="language-C">#include &lt;string.h&gt;
+
+int main() {
+	char* str = &quot;Hello World\n&quot;;
+	long len = strlen(str);
+	int ret = 0;
+
+	__asm__(&quot;movq $1, %%rax \n\t&quot;
+		&quot;movq $1, %%rdi \n\t&quot;
+		&quot;movq %1, %%rsi \n\t&quot;
+		&quot;movl %2, %%edx \n\t&quot;
+		&quot;syscall&quot;
+		: &quot;=g&quot;(ret)
+		: &quot;g&quot;(str), &quot;g&quot; (len));
+
+	return 0;
+}
+</code></pre>
+
+<p>Here we can see the same 2 variables as in previous example and inline assembly definition. First of all we put 1 to rax and rdi registers (write system call number, and stdout) as we did it in our plain assembly hello world. Next we do similar operation with rsi and rdi registers but first operands starts with % symbol instead $. It means str is the output operand referred by %1 and len second output operand referred by %2, so we put values of str and len to rsi and rdi with %n notation, where n is number of output operand. Also there is %% prefixed to the register name.</p>
+
+<pre><code>    This helps GCC to distinguish between the operands and registers. operands have a single % as prefix
+</code></pre>
+
+<p>We can build it with:</p>
+
+<pre><code>build:
+	gcc casm.c -o casm
+</code></pre>
+
+<h2 id="call-c-from-assembly">Call C from assembly</h2>
+
+<p>And the last method is to call C function from assembly code. For example we have following simple C code with one function which just prints Hello world:</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+extern int print();
+
+int print() {
+	printf(&quot;Hello World\n&quot;);
+	return 0;
+}
+</code></pre>
+
+<p>Now we can define this function as extern in our assembly code and call it with call instruction as we do it much times in previous posts:</p>
+
+<pre><code class="language-asssembly">global _start
+
+extern print
+
+section .text
+
+_start:
+		call print
+
+		mov rax, 60
+		mov rdi, 0
+		syscall
+</code></pre>
+
+<p>Build it with:</p>
+
+<pre><code>build:
+	gcc  -c casm.c -o c.o
+	nasm -f elf64 casm.asm -o casm.o
+	ld   -dynamic-linker /lib64/ld-linux-x86-64.so.2 -lc casm.o c.o -o casm
+</code></pre>
+
+<p>and now we can run our third hello world.</p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">01 Oct 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_6/" class="post-title">Say hello to x86_64 Assembly [part 6]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>It is sixth part of Say hello to x86_64 Assembly and here we will look on AT&amp;T assembler syntax. Previously we used nasm assembler in all parts, but there are some another assemblers with different syntax, fasm, yasm and others. As i wrote above we will look on gas (GNU assembler) and difference between it&rsquo;s syntax and nasm. GCC uses GNU assembler, so if you see at assembler output for simple hello world:</p>
+
+<pre><code class="language-C">#include &lt;unistd.h&gt;
+
+int main(void) {
+	write(1, &quot;Hello World\n&quot;, 15);
+	return 0;
+}
+</code></pre>
+
+<p>You will see following output:</p>
+
+<pre><code class="language-assembly">	.file	&quot;test.c&quot;
+	.section	.rodata
+.LC0:
+	.string	&quot;Hello World\n&quot;
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	$15, %edx
+	movl	$.LC0, %esi
+	movl	$1, %edi
+	call	write
+	movl	$0, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	&quot;GCC: (Ubuntu 4.9.1-16ubuntu6) 4.9.1&quot;
+	.section	.note.GNU-stack,&quot;&quot;,@progbits
+</code></pre>
+
+<p>Looks different then nasm Hello world, let&rsquo;s look on some differences.</p>
+
+<h1 id="at-t-syntax">AT&amp;T syntax</h1>
+
+<h2 id="sections">Sections</h2>
+
+<p>I don&rsquo;t know how about you, but when I start to write assembler program, usually I&rsquo;m starting from sections definition. Let&rsquo;s look on simple example:</p>
+
+<pre><code class="language-assembly">.data
+    //
+    // initialized data definition
+    //
+.text
+    .global _start
+
+_start:
+    //
+    // main routine
+    //
+</code></pre>
+
+<p>You can note two little differences here:</p>
+
+<ul>
+<li>Section definition starts with . symbol</li>
+<li>Main routine defines with .globl instead global as we do it in nasm</li>
+</ul>
+
+<p>Also gas uses another directives for data defintion:</p>
+
+<pre><code class="language-assembly">.section .data
+    // 1 byte
+    var1: .byte 10
+    // 2 byte
+    var2: .word 10
+    // 4 byte
+    var3: .int 10
+    // 8 byte
+    var4: .quad 10
+    // 16 byte
+    var5: .octa 10
+
+    // assembles each string (with no automatic trailing zero byte) into consecutive addresses
+    str1: .asci &quot;Hello world&quot;
+    // just like .ascii, but each string is followed by a zero byte
+    str2: .asciz &quot;Hello world&quot;
+    // Copy the characters in str to the object file
+    str3: .string &quot;Hello world&quot;
+</code></pre>
+
+<p>Operands order
+When we write assembler program with nasm, we have following general syntax for data manipulation:</p>
+
+<pre><code class="language-assembly">mov destination, source
+</code></pre>
+
+<p>With GNU assembler we have back order i.e.:</p>
+
+<pre><code class="language-assembly">mov source, destination
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">;;
+;; nasm syntax
+;;
+mov rax, rcx
+
+//
+// gas syntax
+//
+mov %rcx, %rax
+</code></pre>
+
+<p>Also you can not here that registers starts with % symbol. If you&rsquo;re using direct operands, need to use <code>$</code> symbol:</p>
+
+<pre><code class="language-assembly">movb $10, %rax
+</code></pre>
+
+<h2 id="size-of-operands-and-operation-syntax">Size of operands and operation syntax</h2>
+
+<p>Sometimes when we need to get part of memory, for example first byte of 64 register, we used following syntax:</p>
+
+<pre><code class="language-assembly">mov ax, word [rsi]
+</code></pre>
+
+<p>There is another way for such operations in gas. We don&rsquo;t define size in operands but in instruction:</p>
+
+<pre><code class="language-assembly">movw (%rsi), %ax
+</code></pre>
+
+<p>GNU assembler has 6 postfixes for operations:</p>
+
+<ul>
+<li><code>b</code> - 1 byte operands</li>
+<li><code>w</code> - 2 bytes operands</li>
+<li><code>l</code> - 4 bytes operands</li>
+<li><code>q</code> - 8 bytes operands</li>
+<li><code>t</code> - 10 bytes operands</li>
+<li><code>o</code> - 16 bytes operands</li>
+</ul>
+
+<p>This rule is not only mov instruction, but also for all another like addl, xorb, cmpw and etc&hellip;</p>
+
+<h2 id="memory-access">Memory access</h2>
+
+<p>You can note that we used () brackets in previous example instead [] in nasm example. To dereference values in parentheses are used GAS: (%rax), for example:</p>
+
+<pre><code class="language-assembly">movq -8(%rbp),%rdi
+movq 8(%rbp),%rdi
+</code></pre>
+
+<h2 id="jumps">Jumps</h2>
+
+<p>GNU assembler supports following operators for far functions call and jumps:</p>
+
+<pre><code class="language-assembly">lcall $section, $offset
+</code></pre>
+
+<p>Far jump - a jump to an instruction located in a different segment than the current code segment but at the same privilege level, sometimes referred to as an intersegment jump.</p>
+
+<h2 id="comments">Comments</h2>
+
+<p>GNU assembler supports 3 types of comments:</p>
+
+<pre><code>    # - single line comments
+    // - single line comments
+    /* */ - for multiline comments
+</code></pre>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">20 Sep 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_5/" class="post-title">Say hello to x86_64 Assembly [part 5]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>It is a fifth part of Say hello to x86_64 Assembly and here we will look at macros. It will not be blog post about x86_64, mainly it will be about nasm assembler and it&rsquo;s preprocessor. If you&rsquo;re interesting in it read next.</p>
+
+<h2 id="macros">Macros</h2>
+
+<p>NASM supports two form of macro:</p>
+
+<ul>
+<li>single-line</li>
+<li>multiline</li>
+</ul>
+
+<p>All single-line macro must start from %define directive. It form is following:</p>
+
+<pre><code class="language-assembly">%define macro_name(parameter) value
+</code></pre>
+
+<p>Nasm macro behaves and looks very similar as in C. For example, we can create following single-line macro:</p>
+
+<pre><code class="language-assembly">%define argc rsp + 8
+%define cliArg1 rsp + 24
+</code></pre>
+
+<p>and than use it in code:</p>
+
+<pre><code class="language-assembly">;;
+;; argc will be expanded to rsp + 8
+;;
+mov rax, [argc]
+cmp rax, 3
+jne .mustBe3args
+</code></pre>
+
+<p>Multiline macro starts with %macro nasm directive and end with %endmacro. It general form is following:</p>
+
+<pre><code class="language-assembly">%macro number_of_parameters
+    instruction
+    instruction
+    instruction
+%endmacro
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">%macro bootstrap 1
+          push ebp
+          mov ebp,esp
+%endmacro
+</code></pre>
+
+<p>And we can use it:</p>
+
+<pre><code class="language-assembly">_start:
+    bootstrap
+</code></pre>
+
+<p>For example let&rsquo;s look at PRINT macro:</p>
+
+<pre><code class="language-assembly">%macro PRINT 1
+    pusha
+    pushf
+    jmp %%astr
+%%str db %1, 0
+%%strln equ $-%%str
+%%astr: _syscall_write %%str, %%strln
+popf
+popa
+%endmacro
+
+%macro _syscall_write 2
+	mov rax, 1
+        mov rdi, 1
+        mov rsi, %%str
+        mov rdx, %%strln
+        syscall
+%endmacro
+</code></pre>
+
+<p>Let&rsquo;s try to go through it macro and understand how it works: At first line we defined PRINT macro with one parameter. Than we push all general registers (with pusha instruction) and flag register with (with pushf instruction). After this we jump to %%astr label. Pay attention that all labels which defined in macro must start with %%. Now we move to __syscall_write macro with 2 parameter. Let&rsquo;s look on __syscall_write implementation. You can remember that we use write system call in all previous posts for printing string to stdout. It looks like this:</p>
+
+<pre><code class="language-assembly">;; write syscall number
+mov rax, 1
+;; file descriptor, standard output
+mov rdi, 1
+;; message address
+mov rsi, msg
+;; length of message
+mov rdx, 14
+;; call write syscall
+syscall
+</code></pre>
+
+<p>In our __syscall_write macro we define first two instruction for putting 1 to rax (write system call number) and rdi (stdout file descriptor). Than we put %%str to rsi register (pointer to string), where %%str is local label to which is get first parameter of PRINT macro (pay attention that macro parameter access by $parameter_number) and end with 0 (every string must end with zero). And %%strlen which calculates string length. After this we call system call with syscall instruction and that&rsquo;s all.</p>
+
+<p>Now we can use it:</p>
+
+<pre><code class="language-assembly">label: PRINT &quot;Hello World!&quot;
+</code></pre>
+
+<h2 id="useful-standard-macros">Useful standard macros</h2>
+
+<p>NASM supports following standard macros:</p>
+
+<h2 id="struc">STRUC</h2>
+
+<p>We can use <code>STRUC</code> and <code>ENDSTRUC</code> for data structure defintion. For example:</p>
+
+<pre><code class="language-assembly">struc person
+   name: resb 10
+   age:  resb 1
+endstruc
+</code></pre>
+
+<p>And now we can make instance of our structure:</p>
+
+<pre><code class="language-assembly">section .data
+    p: istruc person
+      at name db &quot;name&quot;
+      at age  db 25
+    iend
+
+section .text
+_start:
+    mov rax, [p + person.name]
+</code></pre>
+
+<h2 id="include">%include</h2>
+
+<p>We can include other assembly files and jump to there labels or call functions with %include directive.</p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">01 Sep 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_4/" class="post-title">Say hello to x86_64 Assembly [part 4]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>Some time ago i started to write series of blog posts about assembly programming for x86_64. You can find it by asm tag. Unfortunately i was busy last time and there were not new post, so today I continue to write posts about assembly, and will try to do it every week.</p>
+
+<p>Today we will look at strings and some strings operations. We still use nasm assembler, and linux x86_64.</p>
+
+<h2 id="reverse-string">Reverse string</h2>
+
+<p>Of course when we talk about assembly programming language we can&rsquo;t talk about string data type, actually we&rsquo;re dealing with array of bytes. Let&rsquo;s try to write simple example, we will define string data and try to reverse and write result to stdout. This tasks seems pretty simple and popular when we start to learn new programming language. Let&rsquo;s look on implementation.</p>
+
+<p>First of all, I define initialized data. It will be placed in data section (You can read about sections in part):</p>
+
+<pre><code class="language-assembly">section .data
+		SYS_WRITE equ 1
+		STD_OUT   equ 1
+		SYS_EXIT  equ 60
+		EXIT_CODE equ 0
+
+		NEW_LINE db 0xa
+		INPUT db &quot;Hello world!&quot;
+</code></pre>
+
+<p>Here we can see four constants:</p>
+
+<ul>
+<li><code>SYS_WRITE</code> - &lsquo;write&rsquo; syscall number</li>
+<li><code>STD_OUT</code> - stdout file descriptor</li>
+<li><code>SYS_EXIT</code> - &lsquo;exit&rsquo; syscall number</li>
+<li><code>EXIT_CODE</code> - exit code</li>
+</ul>
+
+<p>syscall list you can find - here. Also there defined:</p>
+
+<ul>
+<li><code>NEW_LINE</code> - new line (\n) symbol</li>
+<li><code>INPUT</code> - our input string, which we will reverse</li>
+</ul>
+
+<p>Next we define bss section for our buffer, where we will put reversed string:</p>
+
+<pre><code class="language-assembly">section .bss
+		OUTPUT resb 12
+</code></pre>
+
+<p>Ok we have some data and buffer where to put result, now we can define text section for code. Let&rsquo;s start from main _start routine:</p>
+
+<pre><code class="language-assembly">_start:
+		mov rsi, INPUT
+		xor rcx, rcx
+		cld
+		mov rdi, $ + 15
+		call calculateStrLength
+		xor rax, rax
+		xor rdi, rdi
+		jmp reverseStr
+</code></pre>
+
+<p>Here are some new things. Let&rsquo;s see how it works: First of all we put INPUT address to si register at line 2, as we did for writing to stdout and write zeros to rcx register, it will be counter for calculating length of our string. At line 4 we can see cld operator. It resets df flag to zero. We need in it because when we will calculate length of string, we will go through symbols of this string, and if df flag will be 0, we will handle symbols of string from left to right. Next we call calculateStrLength function. I missed line 5 with mov rdi, $ + 15 instruction, i will tell about it little later. And now let&rsquo;s look at calculateStrLength implementation:</p>
+
+<pre><code class="language-assembly">calculateStrLength:
+		;; check is it end of string
+		cmp byte [rsi], 0
+		;; if yes exit from function
+		je exitFromRoutine
+		;; load byte from rsi to al and inc rsi
+		lodsb
+		;; push symbol to stack
+		push rax
+		;; increase counter
+		inc rcx
+		;; loop again
+		jmp calculateStrLength
+</code></pre>
+
+<p>As you can understand by it&rsquo;s name, it just calculates length of INPUT string and store result in rcx register. First of all we check that rsi register doesn&rsquo;t point to zero, if so this is the end of string and we can exit from function. Next is lodsb instruction. It&rsquo;s simple, it just put 1 byte to al register (low part of 16 bit ax) and changes rsi pointer. As we executed cld instruction, lodsb everytime will move rsi to one byte from left to right, so we will move by string symbols. After it we push rax value to stack, now it contains symbol from our string (lodsb puts byte from si to al, al is low 8 bit of rax). Why we did push symbol to stack? You must remember how stack works, it works by principle LIFO (last input, first output). It is very good for us. We will take first symbol from si, push it to stack, than second and so on. So there will be last symbol of string at the stack top. Than we just pop symbol by symbol from stack and write to OUTPUT buffer. After it we increment our counter (rcx) and loop again to the start of routine.</p>
+
+<p>Ok, we pushed all symbols from string to stack, now we can jump to exitFromRoutine return to _start there. How to do it? We have ret instruction for this. But if code will be like this:</p>
+
+<pre><code class="language-assembly">exitFromRoutine:
+		;; return to _start
+		ret
+</code></pre>
+
+<p>It will not work. Why? It is tricky. Remember we called calculateStrLength at _start. What occurs when we call a function? First of all function&rsquo;s parameters pushes to stack from right to left. After it return address pushes to stack. So function will know where to return after end of execution. But look at calculateStrLength, we pushed symbols from our string to stack and now there is no return address of stack top and function doesn&rsquo;t know where to return. How to be with it. Now we must take a look to the weird instruction before call:</p>
+
+<pre><code class="language-assembly">    mov rdi, $ + 15
+</code></pre>
+
+<p>First all:</p>
+
+<ul>
+<li><code>$</code> - returns position in memory of string where $ defined</li>
+<li><code>$$</code> - returns position in memory of current section start</li>
+</ul>
+
+<p>So we have position of mov rdi, $ + 15, but why we add 15 here? Look, we need to know position of next line after calculateStrLength. Let&rsquo;s open our file with objdump util:</p>
+
+<pre><code class="language-assembly">objdump -D reverse
+
+reverse:     file format elf64-x86-64
+
+Disassembly of section .text:
+
+00000000004000b0 &lt;_start&gt;:
+  4000b0:	48 be 41 01 60 00 00 	movabs $0x600141,%rsi
+  4000b7:	00 00 00
+  4000ba:	48 31 c9             	xor    %rcx,%rcx
+  4000bd:	fc                   	cld
+  4000be:	48 bf cd 00 40 00 00 	movabs $0x4000cd,%rdi
+  4000c5:	00 00 00
+  4000c8:	e8 08 00 00 00       	callq  4000d5 &lt;calculateStrLength&gt;
+  4000cd:	48 31 c0             	xor    %rax,%rax
+  4000d0:	48 31 ff             	xor    %rdi,%rdi
+  4000d3:	eb 0e                	jmp    4000e3 &lt;reverseStr&gt;
+</code></pre>
+
+<p>We can see here that line 12 (our mov rdi, $ + 15) takes 10 bytes and function call at line 16 - 5 bytes, so it takes 15 bytes. That&rsquo;s why our return address will be mov rdi, $ + 15. Now we can push return address from rdi to stack and return from function:</p>
+
+<pre><code class="language-assembly">exitFromRoutine:
+		;; push return addres to stack again
+		push rdi
+		;; return to _start
+		ret
+</code></pre>
+
+<p>Now we return to start. After call of the <code>calculateStrLength</code> we write zeros to rax and rdi and jump to reverseStr label. It&rsquo;s implementation is following:</p>
+
+<pre><code class="language-assembly">reverseStr:
+		cmp rcx, 0
+		je printResult
+		pop rax
+		mov [OUTPUT + rdi], rax
+		dec rcx
+		inc rdi
+		jmp reverseStr
+</code></pre>
+
+<p>Here we check our counter which is length of string and if it is zero we wrote all symbols to buffer and can print it. After checking counter we pop from stack to rax register first symbol and write it to OUTPUT buffer. We add rdi because in other way we&rsquo;ll write symbol to first byte of buffer. After this we increase rdi for moving next by OUTPUT buffer, decrease length counter and jump to the start of label.</p>
+
+<p>After execution of reverseStr we have reversed string in OUTPUT buffer and can write result to stdout with new line:</p>
+
+<pre><code class="language-assembly">printResult:
+		mov rdx, rdi
+		mov rax, 1
+		mov rdi, 1
+		mov rsi, OUTPUT
+                syscall
+		jmp printNewLine
+
+printNewLine:
+		mov rax, SYS_WRITE
+		mov rdi, STD_OUT
+		mov rsi, NEW_LINE
+		mov rdx, 1
+		syscall
+		jmp exit
+</code></pre>
+
+<p>and exit from the our program:</p>
+
+<pre><code class="language-assembly">exit:
+		mov rax, SYS_EXIT
+		mov rdi, EXIT_CODE
+		syscall
+</code></pre>
+
+<p>That&rsquo;s all, now we can compile our program with:</p>
+
+<pre><code class="language-assembly">all:
+	nasm -g -f elf64 -o reverse.o reverse.asm
+	ld -o reverse reverse.o
+
+clean:
+	rm reverse reverse.o
+</code></pre>
+
+<p>and run it:</p>
+
+<p><img src="http://1.bp.blogspot.com/-PoIXmq_sbmU/VG3x4VvtFiI/AAAAAAAAAH4/z2DiEHcrBxs/s1600/Screenshot%2Bfrom%2B2014-11-20%2B19%3A51%3A15.png" alt="result" /></p>
+
+<h2 id="string-operations">String operations</h2>
+
+<p>Of course there are many other instructions for string/bytes manipulations:</p>
+
+<ul>
+<li><code>REP</code> - repeat while rcx is not zero</li>
+<li><code>MOVSB</code> - copy a string of bytes (MOVSW, MOVSD and etc..)</li>
+<li><code>CMPSB</code> - byte string comparison</li>
+<li><code>SCASB</code> - byte string scanning</li>
+<li><code>STOSB</code> - write byte to string</li>
+</ul>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">15 Aug 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_3/" class="post-title">Say hello to x86_64 Assembly [part 3]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>The stack is special region in memory, which operates on the principle lifo (Last Input, First Output).</p>
+
+<p>We have 16 general-purpose registers for temporary data storage. They are RAX, RBX, RCX, RDX, RDI, RSI, RBP, RSP and R8-R15. It&rsquo;s too few for serious applications. So we can store data in the stack. Yet another usage of stack is following: When we call a function, return address copied in stack. After end of function execution, address copied in commands counter (RIP) and application continue to executes from next place after function.</p>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">global _start
+
+section .text
+
+_start:
+		mov rax, 1
+		call incRax
+		cmp rax, 2
+		jne exit
+		;;
+		;; Do something
+		;;
+
+incRax:
+		inc rax
+		ret
+</code></pre>
+
+<p>Here we can see that after application runnning, rax is equal to 1. Then we call a function incRax, which increases rax value to 1, and now rax value must be 2. After this execution continues from 8 line, where we compare rax value with 2. Also as we can read in <a href="www.x86-64.org/documentation/abi.pdf">System V AMD64 ABI</a>, the first six function arguments passed in registers. They are:</p>
+
+<ul>
+<li><code>rdi</code> - first argument</li>
+<li><code>rsi</code> - second argument</li>
+<li><code>rdx</code> - third argument</li>
+<li><code>rcx</code> - fourth argument</li>
+<li><code>r8</code> - fifth argument</li>
+<li><code>r9</code> - sixth</li>
+</ul>
+
+<p>Next arguments will be passed in stack. So if we have function like this:</p>
+
+<pre><code class="language-C">int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7)
+{
+    return (a1 + a2 - a3 - a4 + a5 - a6) * a7;
+}
+</code></pre>
+
+<p>Then first six arguments will be passed in registers, but 7 argument will be passed in stack.</p>
+
+<h2 id="stack-pointer">Stack pointer</h2>
+
+<p>As i wroute about we have 16 general-purpose registers, and there are two interesting registers - RSP and RBP. RBP is the base pointer register. It points to the base of the current stack frame. RSP is the stack pointer, which points to the top of current stack frame.</p>
+
+<p>Commands</p>
+
+<p>We have two commands for work with stack:</p>
+
+<ul>
+<li><code>push argument</code> - increments stack pointer (RSP) and stores argument in location pointed by stack pointer</li>
+<li><code>pop argument</code> - copied data to argument from location pointed by stack pointer</li>
+</ul>
+
+<p>Let&rsquo;s look on one simple example:</p>
+
+<pre><code class="language-assembly">global _start
+
+section .text
+
+_start:
+		mov rax, 1
+		mov rdx, 2
+		push rax
+		push rdx
+
+		mov rax, [rsp + 8]
+
+		;;
+		;; Do something
+		;;
+</code></pre>
+
+<p>Here we can see that we put 1 to rax register and 2 to rdx register. After it we push to stack values of these registers. Stack works as LIFO (Last In First Out). So after this stack or our application will have following structure:</p>
+
+<p><img src="http://3.bp.blogspot.com/-4H9FAAD2duo/VB0VWfdWJrI/AAAAAAAAAHU/E6BAh0LkDV4/s1600/Untitled%2BDiagram.png" alt="stack diagram" /></p>
+
+<p>Then we copy value from stack which has address rsp + 8. It means we get address of top of stack, add 8 to it and copy data by this address to rax. After it rax value will be 1.</p>
+
+<h2 id="example">Example</h2>
+
+<p>Let&rsquo;s see one example. We will write simple program, which will get two command line arguments. Will get sum of this arguments and print result.</p>
+
+<pre><code class="language-assembly">section .data
+		SYS_WRITE equ 1
+		STD_IN    equ 1
+		SYS_EXIT  equ 60
+		EXIT_CODE equ 0
+
+		NEW_LINE   db 0xa
+		WRONG_ARGC db &quot;Must be two command line argument&quot;, 0xa
+</code></pre>
+
+<p>First of all we define <code>.data</code> section with some values. Here we have four constants for linux syscalls, for sys_write, sys_exit and etc&hellip; And also we have two strings: First is just new line symbol and second is error message.</p>
+
+<p>Let&rsquo;s look on the <code>.text</code> section, which consists from code of program:</p>
+
+<pre><code class="language-assembly">section .text
+        global _start
+
+_start:
+		pop rcx
+		cmp rcx, 3
+		jne argcError
+
+		add rsp, 8
+		pop rsi
+		call str_to_int
+
+		mov r10, rax
+		pop rsi
+		call str_to_int
+		mov r11, rax
+
+		add r10, r11
+</code></pre>
+
+<p>Let&rsquo;s try to understand, what is happening here: After _start label first instruction get first value from stack and puts it to rcx register. If we run application with command line arguments, all of their will be in stack after running in following order:</p>
+
+<pre><code>    [rsp] - top of stack will contain arguments count.
+    [rsp + 8] - will contain argv[0]
+    [rsp + 16] - will contain argv[1]
+    and so on...
+</code></pre>
+
+<p>So we get command line arguments count and put it to rcx. After it we compare rcx with 3. And if they are not equal we jump to argcError label which just prints error message:</p>
+
+<pre><code class="language-assembly">argcError:
+    ;; sys_write syscall
+    mov     rax, 1
+    ;; file descritor, standard output
+	mov     rdi, 1
+    ;; message address
+    mov     rsi, WRONG_ARGC
+    ;; length of message
+    mov     rdx, 34
+    ;; call write syscall
+    syscall
+    ;; exit from program
+	jmp exit
+</code></pre>
+
+<p>Why we compare with 3 when we have two arguments. It&rsquo;s simple. First argument is a program name, and all after it are command line arguments which we passed to program. Ok, if we passed two command line arguments we go next to 10 line. Here we shift rsp to 8 and thereby missing the first argument - the name of the program. Now rsp points to first command line argument which we passed. We get it with pop command and put it to rsi register and call function for converting it to integer. Next we read about <code>str_to_int</code> implementation. After our function ends to work we have integer value in rax register and we save it in r10 register. After this we do the same operation but with r11. In the end we have two integer values in r10 and r11 registers, now we can get sum of it with add command. Now we must convert result to string and print it. Let&rsquo;s see how to do it:</p>
+
+<pre><code class="language-assembly">mov rax, r10
+;; number counter
+xor r12, r12
+;; convert to string
+jmp int_to_str
+</code></pre>
+
+<p>Here we put sum of command line arguments to rax register, set r12 to zero and jump to int_to_str. Ok now we have base of our program. We already know how to print string and we have what to print. Let&rsquo;s see at str_to_int and int_to_str implementation.</p>
+
+<pre><code class="language-assembly">str_to_int:
+            xor rax, rax
+            mov rcx,  10
+next:
+	    cmp [rsi], byte 0
+	    je return_str
+	    mov bl, [rsi]
+            sub bl, 48
+	    mul rcx
+	    add rax, rbx
+	    inc rsi
+	    jmp next
+
+return_str:
+	    ret
+</code></pre>
+
+<p>At the start of str_to_int, we set up rax to 0 and rcx to 10. Then we go to next label. As you can see in above example (first line before first call of str_to_int) we put argv[1] in rsi from stack. Now we compare first byte of rsi with 0, because every string ends with NULL symbol and if it is we return. If it is not 0 we copy it&rsquo;s value to one byte bl register and substract 48 from it. Why 48? All numbers from 0 to 9 have 48 to 57 codes in asci table. So if we substract from number symbol 48 (for example from 57) we get number. Then we multiply rax on rcx (which has value - 10). After this we increment rsi for getting next byte and loop again. Algorthm is simple. For example if rsi points to &lsquo;5&rsquo; &lsquo;7&rsquo; &lsquo;6&rsquo; &lsquo;\000&rsquo; sequence, then will be following steps:</p>
+
+<pre><code>    rax = 0
+    get first byte - 5 and put it to rbx
+    rax * 10 --&gt; rax = 0 * 10
+    rax = rax + rbx = 0 + 5
+    Get second byte - 7 and put it to rbx
+    rax * 10 --&gt; rax = 5 * 10 = 50
+    rax = rax + rbx = 50 + 7 = 57
+    and loop it while rsi is not \000
+</code></pre>
+
+<p>After str_to_int we will have number in rax. Now let&rsquo;s look at int_to_str:</p>
+
+<pre><code class="language-assembly">int_to_str:
+		mov rdx, 0
+		mov rbx, 10
+		div rbx
+		add rdx, 48
+		add rdx, 0x0
+		push rdx
+		inc r12
+		cmp rax, 0x0
+		jne int_to_str
+		jmp print
+</code></pre>
+
+<p>Here we put 0 to rdx and 10 to rbx. Than we exeute div rbx. If we look above at code before str_to_int call. We will see that rax contains integer number - sum of two command line arguments. With this instruction we devide rax value on rbx value and get reminder in rdx and whole part in rax. Next we add to rdx 48 and 0x0. After adding 48 we&rsquo;ll get asci symbol of this number and all strings much be ended with 0x0. After this we save symbol to stack, increment r12 (it&rsquo;s 0 at first iteration, we set it to 0 at the _start) and compare rax with 0, if it is 0 it means that we ended to convert integer to string. Algorithm step by step is following: For example we have number 23</p>
+
+<pre><code>    123 / 10. rax = 12; rdx = 3
+    rdx + 48 = &quot;3&quot;
+    push &quot;3&quot; to stack
+    compare rax with 0 if no go again
+    12 / 10. rax = 1; rdx = 2
+    rdx + 48 = &quot;2&quot;
+    push &quot;2&quot; to stack
+    compare rax with 0, if yes we can finish function execution and we will have &quot;2&quot; &quot;3&quot; ... in stack
+</code></pre>
+
+<p>We implemented two useful function <code>int_to_str</code> and <code>str_to_int</code> for converting integer number to string and vice versa. Now we have sum of two integers which was converted into string and saved in the stack. We can print result:</p>
+
+<pre><code class="language-assembly">print:
+	;;;; calculate number length
+	mov rax, 1
+	mul r12
+	mov r12, 8
+	mul r12
+	mov rdx, rax
+
+	;;;; print sum
+	mov rax, SYS_WRITE
+	mov rdi, STD_IN
+	mov rsi, rsp
+	;; call sys_write
+	syscall
+
+    jmp exit
+</code></pre>
+
+<p>We already know how to print string with <code>sys_write</code> syscall, but here is one interesting part. We must to calculate length of string. If you will look on the <code>int_to_str</code>, you will see that we increment r12 register every iteration, so it contains amount of digits in our number. We must multiple it to 8 (because we pushed every symbol to stack) and it will be length of our string which need to print. After this we as everytime put 1 to rax (sys_write number), 1 to rdi (stdin), string length to rdx and pointer to the top of stack to rsi (start of string). And finish our program:</p>
+
+<pre><code class="language-assembly">exit:
+	mov rax, SYS_EXIT
+	exit code
+	mov rdi, EXIT_CODE
+	syscall
+</code></pre>
+
+<p>That&rsquo;s All.</p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">10 Aug 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_2/" class="post-title">Say hello to x86_64 Assembly [part 2]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>Some days ago I wrote the first blog post - introduction to x64 assembly - Say hello to x64 Assembly [part 1] which to my surprise caused great interest:</p>
+
+<p><img src="http://2.bp.blogspot.com/-wtVOF9PoT3U/VAXLYjlkbbI/AAAAAAAAAGs/Wo-53TGH0Do/s1600/Screenshot%2Bfrom%2B2014-08-31%2B23%3A58%3A26.png" alt="newscombinator" />
+<img src="http://4.bp.blogspot.com/-__MfY5bYax4/VAXLf8lQmGI/AAAAAAAAAG0/MBdT2vjhcts/s1600/Screenshot%2Bfrom%2B2014-09-01%2B00%3A30%3A32.png" alt="reddit" /></p>
+
+<p>It motivates me even more to describe my way of learning. During this days I got many feedback from different people. There were many grateful words, but what is more important for me, there were many advices and adequate critics. Especially I want to say thank you words for great feedback to:</p>
+
+<p>It motivates me even more to describe my way of learning. During this days I got many feedback from different people. There were many grateful words, but what is more important for me, there were many advices and adequate critics. Especially I want to say thank you words for great feedback to:</p>
+
+<ul>
+<li><a href="http://www.reddit.com/user/Fiennes">Fiennes</a></li>
+<li><a href="https://disqus.com/by/Universal178/">Grienders</a></li>
+<li><a href="https://news.ycombinator.com/user?id=nkurz">nkurz</a></li>
+</ul>
+
+<p>And all who took a part in discussion at Reddit and Hacker News. There were many opinions, that first part was a not very clear for absolute beginner, that&rsquo;s why i decided to write more informative posts. So, let&rsquo;s start with second part of Say hello to x86_64 assembly.</p>
+
+<h2 id="terminology-and-concepts">Terminology and Concepts</h2>
+
+<p>As i wrote above, I got many feedback from different people that some parts of first post are not clear, that&rsquo;s why let&rsquo;s start from description of some terminology that we will see in this and next parts.</p>
+
+<p>Register - register is a small amount of storage inside processor. Main point of processor is data processing. Processor can get data from memory, but it is slow operation. That&rsquo;s why processor has own internal restricted set of data storage which name is - register.</p>
+
+<p>Little-endian - we can imagine memory as one large array. It contains bytes. Each address stores one element of the memory &ldquo;array&rdquo;. Each element is one byte. For example we have 4 bytes: AA 56 AB FF. In little-endian the least significant byte has the smallest address:</p>
+
+<pre><code>    0 FF
+    1 AB
+    2 56
+    3 AA
+</code></pre>
+
+<p>where 0,1,2 and 3 are memory addresses.</p>
+
+<p>Big-endian - big-endian stores bytes in opposite order than little-endian. So if we have AA 56 AB FF bytes sequence it will be:</p>
+
+<pre><code>    0 AA
+    1 56
+    2 AB
+    3 FF
+</code></pre>
+
+<p>Syscall - is the way a user level program asks the operating system to do something for it. You can find syscall table - <a href="https://github.com/torvalds/linux/blob/master/arch/x86/entry/syscalls/syscall_64.tbl">here</a>.</p>
+
+<p>Stack - processor has a very restricted count of registers. So stack is a continuous area of ​​memory addressable special registers <code>RSP</code>,<code>SS</code>,<code>RIP</code> and etc. We will take a closer look on stack in next parts.</p>
+
+<p>Section - every assembly program consists from sections. There are following sections:</p>
+
+<ul>
+<li><code>data</code> - section is used for declaring initialized data or constants</li>
+<li><code>bss</code> - section is used for declaring non initialized variables</li>
+<li><code>text</code> - section is used for code</li>
+</ul>
+
+<p>General-purpose registers - there are 16 general-purpose registers - rax, rbx, rcx, rdx, rbp, rsp, rsi, rdi, r8, r9, r10, r11, r12, r13, r14, r15. Of course, it is not a full list of terms and concepts which related with assembly programming. If we will meet another strange and unfamiliar words in next blog posts, there will be explanation of this words.</p>
+
+<h2 id="data-types">Data Types</h2>
+
+<p>The fundamental data types are bytes, words, doublewords, quadwords, and double quadwords. A byte is eight bits, a word is 2 bytes, a doubleword is 4 bytes, a quadword is 8 bytes and a double quadword is 16 bytes (128 bits).</p>
+
+<p>Now we will work only with integer numbers, so let&rsquo;s see to it. There two types of integer: unsigned and signed. Unsigned integers are unsigned binary numbers contained in a byte, word, doubleword, and quadword. Their values range from 0 to 255 for an unsigned byte integer, from 0 to 65,535 for an unsigned word integer, from 0 to 2^32 – 1 for an unsigned doubleword integer, and from 0 to 2^64 – 1 for an unsigned quadword integer. Signed integers are signed binary numbers held as unsigned in a byte, word and etc&hellip; The sign bit is set for negative integers and cleared for positive integers and zero. Integer values range from –128 to +127 for a byte integer, from –32,768 to +32,767 for a word integer,from –2^31 to +2^31 – 1 for a doubleword integer, and from –2^63 to +2^63 – 1 for a quadword integer.</p>
+
+<h2 id="sections">Sections</h2>
+
+<p>As i wrote above, every assembly program consists from sections, it can be data section, text section and bss section. Let&rsquo;s look on data section.It&rsquo;s main point - to declare initialized constants. For example:</p>
+
+<pre><code class="language-assembly">section .data
+    num1:   equ 100
+    num2:   equ 50
+    msg:    db &quot;Sum is correct&quot;, 10
+</code></pre>
+
+<p>Ok, it is almost all clear here. 3 constants with name num1, num2, msg and with values 100, 50 and &ldquo;Sum is correct&rdquo;, 10. But what is it db, equ? Actual NASM supports a number of pseudo-instructions:</p>
+
+<ul>
+<li>DB, DW, DD, DQ, DT, DO, DY and DZ - are used for declaring initialized data. For example:</li>
+</ul>
+
+<pre><code class="language-assembly">;; Initialize 4 bytes 1h, 2h, 3h, 4h
+db 0x01,0x02,0x03,0x04
+
+;; Initialize word to 0x12 0x34
+dw    0x1234
+</code></pre>
+
+<ul>
+<li>RESB, RESW, RESD, RESQ, REST, RESO, RESY and RESZ - are used for declaring non initialized variables</li>
+<li>INCBIN - includes External Binary Files</li>
+<li>EQU - defines constant. For example:</li>
+</ul>
+
+<pre><code class="language-assembly">;; now one is 1
+one equ 1
+</code></pre>
+
+<ul>
+<li>TIMES - Repeating Instructions or Data. (description will be in next posts)</li>
+</ul>
+
+<h2 id="arithmetic-operations">Arithmetic operations</h2>
+
+<p>There is short list of arithmetic instructions:</p>
+
+<ul>
+<li><code>ADD</code> - integer add</li>
+<li><code>SUB</code> - substract</li>
+<li><code>MUL</code> - unsigned multiply</li>
+<li><code>IMUL</code> - signed multiply</li>
+<li><code>DIV</code> - unsigned divide</li>
+<li><code>IDIV</code> - signed divide</li>
+<li><code>INC</code> - increment</li>
+<li><code>DEC</code> - decrement</li>
+<li><code>NEG</code> - negate</li>
+</ul>
+
+<p>Some of it we will see at practice in this post. Other will be covered in next posts.</p>
+
+<h2 id="control-flow">Control flow</h2>
+
+<p>Usually programming languages have ability to change order of evaluation (with if statement, case statement, goto and etc&hellip;) and assembly has it too. Here we will see some of it. There is cmp instruction for performing comparison between two values. It is used along with the conditional jump instruction for decision making. For example:</p>
+
+<pre><code class="language-assembly">;; compare rax with 50
+cmp rax, 50
+</code></pre>
+
+<p>The <code>cmp</code> instruction just compares 2 values, but doesn&rsquo;t affect them and doesn&rsquo;t execute anything depend on result of comparison. For performing any actions after comparison there is conditional jump instructions. It can be one of it:</p>
+
+<ul>
+<li><code>JE</code> - if equal</li>
+<li><code>JZ</code> - if zero</li>
+<li><code>JNE</code> - if not equal</li>
+<li><code>JNZ</code> - if not zero</li>
+<li><code>JG</code> - if first operand is greater than second</li>
+<li><code>JGE</code> - if first operand is greater or equal to second</li>
+<li><code>JA</code> - the same that JG, but performs unsigned comparison</li>
+<li><code>JAE</code> - the same that JGE, but performs unsigned comparison</li>
+</ul>
+
+<p>For example if we want to make something like if/else statement in C:</p>
+
+<pre><code class="language-C">if (rax != 50) {
+    exit();
+} else {
+    right();
+}
+</code></pre>
+
+<p>will be in assembly:</p>
+
+<pre><code class="language-assembly">;; compare rax with 50
+cmp rax, 50
+;; perform .exit if rax is not equal 50
+jne .exit
+jmp .right
+</code></pre>
+
+<p>There is also unconditional jump with syntax:</p>
+
+<pre><code class="language-assembly">JMP label
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-assembly">_start:
+    ;; ....
+    ;; do something and jump to .exit label
+    ;; ....
+    jmp .exit
+
+.exit:
+    mov    rax, 60
+    mov    rdi, 0
+    syscall
+</code></pre>
+
+<p>Here we have can have some code which will be after _start label, and all of this code will be executed, assembly transfer control to .exit label, and code after .exit: will start to execute.</p>
+
+<p>Often unconditional jump uses in loops. For example we have label and some code after it. This code executes anything, than we have condition and jump to the start of this code if condition is not successfully. Loops will be covered in next parts.</p>
+
+<h2 id="example">Example</h2>
+
+<p>Let&rsquo;s see simple example. It will take two integer numbers, get sum of these numbers and compare it with predefined number. If predefined number is equal to sum, it will print something on the screen, if not - just exit. Here is the source code of our example:</p>
+
+<pre><code class="language-assembly">section .data
+    ; Define constants
+    num1:   equ 100
+    num2:   equ 50
+    ; initialize message
+    msg:    db &quot;Sum is correct\n&quot;
+
+section .text
+
+    global _start
+
+;; entry point
+_start:
+    ; set num1's value to rax
+    mov rax, num1
+    ; set num2's value to rbx
+    mov rbx, num2
+    ; get sum of rax and rbx, and store it's value in rax
+    add rax, rbx
+    ; compare rax and 150
+    cmp rax, 150
+    ; go to .exit label if rax and 150 are not equal
+    jne .exit
+    ; go to .rightSum label if rax and 150 are equal
+    jmp .rightSum
+
+; Print message that sum is correct
+.rightSum:
+    ;; write syscall
+    mov     rax, 1
+    ;; file descritor, standard output
+    mov     rdi, 1
+    ;; message address
+    mov     rsi, msg
+    ;; length of message
+    mov     rdx, 15
+    ;; call write syscall
+    syscall
+    ; exit from program
+    jmp .exit
+
+; exit procedure
+.exit:
+    ; exit syscall
+    mov    rax, 60
+    ; exit code
+    mov    rdi, 0
+    ; call exit syscall
+    syscall
+</code></pre>
+
+<p>Let&rsquo;s go through the source code. First of all there is data section with two constants num1, num2 and variable msg with &ldquo;Sum is correct\n&rdquo; value. Now look at 14 line. There is begin of program&rsquo;s entry point. We transfer num1 and num2 values to general purpose registers rax and rbx. Sum it with add instruction. After execution of add instruction, it calculates sum of values from rax and rbx and store it&rsquo;s value to rax. Now we have sum of num1 and num2 in the rax register.</p>
+
+<p>Ok we have num1 which is 100 and num2 which is 50. Our sum must be 150. Let&rsquo;s check it with cmp instruction. After comparison rax and 150 we check result of comparison, if rax and 150 are not equal (checking it with jne) we go to .exit label, if they are equal we go to .rightSum label.</p>
+
+<p>Now we have two labels: .exit and .rightSum. First is just sets 60 to rax, it is exit system call number, and 0 to rdi, it is a exit code. Second is .rightSum is pretty easy, it just prints Sum is correct.</p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">01 Aug 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_1/" class="post-title">Say hello to x86_64 Assembly [part 1]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<h2 id="introduction">Introduction</h2>
+
+<p>There are many developers between us. We write a tons of code every day. Sometime, it is even not a bad code :) Every of us can easily write the simplest code like this:</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+int main() {
+  int x = 10;
+  int y = 100;
+  printf(&quot;x + y = %d&quot;, x + y);
+  return 0;
+}
+</code></pre>
+
+<p>Every of us can understand what&rsquo;s this C code does. But&hellip; How this code works at low level? I think that not all of us can answer on this question, and me too. I thought that i can write code on high level programming languages like Haskell, Erlang, Go and etc&hellip;, but i absolutely don&rsquo;t know how it works at low level, after compilation. So I decided to take a few deep steps down, to assembly, and to describe my learning way about this. Hope it will be interesting, not only for me. Something about 5 - 6 years ago I already used assembly for writing simple programs, it was in university and i used Turbo assembly and DOS operating system. Now I use Linux-x86-64 operating system. Yes, must be big difference between Linux 64 bit and DOS 16 bit. So let&rsquo;s start.</p>
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Before we started, we must to prepare some things like As I wrote about, I use Ubuntu (Ubuntu 14.04.1 LTS 64 bit), thus my posts will be for this operating system and architecture. Different CPU supports different set of instructions. I use Intel Core i7 870 processor, and all code will be written processor. Also i will use nasm assembly. You can install it with:</p>
+
+<pre><code>$ sudo apt-get install nasm
+</code></pre>
+
+<p>It&rsquo;s version must be 2.0.0 or greater. I use NASM version 2.10.09 compiled on Dec 29 2013 version. And the last part, you will need in text editor where you will write you assembly code. I use Emacs with nasm-mode.el for this. It is not mandatory, of course you can use your favourite text editor. If you use Emacs as me you can download nasm-mode.el and configure your Emacs like this:</p>
+
+<pre><code class="language-elisp">(load &quot;~/.emacs.d/lisp/nasm.el&quot;)
+(require 'nasm-mode)
+(add-to-list 'auto-mode-alist '(&quot;\\.\\(asm\\|s\\)$&quot; . nasm-mode))
+</code></pre>
+
+<p>That&rsquo;s all we need for this moment. Other tools will be describe in next posts.</p>
+
+<h2 id="syntax-of-nasm-assembly">Syntax of nasm assembly</h2>
+
+<p>Here I will not describe full assembly syntax, we&rsquo;ll mention only those parts of the syntax, which we will use in this post. Usually NASM program divided into sections. In this post we&rsquo;ll meet 2 following sections:</p>
+
+<ul>
+<li>data section</li>
+<li>text section</li>
+</ul>
+
+<p>The data section is used for declaring constants. This data does not change at runtime. You can declare various math or other constants and etc&hellip; The syntax for declaring data section is:</p>
+
+<pre><code class="language-assembly">    section .data
+</code></pre>
+
+<p>The text section is for code. This section must begin with the declaration global _start, which tells the kernel where the program execution begins.</p>
+
+<pre><code class="language-assembly">    section .text
+    global _start
+    _start:
+</code></pre>
+
+<p>Comments starts with the <code>;</code> symbol. Every NASM source code line contains some combination of the following four fields:</p>
+
+<pre><code>[label:] instruction [operands] [; comment]
+</code></pre>
+
+<p>Fields which are in square brackets are optional. A basic NASM instruction consists from two parts. The first one is the name of the instruction which is to be executed, and the second are the operands of this command. For example:</p>
+
+<pre><code class="language-assembly">    MOV COUNT, 48 ; Put value 48 in the COUNT variable
+</code></pre>
+
+<h2 id="hello-world">Hello world</h2>
+
+<p>Let&rsquo;s write first program with NASM assembly. And of course it will be traditional Hello world program. Here is the code of it:</p>
+
+<pre><code class="language-assembly">section .data
+    msg db      &quot;hello, world!&quot;
+
+section .text
+    global _start
+_start:
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, msg
+    mov     rdx, 13
+    syscall
+    mov    rax, 60
+    mov    rdi, 0
+    syscall
+</code></pre>
+
+<p>Yes, it doesn&rsquo;t look like printf(&ldquo;Hello world&rdquo;). Let&rsquo;s try to understand what is it and how it works. Take a look 1-2 lines. We defined data section and put there msg constant with Hello world value. Now we can use this constant in our code. Next is declaration text section and entry point of program. Program will start to execute from 7 line. Now starts the most interesting part. We already know what is it mov instruction, it gets 2 operands and put value of second to first. But what is it these rax, rdi and etc&hellip; As we can read in the wikipedia:</p>
+
+<pre><code>A central processing unit (CPU) is the hardware within a computer that carries out the instructions of a computer program by performing the basic arithmetical, logical, and input/output operations of the system.
+</code></pre>
+
+<p>Ok, CPU performs some operations, arithmetical and etc&hellip; But where can it get data for this operations? The first answer in memory. However, reading data from and storing data into memory slows down the processor, as it involves complicated processes of sending the data request across the control bus. Thus CPU has own internal memory storage locations called registers:</p>
+
+<p><img src="http://i45.tinypic.com/10wtooh.png" alt="registers" /></p>
+
+<p>So when we write mov rax, 1, it means to put 1 to the rax register. Now we know what is it rax, rdi, rbx and etc&hellip; But need to know when to use rax but when rsi and etc&hellip;</p>
+
+<ul>
+<li><code>rax</code> - temporary register; when we call a syscal, rax must contain syscall number</li>
+<li><code>rdx</code> - used to pass 3rd argument to functions</li>
+<li><code>rdi</code> - used to pass 1st argument to functions</li>
+<li><code>rsi</code> - pointer used to pass 2nd argument to functions</li>
+</ul>
+
+<p>In another words we just make a call of <code>sys_write</code> syscall. Take a look on <code>sys_write</code>:</p>
+
+<pre><code class="language-C">size_t sys_write(unsigned int fd, const char * buf, size_t count);
+</code></pre>
+
+<p>It has 3 arguments:</p>
+
+<ul>
+<li><code>fd</code> - file descriptor. Can be 0, 1 and 2 for standard input, standard output and standard error</li>
+<li><code>buf</code> - points to a character array, which can be used to store content obtained from the file pointed to by fd.</li>
+<li><code>count</code> - specifies the number of bytes to be written from the file into the character array</li>
+</ul>
+
+<p>So we know that <code>sys_write</code> syscall takes three arguments and has number one in syscall table. Let&rsquo;s look again to our hello world implementation. We put 1 to rax register, it means that we will use sys_write system call. In next line we put 1 to rdi register, it will be first argument of <code>sys_write</code>, 1 - standard output. Then we store pointer to msg at rsi register, it will be second buf argument for sys_write. And then we pass the last (third) parameter (length of string) to rdx, it will be third argument of sys_write. Now we have all arguments of the <code>sys_write</code> and we can call it with syscall function at 11 line. Ok, we printed &ldquo;Hello world&rdquo; string, now need to do correctly exit from program. We pass 60 to rax register, 60 is a number of exit syscall. And pass also 0 to rdi register, it will be error code, so with 0 our program must exit successfully. That&rsquo;s all for &ldquo;Hello world&rdquo;. Quite simple :) Now let&rsquo;s build our program. For example we have this code in hello.asm file. Then we need to execute following commands:</p>
+
+<pre><code>$ nasm -f elf64 -o hello.o hello.asm
+$ ld -o hello hello.o
+</code></pre>
+
+<p>After it we will have executable hello file which we can run with ./hello and will see Hello world string in the terminal.</p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">01 Dec 2013, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/kindle/" class="post-title">Amazon Kindle and Read-only file system</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-kindle" href="https://0xAX.github.io/categories/kindle">kindle</a><a class="post-category post-category-amazon" href="https://0xAX.github.io/categories/amazon">amazon</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        <p>Some times ago I&rsquo;ve moved on 64 bit system and my first problem with new system was a situation when I couldn&rsquo;t copy any files to my <a href="https://en.wikipedia.org/wiki/Amazon_Kindle#Kindle_5">Amazon Kindle 5</a>. Every time, when I&rsquo;ve tried to delete some file from my Kindle, I got following error:</p>
+
+<pre><code>[Errno 30] Read-only file system
+</code></pre>
+
+<p>Here is the solution how to fix it: First of all you need to determine your device in the system. To do this you need to execute <code>mount</code> command for you device and you must have something like this:</p>
+
+<pre><code>$ mount
+
+/dev/sdc1 on /media/alex/Kindle type vfat \
+(rw, nosuid, nodev, uid=1000, gid=1000,   \
+shortname=mixed, dmask=0077, utf8=1,      \
+showexec,flush,uhelper=udisks2)
+</code></pre>
+
+<p>After that you mounted your device, just execute:</p>
+
+<pre><code>sudo fsck.vfat -r /dev/sdc1
+</code></pre>
+
+<p>Unmount and remove and plug again the USB cable of your Kindle device, and after this simple manipulations you&rsquo;ll  be able to copy any files to your Kindle.</p>
+
+                    </div>
+                </section>
+                
+            </div>
+            
+
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

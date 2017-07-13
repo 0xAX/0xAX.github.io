@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say hello to x86_64 Assembly [part 7] &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Say hello to x86_64 Assembly [part 7] &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Say hello to x86_64 Assembly [part 7] &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">10 Oct 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_7/" class="post-title">Say hello to x86_64 Assembly [part 7]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/asm_7/" data-title="Say hello to x86_64 Assembly [part 7]" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/asm_7/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<p>It is seventh part of Say hello to x86_64 Assembly and here we will look on how we can use C together with assembler.</p>
+
+<p>Actually we have 3 ways to use it together:</p>
+
+<ul>
+<li>Call assembly routines from C code</li>
+<li>Call c routines from assembly code</li>
+<li>Use inline assembly in C code</li>
+</ul>
+
+<p>Let&rsquo;s write 3 simple Hello world programs which shows us how to use assembly and C together.</p>
+
+<h2 id="call-assembly-from-c">Call assembly from C</h2>
+
+<p>First of all let&rsquo;s write simple C program like this:</p>
+
+<pre><code class="language-C">#include &lt;string.h&gt;
+
+int main() {
+	char* str = &quot;Hello World\n&quot;;
+	int len = strlen(str);
+	printHelloWorld(str, len);
+	return 0;
+}
+</code></pre>
+
+<p>Here we can see C code which defines two variables: our Hello world string which we will write to stdout and length of this string. Next we call printHelloWorld assembly function with this 2 variables as parameters. As we use x86_64 Linux, we must know x86_64 linux calling convetions, so we will know how to write printHelloWorld function, how to get incoming parameters and etc&hellip; When we call function first six parameters passes through rdi, rsi, rdx, rcx, r8 and r9 general purpose registers, all another through the stack. So we can get first and second parameter from rdi and rsi registers and call write syscall and than return from function with ret instruction:</p>
+
+<pre><code class="language-assembly">global printHelloWorld
+
+section .text
+printHelloWorld:
+		;; 1 arg
+		mov r10, rdi
+		;; 2 arg
+		mov r11, rsi
+		;; call write syscall
+		mov rax, 1
+		mov rdi, 1
+		mov rsi, r10
+		mov rdx, r11
+		syscall
+		ret
+</code></pre>
+
+<p>Now we can build it with:</p>
+
+<pre><code>build:
+	nasm -f elf64 -o casm.o casm.asm
+	gcc casm.o casm.c -o casm
+</code></pre>
+
+<h2 id="inline-assembly">Inline assembly</h2>
+
+<p>The following method is to write assembly code directly in C code. There is special syntax for this. It has general view:</p>
+
+<pre><code>asm [volatile] (&quot;assembly code&quot; : output operand : input operand : clobbers);
+</code></pre>
+
+<p>As we can read in gcc documentation volatile keyword means:</p>
+
+<pre><code>The typical use of Extended asm statements is to manipulate input values to produce output values. However, your asm statements may also produce side effects. If so, you may need to use the volatile qualifier to disable certain optimizations
+</code></pre>
+
+<p>Each operand is described by constraint string followed by C expression in parentheses. There are a number of constraints:</p>
+
+<ul>
+<li><code>r</code> - Kept variable value in general purpose register</li>
+<li><code>g</code> - Any register, memory or immediate integer operand is allowed, except for registers that are not general registers.</li>
+<li><code>f</code> - Floating point register</li>
+<li><code>m</code> - A memory operand is allowed, with any kind of address that the machine supports in general.</li>
+<li>and etc&hellip;</li>
+</ul>
+
+<p>So our hello world will be:</p>
+
+<pre><code class="language-C">#include &lt;string.h&gt;
+
+int main() {
+	char* str = &quot;Hello World\n&quot;;
+	long len = strlen(str);
+	int ret = 0;
+
+	__asm__(&quot;movq $1, %%rax \n\t&quot;
+		&quot;movq $1, %%rdi \n\t&quot;
+		&quot;movq %1, %%rsi \n\t&quot;
+		&quot;movl %2, %%edx \n\t&quot;
+		&quot;syscall&quot;
+		: &quot;=g&quot;(ret)
+		: &quot;g&quot;(str), &quot;g&quot; (len));
+
+	return 0;
+}
+</code></pre>
+
+<p>Here we can see the same 2 variables as in previous example and inline assembly definition. First of all we put 1 to rax and rdi registers (write system call number, and stdout) as we did it in our plain assembly hello world. Next we do similar operation with rsi and rdi registers but first operands starts with % symbol instead $. It means str is the output operand referred by %1 and len second output operand referred by %2, so we put values of str and len to rsi and rdi with %n notation, where n is number of output operand. Also there is %% prefixed to the register name.</p>
+
+<pre><code>    This helps GCC to distinguish between the operands and registers. operands have a single % as prefix
+</code></pre>
+
+<p>We can build it with:</p>
+
+<pre><code>build:
+	gcc casm.c -o casm
+</code></pre>
+
+<h2 id="call-c-from-assembly">Call C from assembly</h2>
+
+<p>And the last method is to call C function from assembly code. For example we have following simple C code with one function which just prints Hello world:</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+extern int print();
+
+int print() {
+	printf(&quot;Hello World\n&quot;);
+	return 0;
+}
+</code></pre>
+
+<p>Now we can define this function as extern in our assembly code and call it with call instruction as we do it much times in previous posts:</p>
+
+<pre><code class="language-asssembly">global _start
+
+extern print
+
+section .text
+
+_start:
+		call print
+
+		mov rax, 60
+		mov rdi, 0
+		syscall
+</code></pre>
+
+<p>Build it with:</p>
+
+<pre><code>build:
+	gcc  -c casm.c -o c.o
+	nasm -f elf64 casm.asm -o casm.o
+	ld   -dynamic-linker /lib64/ld-linux-x86-64.so.2 -lc casm.o c.o -o casm
+</code></pre>
+
+<p>and now we can run our third hello world.</p>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

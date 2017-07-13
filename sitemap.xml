@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://0xAX.github.io/grub/</loc>
+    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_8/</loc>
+    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_7/</loc>
+    <lastmod>2014-10-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_6/</loc>
+    <lastmod>2014-10-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_5/</loc>
+    <lastmod>2014-09-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_4/</loc>
+    <lastmod>2014-09-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_3/</loc>
+    <lastmod>2014-08-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_2/</loc>
+    <lastmod>2014-08-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/asm_1/</loc>
+    <lastmod>2014-08-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/ghci-linker-err/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/haskell_not_popular/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/haskel-execution-time/</loc>
+    <lastmod>2014-01-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/kindle/</loc>
+    <lastmod>2013-12-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/amazon/</loc>
+    <lastmod>2013-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/amazon-kindle/</loc>
+    <lastmod>2013-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/assembler/</loc>
+    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/assembly/</loc>
+    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/bootloader/</loc>
+    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/</loc>
+    <lastmod>2013-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/ghci/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/ghci/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/grub/</loc>
+    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/grub/</loc>
+    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/haskel/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/haskell/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/haskell/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/</loc>
+    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/kindle/</loc>
+    <lastmod>2013-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/linux/</loc>
+    <lastmod>2016-01-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/perf/</loc>
+    <lastmod>2014-01-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/perf/</loc>
+    <lastmod>2014-01-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/</loc>
+    <lastmod>2013-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/categories/thoghts/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/thoughts/</loc>
+    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xAX.github.io/tags/x86_64/</loc>
+    <lastmod>2014-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

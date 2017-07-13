@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say hello to x86_64 Assembly [part 1] &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Say hello to x86_64 Assembly [part 1] &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Say hello to x86_64 Assembly [part 1] &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive.html"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">01 Aug 2014, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/asm_1/" class="post-title">Say hello to x86_64 Assembly [part 1]</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="https://0xAX.github.io/asm_1/" data-title="Say hello to x86_64 Assembly [part 1]" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="https://0xAX.github.io/asm_1/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="post-description">
+                        
+
+<h2 id="introduction">Introduction</h2>
+
+<p>There are many developers between us. We write a tons of code every day. Sometime, it is even not a bad code :) Every of us can easily write the simplest code like this:</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+int main() {
+  int x = 10;
+  int y = 100;
+  printf(&quot;x + y = %d&quot;, x + y);
+  return 0;
+}
+</code></pre>
+
+<p>Every of us can understand what&rsquo;s this C code does. But&hellip; How this code works at low level? I think that not all of us can answer on this question, and me too. I thought that i can write code on high level programming languages like Haskell, Erlang, Go and etc&hellip;, but i absolutely don&rsquo;t know how it works at low level, after compilation. So I decided to take a few deep steps down, to assembly, and to describe my learning way about this. Hope it will be interesting, not only for me. Something about 5 - 6 years ago I already used assembly for writing simple programs, it was in university and i used Turbo assembly and DOS operating system. Now I use Linux-x86-64 operating system. Yes, must be big difference between Linux 64 bit and DOS 16 bit. So let&rsquo;s start.</p>
+
+<h2 id="preparation">Preparation</h2>
+
+<p>Before we started, we must to prepare some things like As I wrote about, I use Ubuntu (Ubuntu 14.04.1 LTS 64 bit), thus my posts will be for this operating system and architecture. Different CPU supports different set of instructions. I use Intel Core i7 870 processor, and all code will be written processor. Also i will use nasm assembly. You can install it with:</p>
+
+<pre><code>$ sudo apt-get install nasm
+</code></pre>
+
+<p>It&rsquo;s version must be 2.0.0 or greater. I use NASM version 2.10.09 compiled on Dec 29 2013 version. And the last part, you will need in text editor where you will write you assembly code. I use Emacs with nasm-mode.el for this. It is not mandatory, of course you can use your favourite text editor. If you use Emacs as me you can download nasm-mode.el and configure your Emacs like this:</p>
+
+<pre><code class="language-elisp">(load &quot;~/.emacs.d/lisp/nasm.el&quot;)
+(require 'nasm-mode)
+(add-to-list 'auto-mode-alist '(&quot;\\.\\(asm\\|s\\)$&quot; . nasm-mode))
+</code></pre>
+
+<p>That&rsquo;s all we need for this moment. Other tools will be describe in next posts.</p>
+
+<h2 id="syntax-of-nasm-assembly">Syntax of nasm assembly</h2>
+
+<p>Here I will not describe full assembly syntax, we&rsquo;ll mention only those parts of the syntax, which we will use in this post. Usually NASM program divided into sections. In this post we&rsquo;ll meet 2 following sections:</p>
+
+<ul>
+<li>data section</li>
+<li>text section</li>
+</ul>
+
+<p>The data section is used for declaring constants. This data does not change at runtime. You can declare various math or other constants and etc&hellip; The syntax for declaring data section is:</p>
+
+<pre><code class="language-assembly">    section .data
+</code></pre>
+
+<p>The text section is for code. This section must begin with the declaration global _start, which tells the kernel where the program execution begins.</p>
+
+<pre><code class="language-assembly">    section .text
+    global _start
+    _start:
+</code></pre>
+
+<p>Comments starts with the <code>;</code> symbol. Every NASM source code line contains some combination of the following four fields:</p>
+
+<pre><code>[label:] instruction [operands] [; comment]
+</code></pre>
+
+<p>Fields which are in square brackets are optional. A basic NASM instruction consists from two parts. The first one is the name of the instruction which is to be executed, and the second are the operands of this command. For example:</p>
+
+<pre><code class="language-assembly">    MOV COUNT, 48 ; Put value 48 in the COUNT variable
+</code></pre>
+
+<h2 id="hello-world">Hello world</h2>
+
+<p>Let&rsquo;s write first program with NASM assembly. And of course it will be traditional Hello world program. Here is the code of it:</p>
+
+<pre><code class="language-assembly">section .data
+    msg db      &quot;hello, world!&quot;
+
+section .text
+    global _start
+_start:
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, msg
+    mov     rdx, 13
+    syscall
+    mov    rax, 60
+    mov    rdi, 0
+    syscall
+</code></pre>
+
+<p>Yes, it doesn&rsquo;t look like printf(&ldquo;Hello world&rdquo;). Let&rsquo;s try to understand what is it and how it works. Take a look 1-2 lines. We defined data section and put there msg constant with Hello world value. Now we can use this constant in our code. Next is declaration text section and entry point of program. Program will start to execute from 7 line. Now starts the most interesting part. We already know what is it mov instruction, it gets 2 operands and put value of second to first. But what is it these rax, rdi and etc&hellip; As we can read in the wikipedia:</p>
+
+<pre><code>A central processing unit (CPU) is the hardware within a computer that carries out the instructions of a computer program by performing the basic arithmetical, logical, and input/output operations of the system.
+</code></pre>
+
+<p>Ok, CPU performs some operations, arithmetical and etc&hellip; But where can it get data for this operations? The first answer in memory. However, reading data from and storing data into memory slows down the processor, as it involves complicated processes of sending the data request across the control bus. Thus CPU has own internal memory storage locations called registers:</p>
+
+<p><img src="http://i45.tinypic.com/10wtooh.png" alt="registers" /></p>
+
+<p>So when we write mov rax, 1, it means to put 1 to the rax register. Now we know what is it rax, rdi, rbx and etc&hellip; But need to know when to use rax but when rsi and etc&hellip;</p>
+
+<ul>
+<li><code>rax</code> - temporary register; when we call a syscal, rax must contain syscall number</li>
+<li><code>rdx</code> - used to pass 3rd argument to functions</li>
+<li><code>rdi</code> - used to pass 1st argument to functions</li>
+<li><code>rsi</code> - pointer used to pass 2nd argument to functions</li>
+</ul>
+
+<p>In another words we just make a call of <code>sys_write</code> syscall. Take a look on <code>sys_write</code>:</p>
+
+<pre><code class="language-C">size_t sys_write(unsigned int fd, const char * buf, size_t count);
+</code></pre>
+
+<p>It has 3 arguments:</p>
+
+<ul>
+<li><code>fd</code> - file descriptor. Can be 0, 1 and 2 for standard input, standard output and standard error</li>
+<li><code>buf</code> - points to a character array, which can be used to store content obtained from the file pointed to by fd.</li>
+<li><code>count</code> - specifies the number of bytes to be written from the file into the character array</li>
+</ul>
+
+<p>So we know that <code>sys_write</code> syscall takes three arguments and has number one in syscall table. Let&rsquo;s look again to our hello world implementation. We put 1 to rax register, it means that we will use sys_write system call. In next line we put 1 to rdi register, it will be first argument of <code>sys_write</code>, 1 - standard output. Then we store pointer to msg at rsi register, it will be second buf argument for sys_write. And then we pass the last (third) parameter (length of string) to rdx, it will be third argument of sys_write. Now we have all arguments of the <code>sys_write</code> and we can call it with syscall function at 11 line. Ok, we printed &ldquo;Hello world&rdquo; string, now need to do correctly exit from program. We pass 60 to rax register, 60 is a number of exit syscall. And pass also 0 to rdi register, it will be error code, so with 0 our program must exit successfully. That&rsquo;s all for &ldquo;Hello world&rdquo;. Quite simple :) Now let&rsquo;s build our program. For example we have this code in hello.asm file. Then we need to execute following commands:</p>
+
+<pre><code>$ nasm -f elf64 -o hello.o hello.asm
+$ ld -o hello hello.o
+</code></pre>
+
+<p>After it we will have executable hello file which we can run with ./hello and will see Hello world string in the terminal.</p>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

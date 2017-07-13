@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Amazon Kindle on Just a memo</title>
+    <link>https://0xAX.github.io/tags/amazon-kindle/</link>
+    <description>Recent content in Amazon Kindle on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 01 Dec 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/tags/amazon-kindle/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Amazon Kindle and Read-only file system</title>
+      <link>https://0xAX.github.io/kindle/</link>
+      <pubDate>Sun, 01 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/kindle/</guid>
+      <description>Some times ago I&amp;rsquo;ve moved on 64 bit system and my first problem with new system was a situation when I couldn&amp;rsquo;t copy any files to my Amazon Kindle 5. Every time, when I&amp;rsquo;ve tried to delete some file from my Kindle, I got following error:
+[Errno 30] Read-only file system  Here is the solution how to fix it: First of all you need to determine your device in the system.</description>
+    </item>
+    
+  </channel>
+</rss>
