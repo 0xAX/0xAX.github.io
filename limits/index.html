@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limits on resources in Linux &middot; Just a memo</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Limits on resources in Linux &middot; Just a memo">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Limits on resources in Linux &middot; Just a memo">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="https://0xAX.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="Just a memo" href="https://0xAX.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://0xAX.github.io">Just a memo</a></h1>
+            <h2 class="brand-tagline"> My posts about Linux kernel and low-level stuff </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xAX"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/0xAX "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pure-button" href="https://0xAX.github.io/archive"><i class="fa fa-archive"></i> archive</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">25 Jul 2017, 00:00</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://0xAX.github.io/limits/" class="post-title">Limits on resources in Linux</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-linux" href="https://0xAX.github.io/categories/linux">linux</a><a class="post-category post-category-programming" href="https://0xAX.github.io/categories/programming">programming</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-description">
+                        
+
+<p>Each process in the system uses certain amount of different resources like files, CPU time, memory and so on.</p>
+
+<p>Such resources are not infinite and each process and we should have an instrument to manage it. Sometimes it is useful to know current limits for a certain resource or to change it&rsquo;s value. In this post we will consider such instruments that allow us to get information about limits for a process and increase or decrease such limits.</p>
+
+<p>We will start from userspace view and then we will look how it is implemented in the Linux kernel.</p>
+
+<p>There are three main fundamental <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> to manage resource limit for a process:</p>
+
+<ul>
+<li><code>getrlimit</code></li>
+<li><code>setrlimit</code></li>
+<li><code>prlimit</code></li>
+</ul>
+
+<p>The first two allows a process to read and set limits on a system resource. The last one is extension for previous functions. The <code>prlimit</code> allows to set and read the resource limits of a process specified by <a href="https://en.wikipedia.org/wiki/Process_identifier">PID</a>. Definitions of these functions looks:</p>
+
+<p>The <code>getrlimit</code> is:</p>
+
+<pre><code class="language-C">int getrlimit(int resource, struct rlimit *rlim);
+</code></pre>
+
+<p>The <code>setrlimit</code> is:</p>
+
+<pre><code class="language-C">int setrlimit(int resource, const struct rlimit *rlim);
+</code></pre>
+
+<p>And the definition of the <code>prlimit</code> is:</p>
+
+<pre><code class="language-C">int prlimit(pid_t pid, int resource, const struct rlimit *new_limit,
+            struct rlimit *old_limit);
+</code></pre>
+
+<p>In the first two cases, functions takes two parameters:</p>
+
+<ul>
+<li><code>resource</code> - represents resource type (we will see available types later);</li>
+<li><code>rlim</code> - combination of <code>soft</code> and <code>hard</code> limits.</li>
+</ul>
+
+<p>There are two types of limits:</p>
+
+<ul>
+<li><code>soft</code></li>
+<li><code>hard</code></li>
+</ul>
+
+<p>The first provides actual limit for a resource of a process. The second is a ceiling value of a <code>soft</code> limit and can be set only by superuser. So, <code>soft</code> limit can&rsquo;t exceed related <code>hard</code> limit never.</p>
+
+<p>Both these values are combined in the <code>rlimit</code> structure:</p>
+
+<pre><code class="language-C">struct rlimit {
+    rlim_t rlim_cur;
+    rlim_t rlim_max;
+};
+</code></pre>
+
+<p>The last one function looks a little bit complex and takes <code>4</code> arguments. Besides <code>resource</code> argument, it takes:</p>
+
+<ul>
+<li><code>pid</code> - specifies an ID of a process on which the <code>prlimit</code> should be executed;</li>
+<li><code>new_limit</code> - provides new limits values if it is not <code>NULL</code>;</li>
+<li><code>old_limit</code> - current <code>soft</code> and <code>hard</code> limits will be placed here if it is not <code>NULL</code>.</li>
+</ul>
+
+<p>Exactly <code>prlimit</code> function is used by <a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#index-ulimit">ulimit</a> util. We can verify this with the help of <a href="https://linux.die.net/man/1/strace">strace</a> util.</p>
+
+<p>For example:</p>
+
+<pre><code>~$ strace ulimit -s 2&gt;&amp;1 | grep rl
+
+prlimit64(0, RLIMIT_NPROC, NULL, {rlim_cur=63727, rlim_max=63727}) = 0
+prlimit64(0, RLIMIT_NOFILE, NULL, {rlim_cur=1024, rlim_max=4*1024}) = 0
+prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+</code></pre>
+
+<p>Here we can see <code>prlimit64</code>, but not the <code>prlimit</code>. The fact is that we see underlying system call here instead of library call.</p>
+
+<p>Now let&rsquo;s look at list of available resources:</p>
+
+<table>
+<thead>
+<tr>
+<th>Resouce</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>RLIMIT_CPU</td>
+<td>CPU time limit given in seconds</td>
+</tr>
+
+<tr>
+<td>RLIMIT_FSIZE</td>
+<td>the maximum size of files that a process may create</td>
+</tr>
+
+<tr>
+<td>RLIMIT_DATA</td>
+<td>the maximum  size  of  the process&rsquo;s data segment</td>
+</tr>
+
+<tr>
+<td>RLIMIT_STACK</td>
+<td>the maximum size of the process stack in bytes</td>
+</tr>
+
+<tr>
+<td>RLIMIT_CORE</td>
+<td>the maximum size of a <a href="http://man7.org/linux/man-pages/man5/core.5.html">core</a> file.</td>
+</tr>
+
+<tr>
+<td>RLIMIT_RSS</td>
+<td>the number of bytes that can be allocated for a process in RAM</td>
+</tr>
+
+<tr>
+<td>RLIMIT_NPROC</td>
+<td>the maximum number of processes that can be created by a user</td>
+</tr>
+
+<tr>
+<td>RLIMIT_NOFILE</td>
+<td>the maximum number of a file descriptor that can be opened by by a process</td>
+</tr>
+
+<tr>
+<td>RLIMIT_MEMLOCK</td>
+<td>the maximum number of bytes of memory that may be locked into RAM by <a href="http://man7.org/linux/man-pages/man2/mlock.2.html">mlock</a>.</td>
+</tr>
+
+<tr>
+<td>RLIMIT_AS</td>
+<td>the maximum size of virtual memory in bytes.</td>
+</tr>
+
+<tr>
+<td>RLIMIT_LOCKS</td>
+<td>the maximum number <a href="https://linux.die.net/man/1/flock">flock</a> and locking related <a href="http://man7.org/linux/man-pages/man2/fcntl.2.html">fcntl</a> calls</td>
+</tr>
+
+<tr>
+<td>RLIMIT_SIGPENDING</td>
+<td>maximum number of <a href="http://man7.org/linux/man-pages/man7/signal.7.html">signals</a> that may be queued for a user of the calling process</td>
+</tr>
+
+<tr>
+<td>RLIMIT_MSGQUEUE</td>
+<td>the number of bytes that can be allocated for <a href="http://man7.org/linux/man-pages/man7/mq_overview.7.html">POSIX message queues</a></td>
+</tr>
+
+<tr>
+<td>RLIMIT_NICE</td>
+<td>the maximum <a href="https://linux.die.net/man/1/nice">nice</a> value that can be set by a process</td>
+</tr>
+
+<tr>
+<td>RLIMIT_RTPRIO</td>
+<td>maximum real-time priority value</td>
+</tr>
+
+<tr>
+<td>RLIMIT_RTTIME</td>
+<td>maximum number of microseconds that a process may be scheduled under real-time scheduling policy without making blocking system call</td>
+</tr>
+</tbody>
+</table>
+
+<p>If you&rsquo;re looking into source code of an open source projects, you will note that reading or updating of a resource limit is quite widely used operation and.</p>
+
+<p>For example: <a href="https://github.com/systemd/systemd/blob/master/src/core/main.c">systemd</a></p>
+
+<pre><code class="language-C">/* Don't limit the coredump size */
+(void) setrlimit(RLIMIT_CORE, &amp;RLIMIT_MAKE_CONST(RLIM_INFINITY));
+</code></pre>
+
+<p>Or <a href="https://github.com/haproxy/haproxy/blob/master/src/haproxy.c">haproxy</a>:</p>
+
+<pre><code class="language-C">getrlimit(RLIMIT_NOFILE, &amp;limit);
+if (limit.rlim_cur &lt; global.maxsock) {
+	Warning(&quot;[%s.main()] FD limit (%d) too low for maxconn=%d/maxsock=%d. Please raise 'ulimit-n' to %d or more to avoid any trouble.\n&quot;,
+		argv[0], (int)limit.rlim_cur, global.maxconn, global.maxsock, global.maxsock);
+}
+</code></pre>
+
+<p>We&rsquo;ve just saw a little bit about resources limits related stuff in the userspace, now let&rsquo;s look at the same system calls in the Linux kernel.</p>
+
+<h2 id="limits-on-resource-in-the-linux-kernel">Limits on resource in the Linux kernel</h2>
+
+<p>Both implementation of <code>getrlimit</code> system call and <code>setrlimit</code> looks similar. Both they execute <code>do_prlimit</code> function that is core implementation of the <code>prlimit</code> system call and copy from/to given <code>rlimit</code> from/to userspace:</p>
+
+<p>The <code>getrlimit</code>:</p>
+
+<pre><code class="language-C">SYSCALL_DEFINE2(getrlimit, unsigned int, resource, struct rlimit __user *, rlim)
+{
+	struct rlimit value;
+	int ret;
+
+	ret = do_prlimit(current, resource, NULL, &amp;value);
+	if (!ret)
+		ret = copy_to_user(rlim, &amp;value, sizeof(*rlim)) ? -EFAULT : 0;
+
+	return ret;
+}
+</code></pre>
+
+<p>and <code>setrlimit</code>:</p>
+
+<pre><code class="language-C">SYSCALL_DEFINE2(setrlimit, unsigned int, resource, struct rlimit __user *, rlim)
+{
+	struct rlimit new_rlim;
+
+	if (copy_from_user(&amp;new_rlim, rlim, sizeof(*rlim)))
+		return -EFAULT;
+	return do_prlimit(current, resource, &amp;new_rlim, NULL);
+}
+</code></pre>
+
+<p>Implementations of these system calls are defined in the <a href="https://github.com/torvalds/linux/blob/master/kernel/sys.c">kernel/sys.c</a> kernel source code file.</p>
+
+<p>First of all the <code>do_prlimit</code> function executes a check that the given resource is valid:</p>
+
+<pre><code class="language-C">if (resource &gt;= RLIM_NLIMITS)
+	return -EINVAL;
+</code></pre>
+
+<p>and in a failure case returns <code>-EINVAL</code> error. After this check will pass successfully and new limits was passed as non <code>NULL</code> value, two following checks:</p>
+
+<pre><code class="language-C">if (new_rlim) {
+	if (new_rlim-&gt;rlim_cur &gt; new_rlim-&gt;rlim_max)
+		return -EINVAL;
+	if (resource == RLIMIT_NOFILE &amp;&amp;
+			new_rlim-&gt;rlim_max &gt; sysctl_nr_open)
+		return -EPERM;
+}
+</code></pre>
+
+<p>check that the given <code>soft</code> limit does not exceeds <code>hard</code> limit and in a case when the given resource is the maximum number of a file descriptors that hard limit is not greater than <code>sysctl_nr_open</code> value. The value of the <code>sysctl_nr_open</code> can be found via <a href="https://en.wikipedia.org/wiki/Procfs">procfs</a>:</p>
+
+<pre><code>~$ cat /proc/sys/fs/nr_open 
+1048576
+</code></pre>
+
+<p>After all of these checks we lock <code>tasklist</code> to be sure that [signal]() handlers related things will not be destroyed while we updating limits for a given resource:</p>
+
+<pre><code class="language-C">read_lock(&amp;tasklist_lock);
+...
+...
+...
+read_unlock(&amp;tasklist_lock);
+</code></pre>
+
+<p>We need to do this because <code>prlimit</code> system call allows us to update limits of another task by the given pid. As task list is locked, we take the <code>rlimit</code> instance that is responsible for the given resource limit of the given process:</p>
+
+<pre><code class="language-C">rlim = tsk-&gt;signal-&gt;rlim + resource;
+</code></pre>
+
+<p>where the <code>tsk-&gt;signal-&gt;rlim</code> is just array of <code>struct rlimit</code> that represents certain resources. And if the <code>new_rlim</code> is not <code>NULL</code> we just update its value. If <code>old_rlim</code> is not <code>NULL</code> we fill it:</p>
+
+<pre><code class="language-C">if (old_rlim)
+    *old_rlim = *rlim;
+</code></pre>
+
+<p>That&rsquo;s all.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This is the end of the second part that describes implementation of the system calls in the Linux kernel. If you have questions or suggestions, ping me on Twitter <a href="https://twitter.com/0xAX">0xAX</a>, drop me an <a href="anotherworldofworld@gmail.com">email</a>, or just create an <a href="https://github.com/0xAX/linux-internals/issues/new">issue</a>.</p>
+
+<p><strong>Please note that English is not my first language and I am really sorry for any inconvenience. If you find any mistakes please send me PR to <a href="https://github.com/0xAX/linux-internals">linux-insides</a>.</strong></p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/System_call">system calls</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Process_identifier">PID</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#index-ulimit">ulimit</a></li>
+<li><a href="https://linux.die.net/man/1/strace">strace</a></li>
+<li><a href="http://man7.org/linux/man-pages/man7/mq_overview.7.html">POSIX message queues</a></li>
+</ul>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://0xAX.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

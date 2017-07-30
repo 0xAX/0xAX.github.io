@@ -39,15 +39,6 @@
     </item>
     
     <item>
-      <title>Ghci</title>
-      <link>https://0xAX.github.io/categories/ghci/</link>
-      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://0xAX.github.io/categories/ghci/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Grub</title>
       <link>https://0xAX.github.io/categories/grub/</link>
       <pubDate>Tue, 05 Jan 2016 00:00:00 +0000</pubDate>
@@ -62,15 +53,6 @@
       <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
       
       <guid>https://0xAX.github.io/categories/haskel/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Haskell</title>
-      <link>https://0xAX.github.io/categories/haskell/</link>
-      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://0xAX.github.io/categories/haskell/</guid>
       <description></description>
     </item>
     
@@ -102,11 +84,11 @@
     </item>
     
     <item>
-      <title>Thoghts</title>
-      <link>https://0xAX.github.io/categories/thoghts/</link>
+      <title>Thoughts</title>
+      <link>https://0xAX.github.io/categories/thoughts/</link>
       <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
       
-      <guid>https://0xAX.github.io/categories/thoghts/</guid>
+      <guid>https://0xAX.github.io/categories/thoughts/</guid>
       <description></description>
     </item>
     

@@ -114,15 +114,6 @@ It motivates me even more to describe my way of learning. During this days I got
     </item>
     
     <item>
-      <title>GHCi runtime linker found a duplicate definition error</title>
-      <link>https://0xAX.github.io/ghci-linker-err/</link>
-      <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://0xAX.github.io/ghci-linker-err/</guid>
-      <description>Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I&amp;rsquo;m not against this programming language, opposite, haskell&amp;rsquo;s unpopularity makes me sad. I will not write about haskell popularity in industry, I&amp;rsquo;ll try to explain my thoughts about &amp;ldquo;Why Haskell is not popular&amp;rdquo; not as Haskell expert, not as professional Haskell developer (i don&amp;rsquo;t get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don&amp;rsquo;t afraid monads :).</description>
-    </item>
-    
-    <item>
       <title>My thoughts about why Haskell is not popular</title>
       <link>https://0xAX.github.io/haskell_not_popular/</link>
       <pubDate>Sun, 11 May 2014 00:00:00 +0000</pubDate>
@@ -149,6 +140,16 @@ module TimingTest where main :: IO() main = do putStrLn &amp;quot;Start&amp;quot
       <guid>https://0xAX.github.io/kindle/</guid>
       <description>Some times ago I&amp;rsquo;ve moved on 64 bit system and my first problem with new system was a situation when I couldn&amp;rsquo;t copy any files to my Amazon Kindle 5. Every time, when I&amp;rsquo;ve tried to delete some file from my Kindle, I got following error:
 [Errno 30] Read-only file system  Here is the solution how to fix it: First of all you need to determine your device in the system.</description>
+    </item>
+    
+    <item>
+      <title>Archives</title>
+      <link>https://0xAX.github.io/archive/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/archive/</guid>
+      <description> Atom feeds A feed for the whole blog can be found here.
+Tags  amazon-kindle grub haskell linux perf thoughts x86_64 assembler  Posts  Layout of a stack frame in x86_64 How does GNU GRUB work My thoughts about why Haskell is not popular Get function execution time in Haskell Amazon Kindle and Read-only file system   Series of posts about assembler programming for Linux x86_64  Say hello to x86_64 Assembly [part 1] Say hello to x86_64 Assembly [part 2] Say hello to x86_64 Assembly [part 3] Say hello to x86_64 Assembly [part 4] Say hello to x86_64 Assembly [part 5] Say hello to x86_64 Assembly [part 6] Say hello to x86_64 Assembly [part 7] Say hello to x86_64 Assembly [part 8]  </description>
     </item>
     
   </channel>

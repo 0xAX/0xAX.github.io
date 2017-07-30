@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Haskell on Just a memo</title>
-    <link>https://0xAX.github.io/tags/haskell/</link>
-    <description>Recent content in Haskell on Just a memo</description>
+    <title>Thoughts on Just a memo</title>
+    <link>https://0xAX.github.io/categories/thoughts/</link>
+    <description>Recent content in Thoughts on Just a memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 May 2014 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://0xAX.github.io/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://0xAX.github.io/categories/thoughts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,16 +18,6 @@
       
       <guid>https://0xAX.github.io/haskell_not_popular/</guid>
       <description>Despite Haskell programming language is not young language, it has a really great and helpful community, it has big amount of libraries, unfortunately Haskell is not popular programming language. I&amp;rsquo;m not against this programming language, opposite, haskell&amp;rsquo;s unpopularity makes me sad. I will not write about haskell popularity in industry, I&amp;rsquo;ll try to explain my thoughts about &amp;ldquo;Why Haskell is not popular&amp;rdquo; not as Haskell expert, not as professional Haskell developer (i don&amp;rsquo;t get payment for Haskell programming), but from position of usual developer who started to learn/experiment with Haskell some months ago and already don&amp;rsquo;t afraid monads :).</description>
-    </item>
-    
-    <item>
-      <title>Get function execution time in Haskell</title>
-      <link>https://0xAX.github.io/haskel-execution-time/</link>
-      <pubDate>Mon, 13 Jan 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://0xAX.github.io/haskel-execution-time/</guid>
-      <description>Some times ago I encountered with question: How to get function execution time in Haskell program? I asked this question at StackOverflow, and got some useful answers. Here i will try to describe how to do it. For example we have simple haskell program which will calculate sum of prime numbers which are between 0 and 10000. Something like this:
-module TimingTest where main :: IO() main = do putStrLn &amp;quot;Start&amp;quot; putStrLn (&amp;quot;Result: &amp;quot; ++ show primesSum) putStrLn &amp;quot;Done&amp;quot; -- -- Returns True if `n` is prime -- isPrime :: Int -&amp;gt; Bool isPrime n = null [ x | x &amp;lt;- [2.</description>
     </item>
     
   </channel>

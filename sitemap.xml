@@ -53,11 +53,6 @@
   </url>
   
   <url>
-    <loc>https://0xAX.github.io/ghci-linker-err/</loc>
-    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://0xAX.github.io/haskell_not_popular/</loc>
     <lastmod>2014-05-11T00:00:00+00:00</lastmod>
   </url>
@@ -85,6 +80,10 @@
   </url>
   
   <url>
+    <loc>https://0xAX.github.io/archive/</loc>
+  </url>
+  
+  <url>
     <loc>https://0xAX.github.io/categories/assembler/</loc>
     <lastmod>2017-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -109,18 +108,6 @@
   </url>
   
   <url>
-    <loc>https://0xAX.github.io/tags/ghci/</loc>
-    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xAX.github.io/categories/ghci/</loc>
-    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://0xAX.github.io/tags/grub/</loc>
     <lastmod>2016-01-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -140,12 +127,6 @@
   
   <url>
     <loc>https://0xAX.github.io/tags/haskell/</loc>
-    <lastmod>2014-05-11T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xAX.github.io/categories/haskell/</loc>
     <lastmod>2014-05-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -193,13 +174,13 @@
   </url>
   
   <url>
-    <loc>https://0xAX.github.io/categories/thoghts/</loc>
+    <loc>https://0xAX.github.io/tags/thoughts/</loc>
     <lastmod>2014-05-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://0xAX.github.io/tags/thoughts/</loc>
+    <loc>https://0xAX.github.io/categories/thoughts/</loc>
     <lastmod>2014-05-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

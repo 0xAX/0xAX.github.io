@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux &middot; Just a memo</title>
+    <title>Archives &middot; Just a memo</title>
 
-    <meta name="description" content="My posts about Linux kernel and low-level stuff">
+    <meta name="description" content="">
 
     <meta name="generator" content="Hugo 0.26-DEV" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Linux &middot; Just a memo">
-    <meta name="twitter:description" content="My posts about Linux kernel and low-level stuff">
+    <meta name="twitter:title" content="Archives &middot; Just a memo">
+    <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Linux &middot; Just a memo">
-    <meta property="og:description" content="My posts about Linux kernel and low-level stuff">
+    <meta property="og:title" content="Archives &middot; Just a memo">
+    <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
@@ -70,68 +70,65 @@
         <div>
             
             <div class="posts">
-                
-                <h1 class="content-subhead">13 Jul 2017, 00:00</h1>
+                <h1 class="content-subhead">01 Jan 0001, 00:00</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="https://0xAX.github.io/stack_layout_x86_64/" class="post-title"> Layout of a stack frame in x86_64 </a>
+                        <a href="https://0xAX.github.io/archive/" class="post-title">Archives</a>
 
                         <p class="post-meta">
                             
                             
-                                under 
-                                
-                                <a class="post-category post-category-assembler" href="https://0xAX.github.io/categories/assembler">assembler</a><a class="post-category post-category-linux" href="https://0xAX.github.io/categories/linux">linux</a><a class="post-category post-category-x86_64" href="https://0xAX.github.io/categories/x86_64">x86_64</a>
-                            
                         </p>
                     </header>
-
+                    
                     <div class="post-description">
                         
 
-<h2 id="stack-frame-in-x86-64">Stack frame in x86_64</h2>
+<h2 id="atom-feeds">Atom feeds</h2>
 
-<p>Just for a memo:</p>
+<p>A feed for the whole blog can be found <a href="https://0xax.github.io/index.xml">here</a>.</p>
 
-<pre><code>                         +--------------+
-                         |              |
-                    +    |              |
-                    |    +--------------+
-                    |    |              |
-                    |    |   arg(N-1)   |  starts from 7'th argument for x86_64
-                    |    |              |
-                    |    +--------------+
-                    |    |              |
-                    |    |     argN     |
-                    |    |              |
-                    |    +--------------+
-                    |    |              |
-                    |    |Return address|  %rbp + 8
-Stack grows down    |    |              |
-                    |    +--------------+
-                    |    |              |
-                    |    |     %rbp     |  Frame base pointer
-                    |    |              |
-                    |    +--------------+
-                    |    |              |
-                    |    |  local var1  |  %rbp - 8
-                    |    |              |
-                    |    +--------------+
-                    |    |              |
-                    |    | local ^ar 2  |
-                    v    +--------------+
-                         |              |
-                         |              |
-                         +--------------+
-</code></pre>
+<h2 id="tags">Tags</h2>
+
+<ul>
+<li><a href="https://0xax.github.io/categories/kindle/">amazon-kindle</a></li>
+<li><a href="https://0xax.github.io/categories/grub/">grub</a></li>
+<li><a href="https://0xax.github.io/categories/haskell/">haskell</a></li>
+<li><a href="https://0xax.github.io/categories/linux/">linux</a></li>
+<li><a href="https://0xax.github.io/categories/perf/">perf</a></li>
+<li><a href="https://0xax.github.io/categories/thoghts/">thoughts</a></li>
+<li><a href="https://0xax.github.io/categories/x86_64/">x86_64</a></li>
+<li><a href="https://0xax.github.io/categories/assembler/">assembler</a></li>
+</ul>
+
+<h2 id="posts">Posts</h2>
+
+<ul>
+<li><a href="https://0xax.github.io/stack_layout_x86_64/">Layout of a stack frame in x86_64</a></li>
+<li><a href="https://0xax.github.io/grub/">How does GNU GRUB work</a></li>
+<li><a href="https://0xax.github.io/haskell_not_popular/">My thoughts about why Haskell is not popular</a></li>
+<li><a href="https://0xax.github.io/haskel-execution-time/">Get function execution time in Haskell</a></li>
+<li><a href="https://0xax.github.io/kindle/">Amazon Kindle and Read-only file system </a></li>
+</ul>
+
+<h2 id="series-of-posts-about-assembler-programming-for-linux-x86-64">Series of posts about assembler programming for Linux x86_64</h2>
+
+<ul>
+<li><a href="https://0xax.github.io/asm_1/">Say hello to x86_64 Assembly [part 1]</a></li>
+<li><a href="https://0xax.github.io/asm_2/">Say hello to x86_64 Assembly [part 2]</a></li>
+<li><a href="https://0xax.github.io/asm_3/">Say hello to x86_64 Assembly [part 3]</a></li>
+<li><a href="https://0xax.github.io/asm_4/">Say hello to x86_64 Assembly [part 4]</a></li>
+<li><a href="https://0xax.github.io/asm_5/">Say hello to x86_64 Assembly [part 5]</a></li>
+<li><a href="https://0xax.github.io/asm_6/">Say hello to x86_64 Assembly [part 6]</a></li>
+<li><a href="https://0xax.github.io/asm_7/">Say hello to x86_64 Assembly [part 7]</a></li>
+<li><a href="https://0xax.github.io/asm_8/">Say hello to x86_64 Assembly [part 8]</a></li>
+</ul>
 
                     </div>
+                    
                 </section>
-                
             </div>
-            
-
             <div class="footer">
     <div class="pure-menu pure-menu-horizontal pure-menu-open">
         <ul>
@@ -144,6 +141,7 @@ Stack grows down    |    |              |
         </div>
     </div>
 </div>
+
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

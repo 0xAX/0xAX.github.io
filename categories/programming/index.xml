@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programming on Just a memo</title>
+    <link>https://0xAX.github.io/categories/programming/</link>
+    <description>Recent content in Programming on Just a memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 25 Jul 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://0xAX.github.io/categories/programming/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Limits on resources in Linux</title>
+      <link>https://0xAX.github.io/limits/</link>
+      <pubDate>Tue, 25 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://0xAX.github.io/limits/</guid>
+      <description>Each process in the system uses certain amount of different resources like files, CPU time, memory and so on.
+Such resources are not infinite and each process and we should have an instrument to manage it. Sometimes it is useful to know current limits for a certain resource or to change it&amp;rsquo;s value. In this post we will consider such instruments that allow us to get information about limits for a process and increase or decrease such limits.</description>
+    </item>
+    
+  </channel>
+</rss>
