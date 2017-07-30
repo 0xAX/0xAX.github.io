@@ -11,3 +11,4 @@ Paginate = 10
   twitterName = "0xAX"
   githubName = "0xAX"
   description = "My posts about Linux kernel and low-level stuff"
+  hideShareOptions = true

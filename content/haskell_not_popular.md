@@ -1,5 +1,5 @@
 +++
-Categories = ["haskel", "thoghts"]
+Categories = ["haskel", "thoughts"]
 Tags = ["thoughts",  "haskell"]
 date = "2014-05-11"
 title = "My thoughts about why Haskell is not popular"
