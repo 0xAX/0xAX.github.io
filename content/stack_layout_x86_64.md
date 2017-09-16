@@ -32,7 +32,7 @@ Stack grows down    |    |              |
                     |    |              |
                     |    +--------------+
                     |    |              |
-                    |    |  local var1  |  %rbp - 8
+                    |    |  local var1  |  %rbp - 8 <-- %rsp (at the beginning of function)
                     |    |              |
                     |    +--------------+
                     |    |              |
