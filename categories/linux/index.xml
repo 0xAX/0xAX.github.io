@@ -18,7 +18,7 @@
       
       <guid>https://0xAX.github.io/stack_layout_x86_64/</guid>
       <description> Stack frame in x86_64 Just for a memo:
- +--------------+ | | + | | | +--------------+ | | | | | arg(N-1) | starts from 7&#39;th argument for x86_64 | | | | +--------------+ | | | | | argN | | | | | +--------------+ | | | | |Return address| %rbp + 8 Stack grows down | | | | +--------------+ | | | | | %rbp | Frame base pointer | | | | +--------------+ | | | | | local var1 | %rbp - 8 &amp;lt;-- %rsp (at the beginning of function) | | | | +--------------+ | | | | | local ^ar 2 | v +--------------+ | | | | +--------------+  </description>
+ +--------------+ | | + | | | +--------------+ | | | | | arg(N-1) | starts from 7&#39;th argument for x86_64 | | | | +--------------+ | | | | | argN | | | | | +--------------+ | | | | |Return address| %rbp + 8 Stack grows down | | | | +--------------+ | | | | | %rbp | Frame base pointer | | | | +--------------+ | | | | | local var1 | %rbp - 8 | | | | +--------------+ | | | | | local ^ar 2 | &amp;lt;-- %rsp | | | v +--------------+ | | | | +--------------+  </description>
     </item>
     
   </channel>

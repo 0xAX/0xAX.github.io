@@ -7,7 +7,7 @@
 
     <meta name="description" content="My posts about Linux kernel and low-level stuff">
 
-    <meta name="generator" content="Hugo 0.26-DEV" />
+    <meta name="generator" content="Hugo 0.29" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="Assembly &middot; Just a memo">
@@ -115,11 +115,12 @@ Stack grows down    |    |              |
                     |    |              |
                     |    +--------------+
                     |    |              |
-                    |    |  local var1  |  %rbp - 8 &lt;-- %rsp (at the beginning of function)
+                    |    |  local var1  |  %rbp - 8
                     |    |              |
                     |    +--------------+
                     |    |              |
-                    |    | local ^ar 2  |
+                    |    | local ^ar 2  | &lt;-- %rsp
+                    |    |              |
                     v    +--------------+
                          |              |
                          |              |
