@@ -18,11 +18,11 @@ So, the GNU GRUB is a bootloader. Main point of a bootloader is to load an opera
 
 So the point of the bootloader is clear - to load an operating system kernel. In this post we will see how the GNU GRUB loads the Linux kernel. But before this let's take a little look on architecture of the GNU GRUB. Even if you are newbie Linux user, you can guess that all `boot` related data is placed in the `/boot` directory. For me it looks like:
 
-![boot-dir](http://s30.postimg.org/3mfl4a681/2016_01_02_193818_933x47_scrot.png)
+![boot-dir](https://s7.postimg.cc/g7w8jv6vd/ls-boot.png?dl=1)
 
 This directory contains two [initrd](https://en.wikipedia.org/wiki/Initrd) images, the Linux kernel image and the `grub` directory which contains GNU GRUB related data:
 
-![boot-grub-dir](http://s17.postimg.org/bgttwn3u7/ls_boot.png)
+![boot-grub-dir](https://s7.postimg.cc/hzp7etnob/ls-boot-grub2.png)
 
 Directory with fonts, GNU GRUB configuration file, themes, locales, the `grubenv` file that contains GNU GRUB environment variables which are can be used in runtime and the `i386-pc` directory which contains GNU GRUB images and modules. Content of the `i386-pc` directory is the most interesting for us. Yes the `/boot/grub` directory contains many other interesting directories/files besides the `/boot/grub` directory, but this post will not cover topics like how to make GNU GRUB menu beautiful, readable and etc. If we will open the `/boot/grub/i386-pc` directory, we will find three types of files there:
 
@@ -32,7 +32,7 @@ Directory with fonts, GNU GRUB configuration file, themes, locales, the `grubenv
 
 The first `boot.img` file is the entry of the bootloader on a [PC BIOS](https://en.wikipedia.org/wiki/BIOS) system. The content of this file is written to the first sector of the disk or in the [Master boot record](https://en.wikipedia.org/wiki/Master_boot_record). The main point of the `boot.img` is to load first sector (512 bytes) of the `core.img` which will continue to do main job of the bootloader. As `boot.img` is in the master boot record, it must meet several conditions. First of all its size must be 512-bytes and the last two bytes must be `0xAA55`. We can see that `boot.img` is 512 bytes size file:
 
-![boot.img](http://s2.postimg.org/7e8s3cuzd/boot_img.png)
+![boot.img](https://s7.postimg.cc/8f5krzgcr/boot-img-size.png)
 
 and contains two magic bytes in the end:
 
