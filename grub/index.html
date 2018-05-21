@@ -7,7 +7,7 @@
 
     <meta name="description" content="">
 
-    <meta name="generator" content="Hugo 0.29" />
+    <meta name="generator" content="Hugo 0.37.1" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="How does GNU GRUB work &middot; Just a memo">
@@ -104,11 +104,11 @@ blog <a href="http://0xax.github.io/tag/assembler.html">posts</a> which are decr
 
 <p>So the point of the bootloader is clear - to load an operating system kernel. In this post we will see how the GNU GRUB loads the Linux kernel. But before this let&rsquo;s take a little look on architecture of the GNU GRUB. Even if you are newbie Linux user, you can guess that all <code>boot</code> related data is placed in the <code>/boot</code> directory. For me it looks like:</p>
 
-<p><img src="http://s30.postimg.org/3mfl4a681/2016_01_02_193818_933x47_scrot.png" alt="boot-dir" /></p>
+<p><img src="https://s7.postimg.cc/g7w8jv6vd/ls-boot.png?dl=1" alt="boot-dir" /></p>
 
 <p>This directory contains two <a href="https://en.wikipedia.org/wiki/Initrd">initrd</a> images, the Linux kernel image and the <code>grub</code> directory which contains GNU GRUB related data:</p>
 
-<p><img src="http://s17.postimg.org/bgttwn3u7/ls_boot.png" alt="boot-grub-dir" /></p>
+<p><img src="https://s7.postimg.cc/hzp7etnob/ls-boot-grub2.png" alt="boot-grub-dir" /></p>
 
 <p>Directory with fonts, GNU GRUB configuration file, themes, locales, the <code>grubenv</code> file that contains GNU GRUB environment variables which are can be used in runtime and the <code>i386-pc</code> directory which contains GNU GRUB images and modules. Content of the <code>i386-pc</code> directory is the most interesting for us. Yes the <code>/boot/grub</code> directory contains many other interesting directories/files besides the <code>/boot/grub</code> directory, but this post will not cover topics like how to make GNU GRUB menu beautiful, readable and etc. If we will open the <code>/boot/grub/i386-pc</code> directory, we will find three types of files there:</p>
 
@@ -120,7 +120,7 @@ blog <a href="http://0xax.github.io/tag/assembler.html">posts</a> which are decr
 
 <p>The first <code>boot.img</code> file is the entry of the bootloader on a <a href="https://en.wikipedia.org/wiki/BIOS">PC BIOS</a> system. The content of this file is written to the first sector of the disk or in the <a href="https://en.wikipedia.org/wiki/Master_boot_record">Master boot record</a>. The main point of the <code>boot.img</code> is to load first sector (512 bytes) of the <code>core.img</code> which will continue to do main job of the bootloader. As <code>boot.img</code> is in the master boot record, it must meet several conditions. First of all its size must be 512-bytes and the last two bytes must be <code>0xAA55</code>. We can see that <code>boot.img</code> is 512 bytes size file:</p>
 
-<p><img src="http://s2.postimg.org/7e8s3cuzd/boot_img.png" alt="boot.img" /></p>
+<p><img src="https://s7.postimg.cc/8f5krzgcr/boot-img-size.png" alt="boot.img" /></p>
 
 <p>and contains two magic bytes in the end:</p>
 
