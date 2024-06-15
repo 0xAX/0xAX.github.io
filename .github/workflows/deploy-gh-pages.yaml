@@ -1,6 +1,9 @@
 name: Push updates to the gh-pages
 
 on:
+  pull_request:
+    branches:
+      - "source"
   push:
     branches:
       - "source"
