@@ -1,0 +1,15 @@
+name: Push updates to the gh-pages
+
+on:
+  push:
+    branches:
+      - "source"
+
+jobs:
+  update-gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: |
+          npm run build
+          npm run deploy
