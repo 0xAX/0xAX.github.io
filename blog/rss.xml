@@ -72,8 +72,8 @@
             <link>https://your-docusaurus-site.example.com/blog/first-blog-post</link>
             <guid>https://your-docusaurus-site.example.com/blog/first-blog-post</guid>
             <pubDate>Tue, 28 May 2019 00:00:00 GMT</pubDate>
-            <description><![CDATA[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet]]></description>
-            <content:encoded><![CDATA[<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content:encoded>
+            <description><![CDATA[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet. Test.]]></description>
+            <content:encoded><![CDATA[<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet. Test.</p>]]></content:encoded>
             <category>Hola</category>
             <category>Docusaurus</category>
         </item>
