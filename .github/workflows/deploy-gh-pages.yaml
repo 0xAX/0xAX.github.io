@@ -9,7 +9,13 @@ jobs:
   update-gh-pages:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
       - name: Build
         run: |
+          npm install
           npm run build
-          npm run deploy
