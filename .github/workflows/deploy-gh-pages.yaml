@@ -19,3 +19,9 @@ jobs:
         run: |
           npm install
           npm run build
+      - name: Deploy
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages -d build -u "Alexander Kuleshov <kuleshovmail@gmail.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
