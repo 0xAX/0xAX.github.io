@@ -4,7 +4,7 @@
 The solutions for the following exercises should be considered together with my modest mathetmatical knowledge. As I am not a professional mathematician, I can not give you 100% guarantee that all of this is correct. It is only my try. If you see the mistake, please feel free to open issue or create a pull request.
 :::
 
-## 3.3-1
+## Exercise 3.3-1
 
 > Show that if $f(n)$ and $g(n)$ are monotonically increasing functions, then so are the functions $f(n) + g(n)$ and $f(g(n))$, and if $f(n)$ and $g(n)$ are in addition nonnegative, then $f(n) * g(n)$ is monotonically increasing.
 
@@ -46,7 +46,7 @@ Proof.
 Qed.
 ```
 
-## 3.3-2
+## Exercise 3.3-2
 
 > Prove that $\lfloor \alpha * n \rfloor + \lceil (1 - \alpha)n \rceil = n$ for any integer $n$ and real number \alpha in the range of $0 \le \alpha \le 1.
 
@@ -103,7 +103,7 @@ plt.show()
 The result we may see: ![alpha-function](https://gist.github.com/user-attachments/assets/68607e24-e28a-4d3c-8794-293151c83280)
 
 
-## 3.3-3
+## Exercise 3.3-3
 
 > Use equation (3.14) or other means to show that $(n + o(n))^k \in \theta(n^k)$ for any real constant $k$. Conclude that $\lfloor n \rfloor^k \in \theta(n^k)$.
 
@@ -115,7 +115,7 @@ $$
 
 The term with the highest power of $n$ is $n^k$ which is $\theta(n^k)$. For all other terms we will have $n^{k-i}$ and $f(n)^i$. As our $f(n) \in o(n)$ by definition, it means that with the growth of $n$ our $f(n)$ will tend to $0$ and as a result will bring insignificant growth to $n^{k-i}$.
 
-## 3.3-4
+## Exercise 3.3-4
 
 > Proove the following:
 >
@@ -252,7 +252,7 @@ $$
 \end{align*}
 $$
 
-## 3.3-5
+## Exercise 3.3-5
 
 > Is the function $\lceil log_{2}(n) \rceil!$ polynomially bounded? Is the function $\lceil log_{2}(log_{2}(n)) \rceil!$ polynomially bounded?
 
@@ -291,7 +291,7 @@ The another and more easy way to prove that could be considering $n = 2^k$. In t
 
 For the second function $\lceil log(log(n)) \rceil!$ we can consider that $n$ is reresented by the $2^{2^{k}}$. By the logarithm rules it becomes $k! \le 2^{2^{k}}$. The $k!$ is $1 \cdot 2 \cdot 3 \cdot \ldots \cdot k$. The $2^{2^{k}}$ is $4^1 \cdot 4^2 \cdot 4^3 \cdot \ldots \cdot 4^k$. Thus our main expression $k! \le 2^{2^{k}}$ is true which means the $\lceil log(log(n)) \rceil!$ function is polynomially bounded.
 
-## 3.3-6
+## Exercise 3.3-6
 
 > Which is asymptotically larger: $log^\*(log(n))$ or $log(log^*(n))$?
 
@@ -325,7 +325,7 @@ $$
 
 Obviously the function in the dividend growth slower than in divisor. This means the $log(log^*(n))$ function grows assymptotically faster than $log^\*(log(n))$ function.
 
-## 3.3-7
+## Exercise 3.3-7
 
 > Show that golden ratio $\phi$ and its conjugate $\overline \phi$ both satisfy the equation $x^2 = x + 1$
 
@@ -342,7 +342,7 @@ $$
 
 Where $x_{1}$ and $x_{2}$ are exactly $\phi$ and $\overline \phi$.
 
-## 3.3-8
+## Exercise 3.3-8
 
 > Prove by induction that the $i_{th}$ Fibonacci number satisfies the equation $F_{i} = \frac{\phi^i - \overline \phi^i}{\sqrt{5}}$
 
@@ -364,7 +364,7 @@ $$
 \end{align*}
 $$
 
-## 3.3-9
+## Exercise 3.3-9
 
 > Show that $k \cdot log(k) \in \theta(n)$ implies $k = \theta(n / log(n))$
 
