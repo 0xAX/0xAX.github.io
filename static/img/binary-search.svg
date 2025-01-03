@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="1200">
+  <!-- Given initial array -->
+  <text x="50" y="50" font-size="20">Given array:</text>
+
+  <text x="200" y="50" font-size="20">25</text>
+  <text x="250" y="50" font-size="20">27</text>
+  <text x="300" y="50" font-size="20">32</text>
+  <text x="350" y="50" font-size="20">43</text>
+  <text x="400" y="50" font-size="20">44</text>
+  <text x="450" y="50" font-size="20">59</text>
+  <text x="500" y="50" font-size="20">60</text>
+  <text x="550" y="50" font-size="20">61</text>
+  <text x="600" y="50" font-size="20">68</text>
+  <text x="650" y="50" font-size="20">75</text>
+  <text x="700" y="50" font-size="20">92</text>
+
+  <!-- Given key -->
+  <text id="given-key-text" x="50" y="100" font-size="20" visibility="hidden">Given key:</text>
+  <text id="given-key-value" x="200" y="100" font-size="20" visibility="hidden">27</text>
+
+  <!-- Initial mid/lo/hi -->
+  <g id="step-1" visibility="hidden">
+    <text x="440" y="150" font-size="20" fill="green" id="mid-text">mid</text>
+    <line x1="460" y1="160" x2="460" y2="170" stroke="blue" stroke-width="1" marker-end="url(#arrow)" />
+
+    <text x="200" y="150" font-size="20" fill="blue" id="lo">lo</text>
+    <line x1="210" y1="160" x2="210" y2="170" stroke="blue" stroke-width="1" marker-end="url(#arrow)" />
+
+    <text x="700" y="150" font-size="20" fill="blue" id="hi">hi</text>
+    <line x1="710" y1="160" x2="710" y2="170" stroke="orange" stroke-width="1" marker-end="url(#arrow)" />
+
+    <text x="200" y="200" font-size="20">25</text>
+    <text x="250" y="200" font-size="20">27</text>
+    <text x="300" y="200" font-size="20">32</text>
+    <text x="350" y="200" font-size="20">43</text>
+    <text x="400" y="200" font-size="20">44</text>
+    <text x="450" y="200" font-size="20">59</text>
+    <text x="500" y="200" font-size="20">60</text>
+    <text x="550" y="200" font-size="20">61</text>
+    <text x="600" y="200" font-size="20">68</text>
+    <text x="650" y="200" font-size="20">75</text>
+    <text x="700" y="200" font-size="20">92</text>
+  </g>
+
+  <g id="step-2" visibility="hidden">
+    <text x="50" y="250" font-size="20">Compare 27 and 59:</text>
+    <text x="250" y="250" font-size="20">27 is less than 59</text>
+    <text x="50" y="300" font-size="20">Calculate new middle, low and high.</text>
+  </g>
+
+  <g id="step-3" visibility="hidden">
+    <text x="295" y="350" font-size="20" fill="green" id="mid-text">mid</text>
+    <line x1="310" y1="360" x2="310" y2="370" stroke="blue" stroke-width="1" marker-end="url(#arrow)" />
+    
+    <text x="200" y="350" font-size="20" fill="blue" id="mid-text">lo</text>
+    <line x1="210" y1="360" x2="210" y2="370" stroke="blue" stroke-width="1" marker-end="url(#arrow)" id="lo-arrow" />
+
+    <text x="405" y="350" font-size="20" fill="blue" id="hi">hi</text>
+    <line x1="415" y1="360" x2="415" y2="370" stroke="orange" stroke-width="1" marker-end="url(#arrow)" id="hi-arrow" />
+
+    <text x="200" y="400" font-size="20">25</text>
+    <text x="250" y="400" font-size="20">27</text>
+    <text x="300" y="400" font-size="20">32</text>
+    <text x="350" y="400" font-size="20">43</text>
+    <text x="400" y="400" font-size="20">44</text>
+    <text x="450" y="400" font-size="20">59</text>
+    <text x="500" y="400" font-size="20">60</text>
+    <text x="550" y="400" font-size="20">61</text>
+    <text x="600" y="400" font-size="20">68</text>
+    <text x="650" y="400" font-size="20">75</text>
+    <text x="700" y="400" font-size="20">92</text>
+  </g>
+
+  <g id="step-4" visibility="hidden">
+    <text x="50" y="450" font-size="20">Compare 27 and 32:</text>
+    <text x="250" y="450" font-size="20">27 is less than 59</text>
+    <text x="50" y="500" font-size="20">Calculate new middle, low and high.</text>
+  </g>
+
+  <g id="step-5" visibility="hidden">
+    <text x="190" y="650" font-size="20" fill="green" id="mid-text">mid</text>
+    <line x1="210" y1="630" x2="210" y2="615" stroke="blue" stroke-width="1" marker-end="url(#arrow)" />
+    
+    <text x="200" y="550" font-size="20" fill="blue" id="mid-text">lo</text>
+    <line x1="210" y1="555" x2="210" y2="570" stroke="blue" stroke-width="1" marker-end="url(#arrow)" id="lo-arrow" />
+
+    <text x="255" y="550" font-size="20" fill="blue" id="hi">hi</text>
+    <line x1="263" y1="555" x2="263" y2="570" stroke="orange" stroke-width="1" marker-end="url(#arrow)" id="hi-arrow" />
+
+    <text x="200" y="600" font-size="20">25</text>
+    <text x="250" y="600" font-size="20">27</text>
+    <text x="300" y="600" font-size="20">32</text>
+    <text x="350" y="600" font-size="20">43</text>
+    <text x="400" y="600" font-size="20">44</text>
+    <text x="450" y="600" font-size="20">59</text>
+    <text x="500" y="600" font-size="20">60</text>
+    <text x="550" y="600" font-size="20">61</text>
+    <text x="600" y="600" font-size="20">68</text>
+    <text x="650" y="600" font-size="20">75</text>
+    <text x="700" y="600" font-size="20">92</text>
+  </g>
+
+  <g id="step-6" visibility="hidden">
+    <text x="50" y="700" font-size="20">Compare 27 and 25:</text>
+    <text x="250" y="700" font-size="20">27 is greater than 25</text>
+    <text x="50" y="750" font-size="20">Calculate new middle, low and high.</text>
+  </g>
+
+  <g id="step-7" visibility="hidden">
+    <text x="245" y="800" font-size="20" fill="green" id="mid-text">mid</text>
+    <line x1="265" y1="810" x2="265" y2="820" stroke="blue" stroke-width="1" marker-end="url(#arrow)" />
+    
+    <text x="225" y="900" font-size="20" fill="blue" id="mid-text">hi == lo</text>
+    <line x1="260" y1="880" x2="260" y2="870" stroke="blue" stroke-width="1" marker-end="url(#arrow)" id="lo-arrow" />
+
+    <text x="200" y="850" font-size="20">25</text>
+    <text x="250" y="850" font-size="20">27</text>
+    <text x="300" y="850" font-size="20">32</text>
+    <text x="350" y="850" font-size="20">43</text>
+    <text x="400" y="850" font-size="20">44</text>
+    <text x="450" y="850" font-size="20">59</text>
+    <text x="500" y="850" font-size="20">60</text>
+    <text x="550" y="850" font-size="20">61</text>
+    <text x="600" y="850" font-size="20">68</text>
+    <text x="650" y="850" font-size="20">75</text>
+    <text x="700" y="850" font-size="20">92</text>
+  </g>
+
+  <g id="step-8" visibility="hidden">
+    <text x="50" y="950" font-size="20">Compare 27 and 27:</text>
+    <text x="250" y="950" font-size="20">The key was found!</text>
+  </g>
+  
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
+    </marker>
+  </defs>
+  
+  <!-- Inline JavaScript -->
+  <script type="application/ecmascript">
+    <![CDATA[
+      function movePointer(pointerId, arrowId, newX) {
+        const pointer = document.getElementById(pointerId);
+        const arrow = document.getElementById(arrowId);
+        pointer.setAttribute("x", newX);
+        arrow.setAttribute("x1", newX + 5);
+        arrow.setAttribute("x2", newX + 5);
+      }
+
+      const steps = [
+        { tag: "show-key" },
+        { tag: "step-1" },
+        { tag: "step-2" },
+        { tag: "step-3" },
+        { tag: "step-4" },
+        { tag: "step-5" },
+        { tag: "step-6" },
+        { tag: "step-7" },        
+        { tag: "step-8" },
+      ];
+
+      const positions = [50, 100, 150, 200, 250, 300, 350, 400, 450];
+      let stepIndex = 0;
+
+      function animateStep() {
+        if (stepIndex >= steps.length) return;
+
+        const step = steps[stepIndex];
+
+        console.log(step.tag);
+
+        if (step.tag == "show-key") {
+          document.getElementById("given-key-text").setAttribute("visibility", "visible");
+          document.getElementById("given-key-value").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);          
+          return;
+        }
+
+        if (step.tag == "step-1") {
+          document.getElementById("step-1").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-2") {
+          document.getElementById("step-2").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-3") {
+          document.getElementById("step-3").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-4") {
+          document.getElementById("step-4").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-5") {
+          document.getElementById("step-5").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-6") {
+          document.getElementById("step-6").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-7") {
+          document.getElementById("step-7").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+
+        if (step.tag == "step-8") {
+          document.getElementById("step-8").setAttribute("visibility", "visible");
+          stepIndex++;          
+          setTimeout(animateStep, 1000);
+          return;
+        }
+      }
+
+      // Start animation
+      setTimeout(animateStep, 1000);
+    ]]>
+  </script>
+</svg>
