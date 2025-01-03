@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="400">
+  <text x="50" y="50" font-size="20">Given array:</text>
+
+  <text x="200" y="50" font-size="20">25</text>
+  <text x="250" y="50" font-size="20">27</text>
+  <text x="300" y="50" font-size="20">32</text>
+  <text x="350" y="50" font-size="20">43</text>
+  <text x="400" y="50" font-size="20">44</text>
+  <text x="450" y="50" font-size="20">59</text>
+  <text x="500" y="50" font-size="20">60</text>
+  <text x="550" y="50" font-size="20">61</text>
+  <text x="600" y="50" font-size="20">68</text>
+  <text x="650" y="50" font-size="20">75</text>
+  <text x="700" y="50" font-size="20">92</text>
+
+  <text id="given-key-text" x="50" y="100" font-size="20" visibility="hidden">Given key:</text>
+  <text id="given-key-value" x="200" y="100" font-size="20" visibility="hidden">59</text>
+  
+  <!-- Pointers -->
+  <!-- 
+  <text x="50" y="120" font-size="20" fill="blue" id="lo">lo</text>
+  <line x1="55" y1="110" x2="55" y2="70" stroke="blue" stroke-width="2" marker-end="url(#arrow)" id="lo-arrow" />
+
+  <text x="300" y="120" font-size="20" fill="green" id="mid">mid</text>
+  <line x1="305" y1="110" x2="305" y2="70" stroke="green" stroke-width="2" marker-end="url(#arrow)" id="mid-arrow" />
+
+  <text x="450" y="120" font-size="20" fill="orange" id="hi">hi</text>
+  <line x1="455" y1="110" x2="455" y2="70" stroke="orange" stroke-width="2" marker-end="url(#arrow)" id="hi-arrow" />
+  -->
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
+    </marker>
+  </defs>
+
+  <!-- Inline JavaScript -->
+  <script type="application/ecmascript">
+    <![CDATA[
+      function movePointer(pointerId, arrowId, newX) {
+        const pointer = document.getElementById(pointerId);
+        const arrow = document.getElementById(arrowId);
+        pointer.setAttribute("x", newX);
+        arrow.setAttribute("x1", newX + 5);
+        arrow.setAttribute("x2", newX + 5);
+      }
+
+      const steps = [
+        { tag: "show-key"},
+        { tag: "put-arrows", lo: 0, mid: 4, hi: 8 },
+        { tag: "put-arrows", lo: 4, mid: 5, hi: 8 },
+        { tag: "put-arrows", lo: 5, mid: 5, hi: 5 }
+      ];
+
+      const positions = [50, 100, 150, 200, 250, 300, 350, 400, 450];
+      let stepIndex = 0;
+
+      function animateStep() {
+        if (stepIndex >= steps.length) return;
+
+        const step = steps[stepIndex];
+
+        console.log(step.tag);
+
+        if (step.tag == "show-key") {
+          document.getElementById("given-key-text").setAttribute("visibility", "visible");
+          document.getElementById("given-key-value").setAttribute("visibility", "visible");
+          return;
+        }
+
+        if (step.tag == "put-arrows") {
+          lo = step.lo;
+          mid = step.mid;
+          hi = step.hi;
+
+          movePointer("lo", "lo-arrow", positions[lo]);
+          movePointer("mid", "mid-arrow", positions[mid]);
+          movePointer("hi", "hi-arrow", positions[hi]);
+          stepIndex++;
+          setTimeout(animateStep, 1000);
+          return;
+        }
+      }
+
+      // Start animation
+      setTimeout(animateStep, 1000);
+    ]]>
+  </script>
+</svg>
