@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Closest Pair Visualization</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+    }
+
+    #left {
+      width: 50vw;
+      background: #f0f0f0;
+    }
+
+    #right {
+      width: 50vw;
+      padding: 10px;
+      background: #fff;
+      border-left: 1px solid #ccc;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="left">
+    <canvas id="plane"></canvas>
+  </div>
+  <div id="right">
+    <h2>Output</h2>
+    <p>Canvas is on the left half of the screen. Animation will show closest pair search.</p>
+  </div>
+  <script src="two-closest-points.js"></script>
+</body>
+</html>
