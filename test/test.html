@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Making Software — Projects (Pure JS + Tailwind)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .progress-fill{ background:#000; }
+    html, body { scroll-behavior: smooth; }
+    select.custom-select option {
+      background-color: #1f2937; /* gray-800 */
+      color: #f9fafb; /* gray-50 */
+      padding: 0.5rem 1rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <!-- Redesigned Navbar -->
+  <header id="site-nav" class="fixed top-0 inset-x-0 z-50 transition">
+    <div class="mx-auto max-w-6xl px-2 py-2 flex items-center justify-between">
+      <a href="#hero" class="font-bold text-lg text-white tracking-wide">Making Software</a>
+      <div class="flex items-center gap-3">
+        <input id="q" aria-label="Search projects" placeholder="Search…"
+               class="w-64 rounded-lg border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 bg-white/10 border-white/30 placeholder-white/70 text-white" />
+        <div class="relative">
+          <select id="jump" aria-label="Jump to project" class="custom-select rounded-lg border pl-3 pr-9 py-1.5 text-sm bg-white/10 border-white/30 text-white appearance-none focus:outline-none focus:ring-2">
+            <option value="">Jump…</option>
+          </select>
+          <svg aria-hidden="true" viewBox="0 0 20 20" class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-white/80"><path fill="currentColor" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.14l3.71-2.91a.75.75 0 1 1 .92 1.18l-4.24 3.32a.75.75 0 0 1-.92 0L5.21 8.41a.75.75 0 0 1 .02-1.2z"/></svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero / Intro -->
+  <section id="hero" class="relative w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-700 text-white flex flex-col items-center justify-center px-6 text-center">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-6">Making Software</h1>
+    <p class="max-w-2xl text-lg md:text-xl text-gray-200 mb-10">
+      Deep dives into systems and algorithms — kernel booting, assembly, analysis, and performance.
+    </p>
+    <a href="#cards" class="inline-block px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition">Explore Projects ↓</a>
+  </section>
+
+  <!-- Cards (full-screen sections) -->
+  <section id="projects" class="mt-2 relative">
+    <div id="cards" class="snap-y snap-mandatory">
+      <!-- items injected here -->
+    </div>
+    <p id="empty" class="hidden text-center text-gray-500 py-12">No projects available.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mx-auto max-w-6xl px-4 py-10 text-sm text-gray-600">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-t pt-6">
+      <p>© <span id="year"></span> Making Software. Built with Tailwind. Content © Alex λgeek.</p>
+      <nav class="flex gap-4">
+        <a href="/about" class="hover:underline underline-offset-4">About</a>
+        <a href="/projects" class="hover:underline underline-offset-4">All projects</a>
+        <a href="/feed.xml" class="hover:underline underline-offset-4">RSS</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Data =====
+    const SAMPLE_PROJECTS = [
+      { slug: 'linux-insides', title: 'Linux Insides', blurb: 'Deep dive series on the Linux kernel internals: early boot, protected mode, paging, long mode.', tags: ['kernel','x86_64','low-level'], progress: 62, updated: '2025-09-10' },
+      { slug: 'assembler-notes', title: 'Assembler Notes', blurb: 'Readable notes on x86-64 assembly: registers, calling conventions, stack frames, syscalls.', tags: ['assembly','x86_64'], progress: 35, updated: '2025-09-03' },
+      { slug: 'algorithm-visuals', title: 'Algorithm Visualizations', blurb: "Interactive explanations of sorting, searching, and number theory (Euclid's algorithm) with SVG.", tags: ['algorithms','visualization'], progress: 48, updated: '2025-08-30' },
+      { slug: 'kernel-booting', title: 'Kernel Booting Process (x86_64)', blurb: 'From real mode to protected mode: CPU validation, memory detection, video mode, and beyond.', tags: ['kernel','boot','history'], progress: 70, updated: '2025-09-12' },
+      { slug: 'sql-playbook', title: 'SQL Performance Playbook', blurb: 'EXPLAIN-driven tips for indexing, join ordering, and query rewrites in MySQL.', tags: ['databases','mysql','performance'], progress: 20, updated: '2025-07-25' },
+      { slug: 'binary-search-guide', title: 'Binary Search Illustrated', blurb: 'A visual, proof-first take on binary search, invariants, and off-by-one edge cases.', tags: ['algorithms','search'], progress: 40, updated: '2025-08-22' },
+      { slug: 'euclid-gcd', title: 'Euclid’s Algorithm (GCD)', blurb: 'From division lemma to well-ordering: multiple proofs, step-by-step with examples.', tags: ['math','algorithms','number-theory'], progress: 55, updated: '2025-08-18' },
+      { slug: 'linux-bootstrap-3', title: 'Linux Bootstrap — Part 3', blurb: 'Continuing from early setup to protected mode, video init, APM/EDD/IST queries.', tags: ['kernel','x86_64','boot'], progress: 68, updated: '2025-09-11' },
+      { slug: 'paging-and-long-mode', title: 'Paging & Long Mode', blurb: 'From segmentation to paging to 64‑bit long mode: tables, TLBs, and page faults.', tags: ['kernel','memory','x86_64'], progress: 15, updated: '2025-09-01' },
+      { slug: 'mysql-explain-handbook', title: 'MySQL EXPLAIN Handbook', blurb: 'Real-world EXPLAIN outputs, index strategy, and join order playbook.', tags: ['databases','mysql','performance'], progress: 30, updated: '2025-08-05' }
+    ];
+
+    // ===== Helpers =====
+    const initials = (title) => {
+      const words = String(title||'').trim().split(/\s+/).filter(Boolean);
+      if (!words.length) return '';
+      const first = words[0][0]||'';
+      const second = (words[1] && words[1][0]) || (words[0][1]||'');
+      return (first+second).toUpperCase();
+    }
+    function filterProjects(items, query) {
+      const q = (query||'').trim().toLowerCase();
+      let list = (items||[]).filter(p => {
+        const hay = ((p.title||'')+' '+(p.blurb||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
+        return !q || hay.includes(q);
+      });
+      list.sort((a,b)=> new Date(b.updated||0) - new Date(a.updated||0));
+      return list;
+    }
+
+    // ===== State =====
+    const state = { query: '' };
+
+    // ===== Elements =====
+    const $cards = () => document.getElementById('cards');
+    const $empty = () => document.getElementById('empty');
+    const $q = () => document.getElementById('q');
+    const $jump = () => document.getElementById('jump');
+    const $nav = () => document.getElementById('site-nav');
+    const $hero = () => document.getElementById('hero');
+
+    // ===== Cards =====
+    function projectCard(p, nextId){
+      const art = document.createElement('article');
+      art.className = 'snap-start relative w-full min-h-screen flex flex-col items-center justify-center px-6 py-16 border-b bg-white text-center';
+      art.id = `proj-${p.slug}`;
+      art.innerHTML = `
+        <div class="w-24 h-24 mb-6 rounded-2xl bg-gray-100 border flex items-center justify-center text-2xl font-bold text-gray-700">${initials(p.title)}</div>
+        <h2 class="text-3xl md:text-5xl font-bold mb-4">${p.title}</h2>
+        <p class="max-w-2xl text-gray-600 text-lg md:text-xl mb-6">${p.blurb}</p>
+        <div class="flex flex-wrap gap-2 justify-center mb-6">
+          ${(p.tags||[]).map(tag=>`<span class=\"text-sm rounded-full border px-3 py-1 bg-gray-50\">${tag}</span>`).join('')}
+        </div>
+        <div class="flex items-center gap-4 flex-wrap justify-center">
+          <a class="px-5 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition" href="/projects/${p.slug}">Read Project</a>
+          <a class="px-5 py-2 rounded-full bg-gray-200 text-sm hover:bg-gray-300 transition" href="/projects/${p.slug}/rss.xml">RSS</a>
+        </div>
+        ${nextId ? `<a href=\"#${nextId}\" class=\"absolute right-6 bottom-6 px-4 py-2 rounded-full border bg-white/90 text-gray-900 text-sm hover:bg-white transition shadow\" aria-label=\"Next project\">Next ↓</a>` : ''}
+      `;
+      return art;
+    }
+
+    function renderJump(items){
+      const sel = $jump();
+      sel.classList.add('custom-select');
+      sel.innerHTML = '<option value="">Jump…</option>' + (items||[]).map(p => `<option value="proj-${p.slug}">${p.title}</option>`).join('');
+      sel.onchange = (e) => {
+        const id = e.target.value; if (!id) return; const el = document.getElementById(id); if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      };
+    }
+
+    function renderCards(){
+      const cards = $cards();
+      cards.innerHTML = '';
+      const items = filterProjects(SAMPLE_PROJECTS, state.query);
+      items.forEach((p, i) => {
+        const next = items[(i+1) % items.length];
+        const nextId = next ? `proj-${next.slug}` : null;
+        cards.appendChild(projectCard(p, nextId));
+      });
+      $empty().classList.toggle('hidden', items.length !== 0);
+      renderJump(items);
+    }
+
+    // ===== Navbar style over hero =====
+    function applyNavStyle(){
+      const nav = $nav(); const hero = $hero(); if(!nav || !hero) return;
+      const scrolled = window.scrollY > (hero.offsetHeight - 20);
+      const q = $q(), j = $jump();
+      if (!scrolled) {
+        nav.classList.remove('bg-white/95','text-gray-900','shadow','border-b');
+        nav.classList.add('bg-transparent','text-white');
+        [q,j].forEach(el=>{ if(!el) return; el.classList.remove('bg-white','border-gray-300','text-gray-900','placeholder-gray-400'); el.classList.add('bg-white/10','border-white/30','text-white'); });
+      } else {
+        nav.classList.add('bg-white/95','text-gray-900','shadow','border-b');
+        nav.classList.remove('bg-transparent','text-white');
+        [q,j].forEach(el=>{ if(!el) return; el.classList.add('bg-white','border-gray-300','text-gray-900','placeholder-gray-400'); el.classList.remove('bg-white/10','border-white/30','text-white'); });
+      }
+    }
+
+    // ===== Event bindings =====
+    document.addEventListener('DOMContentLoaded', () => {
+      const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+      $q().addEventListener('input', e => { state.query = e.target.value; renderCards(); });
+      renderCards();
+      applyNavStyle();
+      window.addEventListener('scroll', applyNavStyle, { passive: true });
+      window.addEventListener('resize', applyNavStyle);
+    });
+
+    // ===== Minimal runtime tests (console) =====
+    (function runTests(){
+      function ok(name, cond){ if(!cond){ console.error('✗', name); throw new Error('Test failed: '+name); } else { console.log('✓', name); } }
+      ok('initials("Linux Insides") == LI', initials('Linux Insides') === 'LI');
+      const all = filterProjects(SAMPLE_PROJECTS, '', 'updated');
+      ok('no filters -> all', all.length === SAMPLE_PROJECTS.length);
+      console.log('All tests basic passed.');
+    })();
+  </script>
+</body>
+</html>
